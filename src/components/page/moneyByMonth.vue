@@ -9,7 +9,7 @@
                 <!-- 关键词联想组建 -->
                 <el-select
                   v-model="user_true_name"
-                  style="width: 200px;margin-left: 30px;"
+                  style="width: 250px;margin-left: 30px;"
                   filterable
                   remote
                   clearable
@@ -24,34 +24,14 @@
                     :value="item.value">
                   </el-option>
                 </el-select>
-
-                <el-select v-model="eat_type" placeholder="请选择就餐类型" style="width: 180px;margin-left: 30px;">
-                  <el-option
-                    v-for="item in eatOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-                <el-select v-model="user_type" placeholder="请选择违规类型" style="width: 180px;margin-left: 30px;">
-                  <el-option
-                    v-for="item in usertOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-
                 <el-date-picker
-                  style="margin-left: 20px;width:420px;"
-                  v-model="date"
-                  type="daterange"
-                  range-separator="至"
-                  format="yyyy 年 MM 月 dd 日"
-                  value-format="yyyy-MM-dd"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期">
+                  v-model="month"
+                  style="margin-left: 20px;width:220px;"
+                  type="month"
+                  value-format="yyyy-MM"
+                  placeholder="请选择月份">
                 </el-date-picker>
+                
                 
                 <el-button type="warning" style="margin-left: 30px;" @click="searchClick">查询</el-button>
             </div>
@@ -61,8 +41,89 @@
         <!-- <div class="tree">
           <el-tree :data="data"    @node-click="handleNodeClick"></el-tree>
         </div> -->
-        <el-dialog title="违规图片" :visible.sync="case_detail_dialog">
-          <img :src="lookPicSrc" class="lookPicClass">  
+        <el-dialog title="就餐详情" :visible.sync="case_detail_dialog">
+          <el-table
+              :data="eatList"
+              :header-cell-style="{ 'background-color': '#deedf4','color':'#000'}"
+              :row-style="rowStyle"
+              class="tableClass"
+              >
+              <el-table-column
+                type="index"
+                align="center"
+                width="50">
+              </el-table-column>
+              <el-table-column
+                label="姓名"
+                align="center"
+                prop="user_true_name">
+                
+              </el-table-column>
+              <el-table-column
+                label="消费时间"
+                align="center"
+                width="200"
+                prop="eat_time"
+                >
+                <!-- <template slot-scope="props">
+                  <span v-bind:class="[props.row.stock_status=='in'?'':'colorRed']">{{props.row.stock_status=='in'?'已入库':'待入库'}}</span>
+                </template> -->
+              </el-table-column>
+              <el-table-column
+                label="就餐类型"
+                align="center"
+                
+                >
+                <template slot-scope="props">
+                  <span >{{props.row.eat_type=='lunch'?'午餐':''}}</span>
+                  <span >{{props.row.eat_type=='breakfast'?'早餐':''}}</span>
+                  <span >{{props.row.eat_type=='dinner'?'晚餐':''}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="消费前余额"
+                align="center"
+                >
+                <template slot-scope="props">
+                  <span >{{props.row.before_amount/100}}元</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="消费金额"
+                align="center"
+                >
+                <template slot-scope="props">
+                  <span >{{props.row.quantity/100}}元</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="消费后余额"
+                align="center"
+                >
+                <template slot-scope="props">
+                  <span >{{props.row.after_amount/100}}元</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="消费图片"
+                align="center"
+                >
+                <template slot-scope="props">
+                  <img class="imgTypeClass" :src="props.row.face_url">
+                  <!-- <span >{{props.row.after_amount/100}}元</span> -->
+                </template>
+              </el-table-column>
+            </el-table> 
+            <el-pagination
+                small
+                background
+                style="text-align: center;margin-top: 20px;"
+                @current-change="pageChange2"
+                :current-page.sync="pageNum2"
+                :page-size="pageSize2"
+                layout="prev, pager, next, jumper"
+                :total="total2">
+          </el-pagination>
         </el-dialog>
         <div id="container" style="width: 100%;height: 110%;  float: right;">
           
@@ -80,56 +141,44 @@
                 width="50">
               </el-table-column>
               <el-table-column
-                label="违规时间"
+                label="姓名"
                 align="center"
-                prop="eat_time">
+                prop="user_true_name">
                 
               </el-table-column>
               <el-table-column
-                label="就餐类型"
+                label="时间"
                 align="center"
+                prop="month"
+                >
+              </el-table-column>
+              
+              <el-table-column
+                label="消费次数"
+                align="center"
+                prop="number"
+                >
+              </el-table-column>
+              <el-table-column
+                label="消费金额"
+                align="center"
+                
                 >
                 <template slot-scope="props">
-                  <span>{{props.row.eat_type=='breakfast'?'早餐':''}}</span>
-                  <span>{{props.row.eat_type=='lunch'?'午餐':''}}</span>
-                  <span>{{props.row.eat_type=='dinner'?'晚餐':''}}</span>
+                  <span>{{props.row.total/100}}元</span>
                 </template>
               </el-table-column>
-             <!--  <el-table-column
-                label="刷卡手机"
-                align="center"
-                prop="user_tel"
-                >
-              </el-table-column> -->
-              <el-table-column
-                label="违规人"
-                align="center"
-                prop="user_true_name"
-                >
-              </el-table-column>
-              
-              <!-- <el-table-column
-                label="匹配得分"
-                align="center"
-                prop="face_score"
-                >
-              </el-table-column>
-              <el-table-column
-                label="实际刷卡人"
-                align="center"
-                prop="borrow_user_name"
-                >
-              </el-table-column> -->
-              
               <el-table-column
                 label="操作"
                 width="300px"
                 align="center"
                 >
                 <template slot-scope="props">
-                  <el-button  type="warning" size="mini" style="margin-left: 0px;" @click="lookPic(props.row)">查看违规照片</el-button>
+                  <el-button  type="warning" size="mini" style="margin-left: 0px;" @click="caseDetailClick(props.row)">详细记录</el-button>
                 </template>
               </el-table-column>
+              
+              
             </el-table> 
                 
           </div>
@@ -159,8 +208,8 @@
               case_number:'',
               options4: [],
               case_name: [],
-              user_true_name:'',
               list: [],
+              month:'',
               loading: false,
               states: [],
               date:[],
@@ -173,43 +222,11 @@
               pageSize:10,
               total2:0,
               pageNum2:1,
-              pageSize2:10,
-              lookPicSrc:'',
-              eat_type:'',
-              user_type:'',
-              user_tel:'',
-              eatOptions:[
-                {
-                  value: '',
-                  label: '全部'
-                },
-                {
-                  value: 'breakfast',
-                  label: '早餐'
-                },
-                {
-                  value: 'lunch',
-                  label: '午餐'
-                },
-                {
-                  value: 'dinner',
-                  label: '晚餐'
-                },
-              ],
-              usertOptions:[
-                {
-                  value: '',
-                  label: '全部'
-                },
-                {
-                  value: 'yuangong',
-                  label: '未刷卡'
-                },
-                {
-                  value: 'moshengren',
-                  label: '陌生人'
-                },
-              ]
+              pageSize2:3,
+              user_true_name:'',
+              eatList:[],
+              user_id:'',
+              user_tel:''
             }
               
       },
@@ -218,11 +235,6 @@
           
       },
       methods: {
-          lookPic(e){
-            this.lookPicSrc = '';
-            this.lookPicSrc = e.face_url;
-            this.case_detail_dialog = true;
-          },
           getConfigResult(e){
             console.log(e)
             // if(e.data==101){
@@ -240,29 +252,47 @@
                 var self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
-
+                self.user_id = res;
+                if(self.date==null||self.date.length==0){
+                  var begin_time = '';
+                  var end_time = '';
+                }else{
+                  var begin_time = self.date[0];
+                  var end_time = self.date[1];
+                }
                 
-                params.append('stock_log_id',res.stock_log_id);
+                // params.append('begin_time',begin_time);
+                // params.append('end_time',end_time);
+                params.append('month',res.month);
+                params.append('pageNum',self.pageNum2);
+                params.append('pageSize',self.pageSize2);
+                params.append('user_id',res.user_id);
+                params.append('bank_type','del');
+                // params.append('eat_type',self.eat_type);
+                // params.append('user_tel',self.user_tel);
                 
-                const loading = self.$loading({
-                  lock: true,
-                  text: '打印中',
-                  spinner: 'el-icon-loading',
-                  background: 'rgba(0, 0, 0, 0.6)'
-                });
+                // const loading = self.$loading({
+                //   lock: true,
+                //   text: '加载中...',
+                //   spinner: 'el-icon-loading',
+                //   background: 'rgba(0, 0, 0, 0.6)'
+                // });
                 self.$axios({
                     method: 'post',
-                    url: '/stock/stock-log/printWord',
+                    url: '/bank/bank-log/getByPage',
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
                  }).then(function(data){
                     
                     if(data.data.code==0){
-                      loading.close();
-                      self.$message({
-                        type: 'success',
-                        message: '已发送打印请求'
-                      });
+                      self.eatList = data.data.data.list;
+                      self.case_detail_dialog = true;
+                      self.total2 = data.data.data.total;
+                      // loading.close();
+                      // self.$message({
+                      //   type: 'success',
+                      //   message: '已发送打印请求'
+                      // });
                     }else{
                       self.$response(data,self);
                     }
@@ -270,6 +300,8 @@
           },
           //查询事件
           searchClick(){
+            var self = this;
+            console.log(self.user_true_name)
             this.getDataList();
           },
           //补打条码
@@ -362,7 +394,8 @@
           },
           //分页器点击事件
           pageChange2(){
-
+            var self = this;
+            this.caseDetailClick(self.user_id)
           },
           //关键字模糊查询提示
           remoteMethod(query) {
@@ -421,19 +454,17 @@
                   var begin_time = self.date[0];
                   var end_time = self.date[1];
                 }
-                params.append('begin_time',begin_time);
-                params.append('end_time',end_time);
-                params.append('card',0);
+                params.append('month',self.month);
                 params.append('pageNum',self.pageNum);
                 params.append('pageSize',self.pageSize);
                 params.append('user_id',self.user_true_name);
-                params.append('eat_type',self.eat_type);
                 params.append('user_tel',self.user_tel);
-                params.append('user_type',self.user_type);
+                params.append('bank_type','del');
+                // params.append('stock_log_type','in');
 
                 self.$axios({
                     method: 'post',
-                    url: '/log/eat-log/getByPage',
+                    url: '/bank/bank-log/getByMonth',
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
                  }).then(function(data){
@@ -515,18 +546,15 @@
             border-radius: 0;
             background: rgba(0,0,0,0.1);
     }
-    
+    .imgTypeClass{
+      width: 100px;
+      height: 100px;
+    }
     .tableTitle{
       width: 200px;
       height: 60px;
       float: left;
       margin-left: 30px;
-    }
-    .lookPicClass{
-      width: 500px;
-      height: 500px;
-      margin: 0 auto;
-      margin-left: 200px;
     }
     .numData{
       width: 99%;

@@ -31,19 +31,10 @@
                     v-model="user_tel"
                     clearable>
                 </el-input>
-
-                <el-select v-model="user_type" placeholder="请用户类型" style="width: 180px;margin-left: 30px;">
-                  <el-option
-                    v-for="item in userTypeList"
-                    :key="item.type_value"
-                    :label="item.type_name"
-                    :value="item.type_value">
-                  </el-option>
-                </el-select>
                 <el-button type="warning" style="margin-left: 30px;" @click="searchClick">查询</el-button>
                 <!-- <el-button type="primary" style="margin-left: 80px;" @click="importUsers = true">批量导入</el-button> -->
                 <!-- <el-button type="primary" style="margin-left: 60px;" @click="downLoadFile">导入模板下载</el-button> -->
-                <el-button type="primary" style="margin-left: 60px;" @click="addUserNew">单人新增</el-button>
+                <!-- <el-button type="primary" style="margin-left: 60px;" @click="addUserNew">单人新增</el-button> -->
                 
             </div>
 
@@ -82,7 +73,7 @@
                         <el-input v-model="form.user_tel" style="width: 200px;float: left;"></el-input>
                       </el-form-item>
                       <el-form-item label="是否免检" style="display: inline-block;">
-                        <el-select  filterable v-model="form.exempt" placeholder="请选择" style="width:208px;float: left;">
+                        <el-select  filterable v-model="form.exempt" placeholder="请选择" style="width:208px;">
                           <el-option
                             v-for="item in exemptList"
                             :key="item.exempt_value"
@@ -91,26 +82,13 @@
                           </el-option>
                         </el-select>
                       </el-form-item>
-                      <el-form-item label="手机卡号" style="display: inline-block;margin-left:72px;">
-                        <el-input v-model="form.card_num" style="width: 200px;float: left;"></el-input>
-                      </el-form-item>
                       <el-form-item label="所在部门" style="display: block;">
-                        <el-select multiple filterable v-model="form.dept_ids" placeholder="请选择" style="width:208px;float: left;">
+                        <el-select multiple filterable v-model="form.dept_ids" placeholder="请选择" style="width:208px;">
                           <el-option
                             v-for="item in bumenList"
                             :key="item.dept_id"
                             :label="item.dept_name"
                             :value="item.dept_id">
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
-                      <el-form-item label="用户类型" style="display: inline-block;">
-                        <el-select  filterable v-model="form.user_type" placeholder="请选择" style="width:208px;float: left;">
-                          <el-option
-                            v-for="item in userTypeList"
-                            :key="item.type_value"
-                            :label="item.type_name"
-                            :value="item.type_value">
                           </el-option>
                         </el-select>
                       </el-form-item>
@@ -141,7 +119,7 @@
                         <el-input v-model="form.user_tel" style="width: 200px;float: left;"></el-input>
                       </el-form-item>
                       <el-form-item label="是否免检" style="display: inline-block;">
-                        <el-select  filterable v-model="form.exempt" placeholder="请选择" style="width:208px;float: left;">
+                        <el-select  filterable v-model="form.exempt" placeholder="请选择" style="width:208px;">
                           <el-option
                             v-for="item in exemptList"
                             :key="item.exempt_value"
@@ -150,9 +128,6 @@
                           </el-option>
                         </el-select>
                       </el-form-item>
-                      <el-form-item label="手机卡号" style="display: inline-block;margin-left:72px;">
-                        <el-input v-model="form.card_num" style="width: 200px;float: left;"></el-input>
-                      </el-form-item>
                       <el-form-item label="所在部门" style="display: block;">
                         <el-select multiple filterable v-model="form.dept_ids" placeholder="请选择" style="width:208px;">
                           <el-option
@@ -160,16 +135,6 @@
                             :key="item.dept_id"
                             :label="item.dept_name"
                             :value="item.dept_id">
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
-                      <el-form-item label="用户类型" style="display: inline-block;">
-                        <el-select  filterable v-model="form.user_type" placeholder="请选择" style="width:208px;float: left;">
-                          <el-option
-                            v-for="item in userTypeList"
-                            :key="item.type_value"
-                            :label="item.type_name"
-                            :value="item.type_value">
                           </el-option>
                         </el-select>
                       </el-form-item>
@@ -216,22 +181,10 @@
                 prop="user_true_name">
               </el-table-column>
               <el-table-column
-                label="是否免检"
+                label="手机号"
                 align="center"
+                prop="user_tel"
                 >
-                <template slot-scope="props">
-                  <span>{{props.row.exempt=='0'?'不免检':''}}</span>
-                  <span>{{props.row.exempt=='1'?'免检':''}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="用户类型"
-                align="center"
-                >
-                <template slot-scope="props">
-                  <span>{{props.row.user_type=='fangke'?'访客':''}}</span>
-                  <span>{{props.row.user_type=='yuangong'?'单位干警':''}}</span>
-                </template>
               </el-table-column>
               <el-table-column
                 label="部门"
@@ -242,28 +195,35 @@
                   <span v-for="item in props.row.userDepts">{{item.dept_name}},</span>
                 </template>
               </el-table-column>
+              
               <el-table-column
-                label="手机号"
+                label="余额"
                 align="center"
-                prop="user_tel"
                 >
+                <template slot-scope="props">
+                  <span>{{props.row.amount/100}}元</span>
+                </template>
               </el-table-column>
-              <el-table-column
-                label="手机卡号"
+              <!-- <el-table-column
+                label="创建时间"
                 align="center"
-                prop="card_num">
-              </el-table-column>
+                prop="create_time">
+              </el-table-column> -->
               <el-table-column
                 label="操作"
                 align="center">
                 <template slot-scope="props">
-                  <el-button
+                  <!-- <el-button
                   size="mini"
                   @click="updataClick(props.row)">修改</el-button>
                   <el-button
                   size="mini"
                   type="danger"
-                  @click="handleEdit(props.row)">删除</el-button>
+                  @click="handleEdit(props.row)">删除</el-button> -->
+                  <el-button
+                  size="mini"
+                  type="danger"
+                  @click="addInvest(props.row)">充值</el-button>
                 </template>
               </el-table-column>
               
@@ -297,7 +257,6 @@
       },
       data: function(){
           return {
-              user_type:'',
               face_url: '',
               user_tel:'',
               loading:false,
@@ -351,24 +310,12 @@
                 user_true_name:'',
                 user_tel:'',
                 dept_ids:[],
-                face_url:'',
-                card_num:'',
-                user_type:''
+                face_url:''
               },
               zhiweiList:[],
               bumenList: [],
               uploadUserFaceUrl:'',
-              uploadHeader:'',
-              userTypeList:[
-                {
-                  type_value:'yuangong',
-                  type_name:'单位干警'
-                },
-                {
-                  type_value:'fangke',
-                  type_name:'访客'
-                }
-              ]
+              uploadHeader:''
             }
               
       },
@@ -389,6 +336,42 @@
           this.getNameSearchList('')
       },
       methods: {
+          addInvest(res){
+            var self = this;
+            self.$prompt('请输入充值金额', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              inputPattern: /^[0-9]*[1-9][0-9]*$/,
+              inputErrorMessage: '充值金额为大于0的整数'
+            }).then(({ value }) => {
+                var params = new URLSearchParams();
+                var token = localStorage.getItem('auth');
+                params.append('user_id',res.user_id);
+                params.append('quantity',value*100);
+                self.$axios({
+                    method: 'post',
+                    url: '/user/addBank',
+                    data: params,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                 }).then(function(data){
+                    if(data.data.code==0){
+                        self.$message({
+                          type: 'success',
+                          message: '充值金额是: ' + value
+                        });
+                        self.getDataList();
+                    }else{
+                      self.$response(data,self);
+                    }
+                 });
+              
+            }).catch(() => {
+              self.$message({
+                type: 'info',
+                message: '取消充值'
+              });       
+            });
+          },
           addUserNew(){
             this.form = {};
             this.addUser = true;
@@ -483,8 +466,7 @@
                 params.append('dept_ids',self.form.dept_ids.join(","));
                 params.append('face_url',self.form.face_url);
                 params.append('exempt',self.form.exempt);
-                params.append('card_num',self.form.card_num);
-                params.append('user_type',self.form.user_type);
+                
                 const loading = self.$loading({
                   lock: true,
                   text: '加载中...',
@@ -528,9 +510,6 @@
                 params.append('dept_ids',dept_ids);
                 params.append('face_url',self.form.face_url);
                 params.append('exempt',self.form.exempt);
-                params.append('card_num',self.form.card_num);
-                params.append('user_type',self.form.user_type);
-                
                 const loading = self.$loading({
                   lock: true,
                   text: '加载中...',
@@ -623,7 +602,7 @@
                 params.append('pageSize',self.pageSize); 
                 params.append('user_true_name',self.user_true_name); 
                 params.append('user_tel',self.user_tel);
-                params.append('user_type',self.user_type);
+                params.append('user_type','yuangong');
                 self.$axios({
                     method: 'post',
                     url: '/user/getByPage',

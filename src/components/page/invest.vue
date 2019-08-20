@@ -24,17 +24,14 @@
                     :value="item.value">
                   </el-option>
                 </el-select>
-
                 <el-date-picker
-                  style="margin-left: 20px;width:420px;"
-                  v-model="date"
-                  type="daterange"
-                  range-separator="至"
-                  format="yyyy 年 MM 月 dd 日"
-                  value-format="yyyy-MM-dd"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期">
+                  v-model="month"
+                  style="margin-left: 20px;width:220px;"
+                  type="month"
+                  value-format="yyyy-MM"
+                  placeholder="请选择月份">
                 </el-date-picker>
+                
                 
                 <el-button type="warning" style="margin-left: 30px;" @click="searchClick">查询</el-button>
             </div>
@@ -63,33 +60,44 @@
                 
               </el-table-column>
               <el-table-column
-                label="就餐时间"
+                label="充值时间"
                 align="center"
-                prop="eat_time"
+                width="200"
+                prop="log_time"
                 >
                 <!-- <template slot-scope="props">
                   <span v-bind:class="[props.row.stock_status=='in'?'':'colorRed']">{{props.row.stock_status=='in'?'已入库':'待入库'}}</span>
                 </template> -->
               </el-table-column>
               <el-table-column
-                label="就餐类型"
+                label="充值前余额"
                 align="center"
-                
                 >
                 <template slot-scope="props">
-                  <span >{{props.row.eat_type=='lunch'?'午餐':''}}</span>
-                  <span >{{props.row.eat_type=='breakfast'?'早餐':''}}</span>
-                  <span >{{props.row.eat_type=='dinner'?'晚餐':''}}</span>
+                  <span >{{props.row.before_amount/100}}元</span>
                 </template>
               </el-table-column>
               <el-table-column
-                label="就餐照片"
-                width="200px"
+                label="充值金额"
                 align="center"
                 >
                 <template slot-scope="props">
-                  <img :src="props.row.face_url">
+                  <span >{{props.row.quantity/100}}元</span>
                 </template>
+              </el-table-column>
+              <el-table-column
+                label="充值后余额"
+                align="center"
+                >
+                <template slot-scope="props">
+                  <span >{{props.row.after_amount/100}}元</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="操作员"
+                align="center"
+                prop="operator_user_name">
+                
               </el-table-column>
             </el-table> 
             <el-pagination
@@ -125,21 +133,27 @@
                 
               </el-table-column>
               <el-table-column
-                label="手机号"
+                label="时间"
                 align="center"
-                prop="user_true_name"
+                prop="month"
                 >
               </el-table-column>
               
               <el-table-column
-                label="就餐次数"
+                label="充值次数"
                 align="center"
-                show-overflow-tooltip
-                width="400"
-                prop="quantity"
+                prop="number"
                 >
               </el-table-column>
-              
+              <el-table-column
+                label="充值总金额"
+                align="center"
+                prop="number"
+                >
+                <template slot-scope="props">
+                  <span>{{props.row.total/100}}元</span>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="操作"
                 width="300px"
@@ -181,6 +195,7 @@
               options4: [],
               case_name: [],
               list: [],
+              month:'',
               loading: false,
               states: [],
               date:[],
@@ -193,7 +208,7 @@
               pageSize:10,
               total2:0,
               pageNum2:1,
-              pageSize2:3,
+              pageSize2:5,
               user_true_name:'',
               eatList:[],
               user_id:'',
@@ -223,7 +238,7 @@
                 var self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
-                self.user_id = res.user_id;
+                self.user_id = res;
                 if(self.date==null||self.date.length==0){
                   var begin_time = '';
                   var end_time = '';
@@ -232,12 +247,13 @@
                   var end_time = self.date[1];
                 }
                 
-                params.append('begin_time',begin_time);
-                params.append('end_time',end_time);
-                params.append('card',1);
+                // params.append('begin_time',begin_time);
+                // params.append('end_time',end_time);
+                params.append('month',res.month);
                 params.append('pageNum',self.pageNum2);
                 params.append('pageSize',self.pageSize2);
                 params.append('user_id',res.user_id);
+                params.append('bank_type','add');
                 // params.append('eat_type',self.eat_type);
                 // params.append('user_tel',self.user_tel);
                 
@@ -249,7 +265,7 @@
                 // });
                 self.$axios({
                     method: 'post',
-                    url: '/log/eat-log/getByPage',
+                    url: '/bank/bank-log/getByPage',
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
                  }).then(function(data){
@@ -424,18 +440,17 @@
                   var begin_time = self.date[0];
                   var end_time = self.date[1];
                 }
-                params.append('begin_time',begin_time);
-                params.append('end_time',end_time);
+                params.append('month',self.month);
                 params.append('pageNum',self.pageNum);
                 params.append('pageSize',self.pageSize);
                 params.append('user_id',self.user_true_name);
                 params.append('user_tel',self.user_tel);
-
+                params.append('bank_type','add');
                 // params.append('stock_log_type','in');
 
                 self.$axios({
                     method: 'post',
-                    url: '/log/eat-log/getUserEatLogCount',
+                    url: '/bank/bank-log/getByMonth',
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
                  }).then(function(data){

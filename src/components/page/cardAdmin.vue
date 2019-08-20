@@ -5,7 +5,7 @@
 
             <div class="block">
                
-              <el-select 
+              <!-- <el-select 
                 clearable 
                 v-model="user_true_name" 
                 style="height:40px;" 
@@ -22,18 +22,19 @@
                     :label="item.label"
                     :value="item.label">
                   </el-option>
-                </el-select>
+                </el-select> -->
                 
                 <el-input
                     clearable
-                    placeholder="手机号查询"
-                    style="width: 200px;margin-left: 60px;"
+                    placeholder="就餐卡号查询"
+                    style="width: 200px;margin-left: 10px;"
                     v-model="user_tel"
                     clearable>
                 </el-input>
 
-                <el-select v-model="user_type" placeholder="请用户类型" style="width: 180px;margin-left: 30px;">
+                <el-select v-model="user_type" placeholder="就餐卡类型" style="width: 180px;margin-left: 30px;">
                   <el-option
+                    clearable
                     v-for="item in userTypeList"
                     :key="item.type_value"
                     :label="item.type_name"
@@ -43,7 +44,7 @@
                 <el-button type="warning" style="margin-left: 30px;" @click="searchClick">查询</el-button>
                 <!-- <el-button type="primary" style="margin-left: 80px;" @click="importUsers = true">批量导入</el-button> -->
                 <!-- <el-button type="primary" style="margin-left: 60px;" @click="downLoadFile">导入模板下载</el-button> -->
-                <el-button type="primary" style="margin-left: 60px;" @click="addUserNew">单人新增</el-button>
+                <el-button type="primary" style="margin-left: 60px;" @click="addUserNew">新增</el-button>
                 
             </div>
 
@@ -71,41 +72,17 @@
             </span>
           </el-dialog>
           <el-dialog
-            title="新增单个人员"
+            title="新增就餐卡"
             :visible.sync="addUser"
             >
                   <el-form ref="form" :model="form" label-width="120px" label-position="left" style="margin-left:20px;">
-                      <el-form-item label="真实姓名" style="display: inline-block;">
-                        <el-input v-model="form.user_true_name" style="width: 200px;float: left;"></el-input>
-                      </el-form-item>
-                      <el-form-item label="手机号码" style="display: inline-block;margin-left:80px;">
-                        <el-input v-model="form.user_tel" style="width: 200px;float: left;"></el-input>
-                      </el-form-item>
-                      <el-form-item label="是否免检" style="display: inline-block;">
-                        <el-select  filterable v-model="form.exempt" placeholder="请选择" style="width:208px;float: left;">
-                          <el-option
-                            v-for="item in exemptList"
-                            :key="item.exempt_value"
-                            :label="item.exempt_name"
-                            :value="item.exempt_value">
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
-                      <el-form-item label="手机卡号" style="display: inline-block;margin-left:72px;">
+                     
+                      <el-form-item label="手机卡号" style="display: inline-block;">
                         <el-input v-model="form.card_num" style="width: 200px;float: left;"></el-input>
                       </el-form-item>
-                      <el-form-item label="所在部门" style="display: block;">
-                        <el-select multiple filterable v-model="form.dept_ids" placeholder="请选择" style="width:208px;float: left;">
-                          <el-option
-                            v-for="item in bumenList"
-                            :key="item.dept_id"
-                            :label="item.dept_name"
-                            :value="item.dept_id">
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
-                      <el-form-item label="用户类型" style="display: inline-block;">
-                        <el-select  filterable v-model="form.user_type" placeholder="请选择" style="width:208px;float: left;">
+                      
+                      <el-form-item label="就餐卡类型" style="display: inline-block;margin-left:72px;">
+                        <el-select  filterable v-model="form.card_type" placeholder="请选择" style="width:208px;float: left;">
                           <el-option
                             v-for="item in userTypeList"
                             :key="item.type_value"
@@ -114,18 +91,7 @@
                           </el-option>
                         </el-select>
                       </el-form-item>
-                      <el-form-item label="人员照片" style="display: block;">
-                        <el-upload
-                          class="avatar-uploader"
-                          :headers="uploadHeader"
-                          :action="uploadUserFaceUrl"
-                          :show-file-list="false"
-                          :on-success="handleAvatarSuccess"
-                          :before-upload="beforeAvatarUpload">
-                          <img v-if="form.face_url" :src="form.face_url" class="avatar">
-                          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                        </el-upload>
-                      </el-form-item>
+                      
                     </el-form>            
             <span slot="footer" class="dialog-footer">
               <el-button @click="addUser = false">取 消</el-button>
@@ -134,37 +100,13 @@
           </el-dialog>
           <el-dialog  title="修改用户资料" :visible.sync="dialogFormVisible">
                 <el-form ref="form" :model="form" label-width="120px" label-position="left" style="margin-left:20px;">
-                      <el-form-item label="真实姓名" style="display: inline-block;">
-                        <el-input v-model="form.user_true_name" style="width: 200px;float: left;"></el-input>
-                      </el-form-item>
-                      <el-form-item label="手机号码" style="display: inline-block;margin-left:80px;">
-                        <el-input v-model="form.user_tel" style="width: 200px;float: left;"></el-input>
-                      </el-form-item>
-                      <el-form-item label="是否免检" style="display: inline-block;">
-                        <el-select  filterable v-model="form.exempt" placeholder="请选择" style="width:208px;float: left;">
-                          <el-option
-                            v-for="item in exemptList"
-                            :key="item.exempt_value"
-                            :label="item.exempt_name"
-                            :value="item.exempt_value">
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
-                      <el-form-item label="手机卡号" style="display: inline-block;margin-left:72px;">
+                      
+                      <el-form-item label="手机卡号" style="display: inline-block;">
                         <el-input v-model="form.card_num" style="width: 200px;float: left;"></el-input>
                       </el-form-item>
-                      <el-form-item label="所在部门" style="display: block;">
-                        <el-select multiple filterable v-model="form.dept_ids" placeholder="请选择" style="width:208px;">
-                          <el-option
-                            v-for="item in bumenList"
-                            :key="item.dept_id"
-                            :label="item.dept_name"
-                            :value="item.dept_id">
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
-                      <el-form-item label="用户类型" style="display: inline-block;">
-                        <el-select  filterable v-model="form.user_type" placeholder="请选择" style="width:208px;float: left;">
+                      
+                      <el-form-item label="就餐卡类型" style="display: inline-block;margin-left:72px;" >
+                        <el-select  filterable v-model="form.card_type" placeholder="请选择" style="width:208px;float: left;">
                           <el-option
                             v-for="item in userTypeList"
                             :key="item.type_value"
@@ -173,18 +115,7 @@
                           </el-option>
                         </el-select>
                       </el-form-item>
-                      <el-form-item label="人员照片" style="display: block;">
-                        <el-upload
-                          class="avatar-uploader"
-                          :headers="uploadHeader"
-                          :action="uploadUserFaceUrl"
-                          :show-file-list="false"
-                          :on-success="handleAvatarSuccess"
-                          :before-upload="beforeAvatarUpload">
-                          <img v-if="form.face_url" :src="form.face_url" class="avatar">
-                          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                        </el-upload>
-                      </el-form-item>
+                      
                     </el-form>         
 
               <div slot="footer" class="dialog-footer">
@@ -205,53 +136,22 @@
                 align="center"
                 >
               </el-table-column>
-              <!-- <el-table-column
-                label="账号"
-                align="center"
-                prop="username">
-              </el-table-column> -->
-              <el-table-column
-                label="姓名"
-                align="center"
-                prop="user_true_name">
-              </el-table-column>
-              <el-table-column
-                label="是否免检"
-                align="center"
-                >
-                <template slot-scope="props">
-                  <span>{{props.row.exempt=='0'?'不免检':''}}</span>
-                  <span>{{props.row.exempt=='1'?'免检':''}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="用户类型"
-                align="center"
-                >
-                <template slot-scope="props">
-                  <span>{{props.row.user_type=='fangke'?'访客':''}}</span>
-                  <span>{{props.row.user_type=='yuangong'?'单位干警':''}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="部门"
-                align="center"
-                prop="dept_name"
-                >
-                <template slot-scope="props">
-                  <span v-for="item in props.row.userDepts">{{item.dept_name}},</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="手机号"
-                align="center"
-                prop="user_tel"
-                >
-              </el-table-column>
+              
+              
+              
               <el-table-column
                 label="手机卡号"
                 align="center"
                 prop="card_num">
+              </el-table-column>
+              <el-table-column
+                label="就餐卡类型"
+                align="center"
+                >
+                <template slot-scope="props">
+                  <span>{{props.row.card_type=='normal'?'普通':''}}</span>
+                  <span>{{props.row.card_type=='once'?'临时':''}}</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="操作"
@@ -353,7 +253,8 @@
                 dept_ids:[],
                 face_url:'',
                 card_num:'',
-                user_type:''
+                user_type:'',
+                card_type:''
               },
               zhiweiList:[],
               bumenList: [],
@@ -361,12 +262,16 @@
               uploadHeader:'',
               userTypeList:[
                 {
-                  type_value:'yuangong',
-                  type_name:'单位干警'
+                  type_value:'',
+                  type_name:'全部'
                 },
                 {
-                  type_value:'fangke',
-                  type_name:'访客'
+                  type_value:'normal',
+                  type_name:'普通卡'
+                },
+                {
+                  type_value:'once',
+                  type_name:'临时卡'
                 }
               ]
             }
@@ -423,10 +328,10 @@
                 var token = localStorage.getItem('auth');
                 
                 
-                params.append('user_id',res.user_id);
+                params.append('card_num',res.card_num);
                 self.$axios({
                     method: 'post',
-                    url: '/user/del',
+                    url: '/card/del',
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
                  }).then(function(data){
@@ -478,13 +383,13 @@
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
                 
-                params.append('user_true_name',self.form.user_true_name);
-                params.append('user_tel',self.form.user_tel);
-                params.append('dept_ids',self.form.dept_ids.join(","));
-                params.append('face_url',self.form.face_url);
-                params.append('exempt',self.form.exempt);
+                // params.append('user_true_name',self.form.user_true_name);
+                // params.append('user_tel',self.form.user_tel);
+                // params.append('dept_ids',self.form.dept_ids.join(","));
+                // params.append('face_url',self.form.face_url);
+                // params.append('exempt',self.form.exempt);
                 params.append('card_num',self.form.card_num);
-                params.append('user_type',self.form.user_type);
+                params.append('card_type',self.form.card_type);
                 const loading = self.$loading({
                   lock: true,
                   text: '加载中...',
@@ -494,7 +399,7 @@
                 
                 self.$axios({
                     method: 'post',
-                    url: '/user/add',
+                    url: '/card/add',
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
                  }).then(function(data){
@@ -522,14 +427,9 @@
                 }else{
                   var dept_ids = '';
                 }
-                params.append('user_id',self.form.user_id);
-                params.append('user_true_name',self.form.user_true_name);
-                params.append('user_tel',self.form.user_tel);
-                params.append('dept_ids',dept_ids);
-                params.append('face_url',self.form.face_url);
-                params.append('exempt',self.form.exempt);
+                
                 params.append('card_num',self.form.card_num);
-                params.append('user_type',self.form.user_type);
+                params.append('card_type',self.form.card_type);
                 
                 const loading = self.$loading({
                   lock: true,
@@ -540,7 +440,7 @@
                 
                 self.$axios({
                     method: 'post',
-                    url: '/user/update',
+                    url: '/card/update',
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
                  }).then(function(data){
@@ -621,12 +521,12 @@
                 var token = localStorage.getItem('auth');
                 params.append('pageNum',self.currentPage); 
                 params.append('pageSize',self.pageSize); 
-                params.append('user_true_name',self.user_true_name); 
-                params.append('user_tel',self.user_tel);
-                params.append('user_type',self.user_type);
+                params.append('card_type',self.user_type); 
+                params.append('card_num',self.user_tel);
+                // params.append('user_type',self.user_type);
                 self.$axios({
                     method: 'post',
-                    url: '/user/getByPage',
+                    url: '/card/getByPage',
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
                  }).then(function(data){

@@ -60,7 +60,7 @@ import md5 from 'js-md5';
                     },
                     {
                         icon: 'el-icon-setting',
-                        index: 'money',
+                        index: 'moneyByMonth',
                         title: '就餐费用查询'
                     },
                     {
@@ -70,13 +70,23 @@ import md5 from 'js-md5';
                     },
                     {
                         icon: 'el-icon-setting',
+                        index: 'addInvest',
+                        title: '为用户充值'
+                    },
+                    {
+                        icon: 'el-icon-setting',
                         index: 'userAdmin',
                         title: '就餐人员设置'
                     },
                     {
                         icon: 'el-icon-setting',
+                        index: 'cardAdmin',
+                        title: '就餐卡管理'
+                    },
+                    {
+                        icon: 'el-icon-setting',
                         index: 'timeSetting',
-                        title: '就餐时间设置'
+                        title: '系统设置'
                     },
                     {
                         icon: 'el-icon-setting',

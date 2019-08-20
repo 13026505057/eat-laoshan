@@ -28,9 +28,19 @@ export default new Router({
                     component: resolve => require(['../components/page/inStoreHistory.vue'], resolve) // Vue-Quill-Editor组件
                 },
                 {
+                    name: '临时卡管理',
+                    path: '/cardAdmin',
+                    component: resolve => require(['../components/page/cardAdmin.vue'], resolve) // Vue-Quill-Editor组件
+                },
+                {
                     name: '就餐费用查询',
-                    path: '/money',
-                    component: resolve => require(['../components/page/money.vue'], resolve) // Vue-Quill-Editor组件
+                    path: '/moneyByMonth',
+                    component: resolve => require(['../components/page/moneyByMonth.vue'], resolve) // Vue-Quill-Editor组件
+                },
+                {
+                    name: '充值',
+                    path: '/addInvest',
+                    component: resolve => require(['../components/page/addInvest.vue'], resolve) // Vue-Quill-Editor组件
                 },
                 {
                     name: '就餐时间设置',
@@ -268,6 +278,10 @@ export default new Router({
         {
             path: '/login',
             component: resolve => require(['../components/page/Login.vue'], resolve)
+        },
+        {
+            path: '/tvShow',
+            component: resolve => require(['../components/page/tvShow.vue'], resolve)
         },
     ]
 })
