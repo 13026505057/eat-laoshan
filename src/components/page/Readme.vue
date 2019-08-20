@@ -165,7 +165,7 @@
       option:{
      
           title: {
-              text: '入库案件按部门统计',
+              text: '就餐人数按月统计',
               subtext: '按月分布'
           },
           tooltip: {
@@ -224,7 +224,7 @@
       option1:{
      
           title: {
-              text: '出库案件按部门统计',
+              text: '违规就餐人数按月统计',
               subtext: '按月分布'
           },
           tooltip: {
@@ -404,16 +404,16 @@
     
     this.getWeek();
     this.getDate();
-    // this.getInByDept();
-    // this.getOutByDept();
+    this.getInByDept();
+    this.getOutByDept();
     // this.getInByTime();
     // this.getOutByTime();
     this.getUserName();
     this.loading();
-    this.getNum();
-    this.getNewsList();
-    this.getSheetDate();
-    this.getMonth();
+    // this.getNum();
+    // this.getNewsList();
+    // this.getSheetDate();
+    // this.getMonth();
     this.drawLine();
   },
   methods: {
@@ -421,10 +421,10 @@
                 var self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
-               
+                params.append("card",1)
                 self.$axios({
                     method: 'post',
-                    url: '/chart/getInCaseCountByDept',
+                    url: '/log/eat-log/getEatLogCountByMonth',
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
                  }).then(function(data){
@@ -433,7 +433,7 @@
                         var countArr = [];
                         var countArr1 = [];
                         for(var i = 0;i<data.data.data.length;i++){
-                            countArr.push(data.data.data[i].dept_name);
+                            countArr.push(data.data.data[i].month);
                             countArr1.push(data.data.data[i].quantity);
                         }
                         self.option.xAxis[0].data = countArr;
@@ -448,10 +448,10 @@
                 var self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
-               
+               params.append("card",0)
                 self.$axios({
                     method: 'post',
-                    url: '/chart/getOutCaseCountByDept',
+                    url: '/log/eat-log/getEatLogCountByMonth',
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
                  }).then(function(data){
@@ -460,7 +460,7 @@
                         var countArr = [];
                         var countArr1 = [];
                         for(var i = 0;i<data.data.data.length;i++){
-                            countArr.push(data.data.data[i].dept_name);
+                            countArr.push(data.data.data[i].month);
                             countArr1.push(data.data.data[i].quantity);
                         }
                         self.option1.xAxis[0].data = countArr;
@@ -471,117 +471,117 @@
                     }
                  });
     },
-    getInByTime(){
-                var self = this;
-                var params = new URLSearchParams();
-                var token = localStorage.getItem('auth');
+    // getInByTime(){
+    //             var self = this;
+    //             var params = new URLSearchParams();
+    //             var token = localStorage.getItem('auth');
                
-                self.$axios({
-                    method: 'post',
-                    url: '/chart/getInCaseCountByMonth',
-                    data: params,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                 }).then(function(data){
+    //             self.$axios({
+    //                 method: 'post',
+    //                 url: '/chart/getInCaseCountByMonth',
+    //                 data: params,
+    //                 headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+    //              }).then(function(data){
                     
-                    if(data.data.code==0){
-                        var countArr = [];
-                        var countArr1 = [];
-                        for(var i = 0;i<data.data.data.length;i++){
-                            countArr.push(data.data.data[i].month);
-                            countArr1.push(data.data.data[i].quantity);
-                        }
-                        self.option2.xAxis[0].data = countArr;
-                        self.option2.series[0].data = countArr1;
-                        self.drawLine();
-                    }else{
-                      self.$response(data,self);
-                    }
-                 });
-    },
-    getOutByTime(){
-                var self = this;
-                var params = new URLSearchParams();
-                var token = localStorage.getItem('auth');
+    //                 if(data.data.code==0){
+    //                     var countArr = [];
+    //                     var countArr1 = [];
+    //                     for(var i = 0;i<data.data.data.length;i++){
+    //                         countArr.push(data.data.data[i].month);
+    //                         countArr1.push(data.data.data[i].quantity);
+    //                     }
+    //                     self.option2.xAxis[0].data = countArr;
+    //                     self.option2.series[0].data = countArr1;
+    //                     self.drawLine();
+    //                 }else{
+    //                   self.$response(data,self);
+    //                 }
+    //              });
+    // },
+    // getOutByTime(){
+    //             var self = this;
+    //             var params = new URLSearchParams();
+    //             var token = localStorage.getItem('auth');
                
-                self.$axios({
-                    method: 'post',
-                    url: '/chart/getOutCaseCountByMonth',
-                    data: params,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                 }).then(function(data){
+    //             self.$axios({
+    //                 method: 'post',
+    //                 url: '/chart/getOutCaseCountByMonth',
+    //                 data: params,
+    //                 headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+    //              }).then(function(data){
                     
-                    if(data.data.code==0){
-                        var countArr = [];
-                        var countArr1 = [];
-                        for(var i = 0;i<data.data.data.length;i++){
-                            countArr.push(data.data.data[i].month);
-                            countArr1.push(data.data.data[i].quantity);
-                        }
-                        self.option3.xAxis[0].data = countArr;
-                        self.option3.series[0].data = countArr1;
-                        self.drawLine();
-                    }else{
-                      self.$response(data,self);
-                    }
-                 });
-    },
-    getSheetDate(){
-      var self = this;
+    //                 if(data.data.code==0){
+    //                     var countArr = [];
+    //                     var countArr1 = [];
+    //                     for(var i = 0;i<data.data.data.length;i++){
+    //                         countArr.push(data.data.data[i].month);
+    //                         countArr1.push(data.data.data[i].quantity);
+    //                     }
+    //                     self.option3.xAxis[0].data = countArr;
+    //                     self.option3.series[0].data = countArr1;
+    //                     self.drawLine();
+    //                 }else{
+    //                   self.$response(data,self);
+    //                 }
+    //              });
+    // },
+    // getSheetDate(){
+    //   var self = this;
       
-    },
-    getNewsList(){
-                var self = this;
-                var params = new URLSearchParams();
-                var token = localStorage.getItem('auth');
-                params.append('pageNum',1);
-                params.append('pageSize',10);
-                params.append('msg_read','0');
-                // const loading = self.$loading({
-                //   lock: true,
-                //   text: '打印中',
-                //   spinner: 'el-icon-loading',
-                //   background: 'rgba(0, 0, 0, 0.6)'
-                // });
-                self.$axios({
-                    method: 'post',
-                    url: '/msg/getByPage',
-                    data: params,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                 }).then(function(data){
+    // },
+    // getNewsList(){
+    //             var self = this;
+    //             var params = new URLSearchParams();
+    //             var token = localStorage.getItem('auth');
+    //             params.append('pageNum',1);
+    //             params.append('pageSize',10);
+    //             params.append('msg_read','0');
+    //             // const loading = self.$loading({
+    //             //   lock: true,
+    //             //   text: '打印中',
+    //             //   spinner: 'el-icon-loading',
+    //             //   background: 'rgba(0, 0, 0, 0.6)'
+    //             // });
+    //             self.$axios({
+    //                 method: 'post',
+    //                 url: '/msg/getByPage',
+    //                 data: params,
+    //                 headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+    //              }).then(function(data){
                     
-                    if(data.data.code==0){
-                      self.msgList = data.data.data.list;
-                      // loading.close();
-                      // self.$message({
-                      //   type: 'success',
-                      //   message: '已发送打印请求'
-                      // });
-                    }else{
-                      self.$response(data,self);
-                    }
-                 });
+    //                 if(data.data.code==0){
+    //                   self.msgList = data.data.data.list;
+    //                   // loading.close();
+    //                   // self.$message({
+    //                   //   type: 'success',
+    //                   //   message: '已发送打印请求'
+    //                   // });
+    //                 }else{
+    //                   self.$response(data,self);
+    //                 }
+    //              });
       
-    },
-    getNum(){
-                var self = this;
-                var params = new URLSearchParams();
-                var token = localStorage.getItem('auth');
+    // },
+    // getNum(){
+    //             var self = this;
+    //             var params = new URLSearchParams();
+    //             var token = localStorage.getItem('auth');
                
-                self.$axios({
-                    method: 'post',
-                    url: '/chart/index',
-                    data: params,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                 }).then(function(data){
+    //             self.$axios({
+    //                 method: 'post',
+    //                 url: '/chart/index',
+    //                 data: params,
+    //                 headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+    //              }).then(function(data){
                     
-                    if(data.data.code==0){
-                     self.numInfo = data.data.data;
+    //                 if(data.data.code==0){
+    //                  self.numInfo = data.data.data;
                       
-                    }else{
-                      self.$response(data,self);
-                    }
-                 });      
-    },
+    //                 }else{
+    //                   self.$response(data,self);
+    //                 }
+    //              });      
+    // },
     jieshouClick(){
       
     },
@@ -640,13 +640,13 @@
         // 绘制图表
             myEchars2.setOption(self.option1);
         // 基于准备好的dom，初始化echarts实例
-            let myEchars3 = this.$echarts.init(document.getElementById('myEchars3'))
-        // 绘制图表
-            myEchars3.setOption(self.option2);
-        // 基于准备好的dom，初始化echarts实例
-            let myEchars4 = this.$echarts.init(document.getElementById('myEchars4'))
-        // 绘制图表
-            myEchars4.setOption(self.option3);
+        //     let myEchars3 = this.$echarts.init(document.getElementById('myEchars3'))
+        // // 绘制图表
+        //     myEchars3.setOption(self.option2);
+        // // 基于准备好的dom，初始化echarts实例
+        //     let myEchars4 = this.$echarts.init(document.getElementById('myEchars4'))
+        // // 绘制图表
+        //     myEchars4.setOption(self.option3);
              
            
         

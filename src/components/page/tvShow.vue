@@ -6,10 +6,10 @@
                     正常餐卡
                 </div>
                 <div class="normalTitle2">
-                    今日应刷：60
+                    今日应刷：{{yuangongQuantity}}
                 </div>
                 <div class="normalTitle2">
-                    今日实刷：50
+                    今日实刷：{{yuangongEatQuantity}}
                 </div>
             </div>
              <div class="normal">
@@ -17,10 +17,10 @@
                     临时餐卡
                 </div>
                 <div class="normalTitle2">
-                    今日应刷：60
+                    今日应刷：{{fangkeQuantity}}
                 </div>
                 <div class="normalTitle2">
-                    今日实刷：50
+                    今日实刷：{{fangkeEatQuantity}}
                 </div>
             </div>
              <div class="normal">
@@ -28,10 +28,10 @@
                     特殊餐卡
                 </div>
                 <div class="normalTitle2">
-                    今日应刷：60
+                    今日应刷：{{moshengrenQuantity}}
                 </div>
                 <div class="normalTitle2">
-                    今日实刷：50
+                    今日实刷：{{moshengrenEatQuantity}}
                 </div>
             </div>
             <!-- <div class="userBoxItem">
@@ -57,12 +57,13 @@
                         违规类型
                     </div>
                 </div>
-                <div class="outruleBoxTitle">
+                <div class="outruleBoxTitle" v-for="(outruleItem,index) in outruleItems" :key="index">
                     <div class="outruleBoxTitleItem">
-                        2019-08-01 23：23：23
+                        <!-- 2019-08-01 23：23：23 -->
+                        {{outruleItem.eat_time}}
                     </div>
                     <div class="outruleBoxTitleItem">
-                        朱元皓
+                        {{outruleItem.user_true_name}}
                     </div>
                     <div class="outruleBoxTitleItem" style="border-right: none;">
                         未刷卡
@@ -76,7 +77,12 @@
                 <div class="normalTitle">
                     陌生人
                 </div>
-                <div class="userBoxItem">
+                <div class="userBoxItem" v-for="(stranger,index) in strangers" :key="index">
+                    <div class="userFace">
+                        <img style="width: 100%;height: 100%;" :src="stranger.face_url">
+                    </div>
+                </div>
+                <!-- <div class="userBoxItem">
                     <div class="userFace">
                         <img style="width: 100%;height: 100%;" src="../../../static/img/test.png">
                     </div>
@@ -90,12 +96,7 @@
                     <div class="userFace">
                         <img style="width: 100%;height: 100%;" src="../../../static/img/test.png">
                     </div>
-                </div>
-                <div class="userBoxItem">
-                    <div class="userFace">
-                        <img style="width: 100%;height: 100%;" src="../../../static/img/test.png">
-                    </div>
-                </div>
+                </div> -->
             </div>
              
             <!-- <div class="userBoxItem">
@@ -132,7 +133,15 @@
                       date: '2016-05-03',
                       name: '王小虎',
                       address: '上海市普陀区金沙江路 1516 弄'
-                    }]
+                    }],
+                yuangongEatQuantity:'',
+                yuangongQuantity:'',
+                fangkeQuantity:'',
+                fangkeEatQuantity:"",
+                moshengrenQuantity:'',
+                moshengrenEatQuantity:'',
+                outruleItems:[],
+                strangers:'',
             }
         },
         methods: {
@@ -166,9 +175,56 @@
                     }
                  });
             },
+            getCard(){
+                // log/eat-log/getNowEatUserQuantity
+                // 带eat实刷
+                const self = this;
+                var params = new URLSearchParams();
+                //这里需要查的是当前就餐
+                self.$axios({
+                    method: 'post',
+                    url: '/log/eat-log/getNowEatUserQuantity',
+                    data: params,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                }).then(function(data){
+                    if(data.data.code==0){
+                        self.yuangongEatQuantity = data.data.data.yuangong_eat_quantity;
+                        self.yuangongQuantity = data.data.data.yuangong_quantity;
+                        self.fangkeQuantity = data.data.data.fangke_quantity;
+                        self.fangkeEatQuantity = data.data.data.fangke_eat_quantity;
+                        self.moshengrenQuantity = data.data.data.moshengren_quantity;
+                        self.moshengrenEatQuantity = data.data.data.moshengren_eat_quantity;
+                        self.strangers = data.data.data.msr;
+
+                    }else{
+                      self.$response(data,self);
+                    }
+                });
+            },
+            // 违规
+            getOutOfLine(){
+                const self = this;
+                var params = new URLSearchParams();
+                //这里需要查的是当前就餐
+                self.$axios({
+                    method: 'post',
+                    url: '/log/eat-log/getNowEatUser',
+                    data: params,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                }).then(function(data){
+                    if(data.data.code==0){
+                        self.outruleItems = data.data.data;
+                    }else{
+                      self.$response(data,self);
+                    }
+                });
+            },
+
         },
         mounted(){
             // this.onload();
+            this.getCard();
+            this.getOutOfLine();
         }
     }
 </script>
