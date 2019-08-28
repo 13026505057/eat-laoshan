@@ -208,7 +208,7 @@
                 //这里需要查的是当前就餐
                 self.$axios({
                     method: 'post',
-                    url: '/log/eat-log/getNowEatUser',
+                    url: '/log/eat-log/getNowEatUserNoMsr',
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 }).then(function(data){
@@ -222,9 +222,14 @@
 
         },
         mounted(){
+            var self = this;
             // this.onload();
             this.getCard();
             this.getOutOfLine();
+            setInterval(function(){
+                self.getCard();
+                self.getOutOfLine();
+            },60000)
         }
     }
 </script>
