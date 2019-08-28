@@ -122,7 +122,7 @@
                           :show-file-list="false"
                           :on-success="handleAvatarSuccess"
                           :before-upload="beforeAvatarUpload">
-                          <img v-if="form.face_url" :src="form.face_url" class="avatar">
+                          <img v-if="face_url" :src="form.face_url" class="avatar">
                           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
                       </el-form-item>
@@ -181,7 +181,7 @@
                           :show-file-list="false"
                           :on-success="handleAvatarSuccess"
                           :before-upload="beforeAvatarUpload">
-                          <img v-if="form.face_url" :src="form.face_url" class="avatar">
+                          <img v-if="face_url" :src="form.face_url" class="avatar">
                           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
                       </el-form-item>
@@ -396,6 +396,12 @@
           handleAvatarSuccess(res, file) {
             if(res.code==0){
               this.form.face_url = res.data;
+              this.face_url = res.data;
+              this.$message({
+                message: '上传成功',
+                type: 'success'
+             });
+             
             }else{
               this.$message({
                 type: 'error',
@@ -506,6 +512,7 @@
                         }); 
                         self.getDataList();
                     }else{
+                        loading.close();
                       self.$response(data,self);
                     }
                  });

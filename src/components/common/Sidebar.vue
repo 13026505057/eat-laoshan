@@ -86,7 +86,7 @@ import md5 from 'js-md5';
                     {
                         icon: 'el-icon-setting',
                         index: 'timeSetting',
-                        title: '系统设置'
+                        title: '就餐时间管理'
                     },
                     {
                         icon: 'el-icon-setting',

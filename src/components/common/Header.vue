@@ -365,7 +365,7 @@ import md5 from 'js-md5';
     .top{
         width: 100%;
         height:80px;
-        background-image: url(../../../static/img/top_head.png);
+        background-image: url(../../../static/img/top_head.jpg);
         background-size:100%100%;  
     }
     .el-menu--horizontal{

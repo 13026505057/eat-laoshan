@@ -13,7 +13,7 @@ export default new Router({
             path: '/readme',
             component: resolve => require(['../components/common/Home.vue'], resolve),
             children: [{
-                    name: '管控人分布',
+                    name: '首页',
                     path: '/',
                     component: resolve => require(['../components/page/Readme.vue'], resolve)
                 },
@@ -23,7 +23,7 @@ export default new Router({
                     component: resolve => require(['../components/page/waitForInStore.vue'], resolve) // Vue-Quill-Editor组件
                 },
                 {
-                    name: '入库历史',
+                    name: '就餐记录查询',
                     path: '/inStoreHistory',
                     component: resolve => require(['../components/page/inStoreHistory.vue'], resolve) // Vue-Quill-Editor组件
                 },
