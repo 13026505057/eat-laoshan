@@ -5,27 +5,26 @@
 
             <div class="block">
                
-              <el-select 
-                clearable 
-                v-model="user_true_name" 
-                style="height:40px;" 
-                remote 
-                reserve-keyword 
-                :remote-method="remoteMethod" 
-                :loading="loading" 
-                filterable 
-                placeholder="姓名查询">
-                  <el-option
-                    style="height:40px;"
-                    v-for="item,index in userNameList"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.label">
-                  </el-option>
+                <el-select 
+                    clearable 
+                    v-model="user_true_name" 
+                    style="height:40px;" 
+                    remote 
+                    reserve-keyword 
+                    :remote-method="remoteMethod" 
+                    :loading="loading" 
+                    filterable 
+                    placeholder="姓名查询">
+                    <el-option
+                        style="height:40px;"
+                        v-for="(item,index) in userNameList"
+                        :key="index"
+                        :label="item.label"
+                        :value="item.label">
+                    </el-option>
                 </el-select>
                 
                 <el-input
-                    clearable
                     placeholder="手机号查询"
                     style="width: 200px;margin-left: 60px;"
                     v-model="user_tel"
@@ -33,12 +32,12 @@
                 </el-input>
 
                 <el-select v-model="user_type" placeholder="请用户类型" style="width: 180px;margin-left: 30px;">
-                  <el-option
-                    v-for="item in userTypeList"
-                    :key="item.type_value"
-                    :label="item.type_name"
-                    :value="item.type_value">
-                  </el-option>
+                    <el-option
+                        v-for="item in userTypeList"
+                        :key="item.type_value"
+                        :label="item.type_name"
+                        :value="item.type_value">
+                    </el-option>
                 </el-select>
                 <el-button type="warning" style="margin-left: 30px;" @click="searchClick">查询</el-button>
                 <!-- <el-button type="primary" style="margin-left: 80px;" @click="importUsers = true">批量导入</el-button> -->
@@ -50,228 +49,227 @@
           
         </div>
         <div id="container" style="width: 100%;height: 110%; margin-top: 20px;">
-          <el-dialog
-            title="人员批量导入"
-            :visible.sync="importUsers"
-            width="40%"
-            style="text-align:center;"
-            >
-            <el-upload
-              class="upload-demo"
-              drag
-              :action="addManyUserUploadUrl"
-              multiple>
-              <i class="el-icon-upload"></i>
-              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-              <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-            </el-upload>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="importUsers = false">取 消</el-button>
-              <el-button type="primary" @click="importUsers = false">确 定</el-button>
-            </span>
-          </el-dialog>
-          <el-dialog
-            title="新增单个人员"
-            :visible.sync="addUser"
-            >
-                  <el-form ref="form" :model="form" label-width="120px" label-position="left" style="margin-left:20px;">
-                      <el-form-item label="真实姓名" style="display: inline-block;">
-                        <el-input v-model="form.user_true_name" style="width: 200px;float: left;"></el-input>
-                      </el-form-item>
-                      <el-form-item label="手机号码" style="display: inline-block;margin-left:80px;">
-                        <el-input v-model="form.user_tel" style="width: 200px;float: left;"></el-input>
-                      </el-form-item>
-                      <el-form-item label="是否免检" style="display: inline-block;">
-                        <el-select  filterable v-model="form.exempt" placeholder="请选择" style="width:208px;float: left;">
-                          <el-option
-                            v-for="item in exemptList"
-                            :key="item.exempt_value"
-                            :label="item.exempt_name"
-                            :value="item.exempt_value">
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
-                      <el-form-item label="手机卡号" style="display: inline-block;margin-left:72px;">
-                        <el-input v-model="form.card_num" style="width: 200px;float: left;"></el-input>
-                      </el-form-item>
-                      <el-form-item label="所在部门" style="display: block;">
-                        <el-select multiple filterable v-model="form.dept_ids" placeholder="请选择" style="width:208px;float: left;">
-                          <el-option
-                            v-for="item in bumenList"
-                            :key="item.dept_id"
-                            :label="item.dept_name"
-                            :value="item.dept_id">
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
-                      <el-form-item label="用户类型" style="display: inline-block;">
-                        <el-select  filterable v-model="form.user_type" placeholder="请选择" style="width:208px;float: left;">
-                          <el-option
-                            v-for="item in userTypeList"
-                            :key="item.type_value"
-                            :label="item.type_name"
-                            :value="item.type_value">
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
-                      <el-form-item label="人员照片" style="display: block;">
-                        <el-upload
-                          class="avatar-uploader"
-                          :headers="uploadHeader"
-                          :action="uploadUserFaceUrl"
-                          :show-file-list="false"
-                          :on-success="handleAvatarSuccess"
-                          :before-upload="beforeAvatarUpload">
-                          <img v-if="face_url" :src="form.face_url" class="avatar">
-                          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                        </el-upload>
-                      </el-form-item>
-                    </el-form>            
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="addUser = false">取 消</el-button>
-              <el-button type="primary" @click="addUserClick">确 定</el-button>
-            </span>
-          </el-dialog>
-          <el-dialog  title="修改用户资料" :visible.sync="dialogFormVisible">
+            <el-dialog
+                title="人员批量导入"
+                :visible.sync="importUsers"
+                width="40%"
+                style="text-align:center;"
+                >
+                <el-upload
+                    class="upload-demo"
+                    drag
+                    :action="addManyUserUploadUrl"
+                    multiple>
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                    <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                </el-upload>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="importUsers = false">取 消</el-button>
+                    <el-button type="primary" @click="importUsers = false">确 定</el-button>
+                </span>
+            </el-dialog>
+            <el-dialog
+                title="新增单个人员"
+                :visible.sync="addUser"
+                >
                 <el-form ref="form" :model="form" label-width="120px" label-position="left" style="margin-left:20px;">
-                      <el-form-item label="真实姓名" style="display: inline-block;">
+                    <el-form-item label="真实姓名" style="display: inline-block;">
                         <el-input v-model="form.user_true_name" style="width: 200px;float: left;"></el-input>
-                      </el-form-item>
-                      <el-form-item label="手机号码" style="display: inline-block;margin-left:80px;">
+                    </el-form-item>
+                    <el-form-item label="手机号码" style="display: inline-block;margin-left:80px;">
                         <el-input v-model="form.user_tel" style="width: 200px;float: left;"></el-input>
-                      </el-form-item>
-                      <el-form-item label="是否免检" style="display: inline-block;">
+                    </el-form-item>
+                    <el-form-item label="是否免检" style="display: inline-block;">
                         <el-select  filterable v-model="form.exempt" placeholder="请选择" style="width:208px;float: left;">
-                          <el-option
+                        <el-option
                             v-for="item in exemptList"
                             :key="item.exempt_value"
                             :label="item.exempt_name"
                             :value="item.exempt_value">
-                          </el-option>
+                        </el-option>
                         </el-select>
-                      </el-form-item>
-                      <el-form-item label="手机卡号" style="display: inline-block;margin-left:72px;">
+                    </el-form-item>
+                    <el-form-item label="手机卡号" style="display: inline-block;margin-left:72px;">
                         <el-input v-model="form.card_num" style="width: 200px;float: left;"></el-input>
-                      </el-form-item>
-                      <el-form-item label="所在部门" style="display: block;">
-                        <el-select multiple filterable v-model="form.dept_ids" placeholder="请选择" style="width:208px;">
-                          <el-option
+                    </el-form-item>
+                    <el-form-item label="所在部门" style="display: block;">
+                        <el-select multiple filterable v-model="form.dept_ids" placeholder="请选择" style="width:208px;float: left;">
+                        <el-option
                             v-for="item in bumenList"
                             :key="item.dept_id"
                             :label="item.dept_name"
                             :value="item.dept_id">
-                          </el-option>
+                        </el-option>
                         </el-select>
-                      </el-form-item>
-                      <el-form-item label="用户类型" style="display: inline-block;">
+                    </el-form-item>
+                    <el-form-item label="用户类型" style="display: inline-block;">
                         <el-select  filterable v-model="form.user_type" placeholder="请选择" style="width:208px;float: left;">
-                          <el-option
+                            <el-option
+                                v-for="item in userTypeList"
+                                :key="item.type_value"
+                                :label="item.type_name"
+                                :value="item.type_value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="人员照片" style="display: block;">
+                        <el-upload
+                            class="avatar-uploader"
+                            :headers="uploadHeader"
+                            :action="uploadUserFaceUrl"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess"
+                            :before-upload="beforeAvatarUpload">
+                            <img v-if="face_url" :src="form.face_url" class="avatar">
+                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                        </el-upload>
+                    </el-form-item>
+                </el-form>            
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="addUser = false">取 消</el-button>
+                    <el-button type="primary" @click="addUserClick">确 定</el-button>
+                </span>
+            </el-dialog>
+            <el-dialog  title="修改用户资料" :visible.sync="dialogFormVisible">
+                <el-form ref="form" :model="form" label-width="120px" label-position="left" style="margin-left:20px;">
+                    <el-form-item label="真实姓名" style="display: inline-block;">
+                        <el-input v-model="form.user_true_name" style="width: 200px;float: left;"></el-input>
+                    </el-form-item>
+                    <el-form-item label="手机号码" style="display: inline-block;margin-left:80px;">
+                        <el-input v-model="form.user_tel" style="width: 200px;float: left;"></el-input>
+                    </el-form-item>
+                    <el-form-item label="是否免检" style="display: inline-block;">
+                        <el-select  filterable v-model="form.exempt" placeholder="请选择" style="width:208px;float: left;">
+                            <el-option
+                            v-for="item in exemptList"
+                            :key="item.exempt_value"
+                            :label="item.exempt_name"
+                            :value="item.exempt_value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="手机卡号" style="display: inline-block;margin-left:72px;">
+                        <el-input v-model="form.card_num" style="width: 200px;float: left;"></el-input>
+                    </el-form-item>
+                    <el-form-item label="所在部门" style="display: block;">
+                        <el-select multiple filterable v-model="form.dept_ids" placeholder="请选择" style="width:208px;">
+                            <el-option
+                            v-for="item in bumenList"
+                            :key="item.dept_id"
+                            :label="item.dept_name"
+                            :value="item.dept_id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="用户类型" style="display: inline-block;">
+                        <el-select  filterable v-model="form.user_type" placeholder="请选择" style="width:208px;float: left;">
+                            <el-option
                             v-for="item in userTypeList"
                             :key="item.type_value"
                             :label="item.type_name"
                             :value="item.type_value">
-                          </el-option>
+                            </el-option>
                         </el-select>
-                      </el-form-item>
-                      <el-form-item label="人员照片" style="display: block;">
+                    </el-form-item>
+                    <el-form-item label="人员照片" style="display: block;">
                         <el-upload
-                          class="avatar-uploader"
-                          :headers="uploadHeader"
-                          :action="uploadUserFaceUrl"
-                          :show-file-list="false"
-                          :on-success="handleAvatarSuccess"
-                          :before-upload="beforeAvatarUpload">
-                          <img v-if="face_url" :src="form.face_url" class="avatar">
-                          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                            class="avatar-uploader"
+                            :headers="uploadHeader"
+                            :action="uploadUserFaceUrl"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess"
+                            :before-upload="beforeAvatarUpload">
+                            <img v-if="face_url" :src="form.face_url" class="avatar">
+                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
-                      </el-form-item>
-                    </el-form>         
+                    </el-form-item>
+                </el-form>         
 
-              <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="sureToChange">确定修改</el-button>
-              </div>
-          </el-dialog>
-          <div class="tableList">
-            <el-table
-              :data="tableData5"
-              :header-cell-style="{ 'background-color': '#deedf4','color':'#000'}"
-              :row-style="rowStyle"
-              row-key="user_card_id"
-              class="tableClass"
-              style="">
-              <el-table-column
-                type="index"
-                align="center"
-                >
-              </el-table-column>
-              <!-- <el-table-column
-                label="账号"
-                align="center"
-                prop="username">
-              </el-table-column> -->
-              <el-table-column
-                label="姓名"
-                align="center"
-                prop="user_true_name">
-              </el-table-column>
-              <el-table-column
-                label="是否免检"
-                align="center"
-                >
-                <template slot-scope="props">
-                  <span>{{props.row.exempt=='0'?'不免检':''}}</span>
-                  <span>{{props.row.exempt=='1'?'免检':''}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="用户类型"
-                align="center"
-                >
-                <template slot-scope="props">
-                  <span>{{props.row.user_type=='fangke'?'访客':''}}</span>
-                  <span>{{props.row.user_type=='yuangong'?'单位干警':''}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="部门"
-                align="center"
-                prop="dept_name"
-                >
-                <template slot-scope="props">
-                  <span v-for="item in props.row.userDepts">{{item.dept_name}},</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="手机号"
-                align="center"
-                prop="user_tel"
-                >
-              </el-table-column>
-              <el-table-column
-                label="手机卡号"
-                align="center"
-                prop="card_num">
-              </el-table-column>
-              <el-table-column
-                label="操作"
-                align="center">
-                <template slot-scope="props">
-                  <el-button
-                  size="mini"
-                  @click="updataClick(props.row)">修改</el-button>
-                  <el-button
-                  size="mini"
-                  type="danger"
-                  @click="handleEdit(props.row)">删除</el-button>
-                </template>
-              </el-table-column>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="sureToChange">确定修改</el-button>
+                </div>
+            </el-dialog>
+            <div class="tableList">
+                <el-table
+                    :data="tableData5"
+                    :header-cell-style="{ 'background-color': '#deedf4','color':'#000'}"
+                    :row-style="rowStyle"
+                    row-key="user_card_id"
+                    class="tableClass"
+                    style="">
+                    <el-table-column
+                        type="index"
+                        align="center"
+                        >
+                    </el-table-column>
+                    <!-- <el-table-column
+                        label="账号"
+                        align="center"
+                        prop="username">
+                    </el-table-column> -->
+                    <el-table-column
+                        label="姓名"
+                        align="center"
+                        prop="user_true_name">
+                    </el-table-column>
+                    <el-table-column
+                        label="是否免检"
+                        align="center"
+                        >
+                        <template slot-scope="props">
+                        <span>{{props.row.exempt=='0'?'不免检':''}}</span>
+                        <span>{{props.row.exempt=='1'?'免检':''}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        label="用户类型"
+                        align="center"
+                        >
+                        <template slot-scope="props">
+                        <span>{{props.row.user_type=='fangke'?'访客':''}}</span>
+                        <span>{{props.row.user_type=='yuangong'?'单位干警':''}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        label="部门"
+                        align="center"
+                        prop="dept_name"
+                        >
+                        <template slot-scope="props">
+                            <span v-for="item in props.row.userDepts">{{item.dept_name}},</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        label="手机号"
+                        align="center"
+                        prop="user_tel"
+                        >
+                    </el-table-column>
+                    <el-table-column
+                        label="手机卡号"
+                        align="center"
+                        prop="card_num">
+                    </el-table-column>
+                    <el-table-column
+                        label="操作"
+                        align="center">
+                        <template slot-scope="props">
+                        <el-button
+                        size="mini"
+                        @click="updataClick(props.row)">修改</el-button>
+                        <el-button
+                        size="mini"
+                        type="danger"
+                        @click="handleEdit(props.row)">删除</el-button>
+                        </template>
+                    </el-table-column>
               
-             
-            </el-table> 
+                </el-table> 
                 
-          </div>
-          <el-pagination
+            </div>
+            <el-pagination
                 small
                 background
                 style="text-align: center;margin-top: 20px;"
@@ -280,7 +278,7 @@
                 :page-size="9"
                 layout="prev, pager, next, jumper"
                 :total="total">
-          </el-pagination>
+            </el-pagination>
         </div>
         
 
@@ -372,26 +370,35 @@
             }
               
       },
-      mounted() {
-         
-          var addManyUserUploadUrl = this.$axios.defaults.baseURL+'/user/addByExcel';
-          var uploadUserFaceUrl = this.$axios.defaults.baseURL+'/user/face/upload';
-          this.uploadUserFaceUrl = uploadUserFaceUrl;
-          var token = localStorage.getItem('auth')
-          this.uploadHeader = {
-            'kf-token':token
-          }
-          this.addManyUserUploadUrl = addManyUserUploadUrl;
-          this.getDeptList();
-          // this.getPowerList();
-          this.getDataList();
-          // this.getZhiweiList();
-          this.getNameSearchList('')
-      },
-      methods: {
+        mounted() {
+            
+            var addManyUserUploadUrl = this.$axios.defaults.baseURL+'/user/addByExcel';
+            var uploadUserFaceUrl = this.$axios.defaults.baseURL+'/user/face/upload';
+            this.uploadUserFaceUrl = uploadUserFaceUrl;
+            var token = localStorage.getItem('auth')
+            this.uploadHeader = {
+                'kf-token':token
+            }
+            this.addManyUserUploadUrl = addManyUserUploadUrl;
+            this.getDeptList();
+            // this.getPowerList();
+            this.getDataList();
+            // this.getZhiweiList();
+            this.getNameSearchList('')
+        },
+        methods: {
           addUserNew(){
-            this.form = {};
+            this.form = {
+                user_true_name:'',
+                user_tel:'',
+                dept_ids:[],
+                face_url:'',
+                card_num:'',
+                user_type:''
+            };
             this.addUser = true;
+            this.face_url = "";
+
           },
           handleAvatarSuccess(res, file) {
             if(res.code==0){
@@ -475,15 +482,16 @@
             
             this.form = data;
             this.dialogFormVisible = true;
+            this.face_url = data.face_url;
             // alert(11)
             // console.log(this.changeform)
           },
-          //新增单个用户
-          addUserClick(){
+            //新增单个用户
+            addUserClick(){
                 const self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
-                
+                console.log(self.form.dept_ids)
                 params.append('user_true_name',self.form.user_true_name);
                 params.append('user_tel',self.form.user_tel);
                 params.append('dept_ids',self.form.dept_ids.join(","));
@@ -510,20 +518,20 @@
                           type: 'success',
                           message: '添加成功'
                         }); 
+                        self.addUser = false;
                         self.getDataList();
                     }else{
                         loading.close();
                       self.$response(data,self);
                     }
                  });
-          },
-          //确定修改资料
-          sureToChange(){
+            },
+            //确定修改资料
+            sureToChange(){
                 const self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
                 
-                console.log(self.form)
                 if(self.form.dept_ids){
                   var dept_ids = self.form.dept_ids.join(",")
                 }else{
@@ -557,14 +565,15 @@
                           type: 'success',
                           message: '修改成功'
                         }); 
+                        self.dialogFormVisible = false;
                         self.getDataList();
                     }else{
                       self.$response(data,self);
                     }
                  });
-          },
-          //点击展开表格展示处置
-          rowClick(row, event, column) {
+            },
+            //点击展开表格展示处置
+            rowClick(row, event, column) {
                 Array.prototype.remove = function (val) {
                     let index = this.indexOf(val);
                     if (index > -1) {
@@ -580,49 +589,49 @@
                 }
                 // console.log(this.expands)
  
-          },
-          //单元格双击跳转档案页
-          rowDbclick(row, event){
-            console.log(row)
-          },
-          handleCurrentChange(){
-            //页码发生变化请求新数据
-            this.getDataList();
-          },
-          //修改单元行颜色
-          rowStyle({ row, rowIndex}){
-            if(rowIndex%2 ==0){
-              return 'background:#eee;color:#000;'
-            }else{
-             return 'background:#e5e7e8;color:#000;'
-            }
-          },      
-          handleChange(value) {
-              var newArr = [];
-              newArr.push(value[value.length-1]) 
-              this.org_idList = newArr;
-          },
-          querySearch(queryString, cb) {
-              this.getNameList();
-              var restaurants = this.restaurants;
-              var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-              // 调用 callback 返回建议列表的数据
-              cb(results);
-          },
-          createFilter(queryString) {
-              return (restaurant) => {
-                return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-              };
-          },
-          handleSelect(item) {
-            this.getDataList();
-          },
-          //搜索点击事件
-          searchClick(){
-            this.getDataList();
-          },
-          //默认获取用户列表页面
-          getDataList(){
+            },
+            //单元格双击跳转档案页
+            rowDbclick(row, event){
+                console.log(row)
+            },
+            handleCurrentChange(){
+                //页码发生变化请求新数据
+                this.getDataList();
+            },
+            //修改单元行颜色
+            rowStyle({ row, rowIndex}){
+                if(rowIndex%2 ==0){
+                return 'background:#eee;color:#000;'
+                }else{
+                return 'background:#e5e7e8;color:#000;'
+                }
+            },      
+            handleChange(value) {
+                var newArr = [];
+                newArr.push(value[value.length-1]) 
+                this.org_idList = newArr;
+            },
+            querySearch(queryString, cb) {
+                this.getNameList();
+                var restaurants = this.restaurants;
+                var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+                // 调用 callback 返回建议列表的数据
+                cb(results);
+            },
+            createFilter(queryString) {
+                return (restaurant) => {
+                    return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+                };
+            },
+            handleSelect(item) {
+                this.getDataList();
+            },
+            //搜索点击事件
+            searchClick(){
+                this.getDataList();
+            },
+            //默认获取用户列表页面
+            getDataList(){
                 const self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
@@ -645,11 +654,11 @@
                       self.$response(data,self);
                     }
                  });
-          },
+            },
           
          
-          //获取职业信息
-          getZhiweiList(){
+            //获取职业信息
+            getZhiweiList(){
                 const self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth'); 
@@ -668,25 +677,25 @@
                       self.$response(data,self);
                     }
                  });
-          },
-          // //姓名模糊查询提示
+            },
+            // //姓名模糊查询提示
           
-          remoteMethod(query){
-              if (query !== '') {
-                this.loading = true;
-                this.getNameSearchList(query);
-                      setTimeout(() => {
-                        this.loading = false;
-                        this.userNameList = this.list.filter(item => {
-                          return item.label.toLowerCase()
-                            .indexOf(query.toLowerCase()) > -1;
-                        });
-                      }, 200);
-              } else {
-                this.userNameList = [];
-              }
-          },
-          getNameSearchList(query){
+            remoteMethod(query){
+                if (query !== '') {
+                    this.loading = true;
+                    this.getNameSearchList(query);
+                        setTimeout(() => {
+                            this.loading = false;
+                            this.userNameList = this.list.filter(item => {
+                            return item.label.toLowerCase()
+                                .indexOf(query.toLowerCase()) > -1;
+                            });
+                        }, 200);
+                } else {
+                    this.userNameList = [];
+                }
+            },
+            getNameSearchList(query){
                 const self = this;
                 self.user_true_name = query;
                 var params = new URLSearchParams();
@@ -710,10 +719,10 @@
                       self.$response(data,self);
                     }
                  });
-          },
+            },
           
-          //获取部门信息
-          getDeptList(){
+            //获取部门信息
+            getDeptList(){
                 const self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
@@ -732,9 +741,9 @@
                       self.$response(data,self);
                     }
                  });
-          },
-          //获取权限组列表
-          getPowerList(){
+            },
+            //获取权限组列表
+            getPowerList(){
                 const self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');         
@@ -743,15 +752,15 @@
                     url: '/group/get',
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                 }).then(function(data){
+                }).then(function(data){
                     if(data.data.code==0){
                        self.powerList = data.data.data;
                     }else{
                       self.$response(data,self);
                     }
                  });
-          }
-      }
+            }
+        }
      
   }
 </script>

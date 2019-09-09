@@ -8,49 +8,49 @@
                 <el-input style="width:250px;" v-model="user_tel" placeholder="手机号查询"></el-input>
                 <!-- 关键词联想组建 -->
                 <el-select
-                  v-model="user_true_name"
-                  style="width: 200px;margin-left: 30px;"
-                  filterable
-                  remote
-                  clearable
-                  reserve-keyword
-                  placeholder="请输入姓名"
-                  :remote-method="remoteMethod"
-                  :loading="loading">
-                  <el-option
-                    v-for="item in options4"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
+                    v-model="user_true_name"
+                    style="width: 200px;margin-left: 30px;"
+                    filterable
+                    remote
+                    clearable
+                    reserve-keyword
+                    placeholder="请输入姓名"
+                    :remote-method="remoteMethod"
+                    :loading="loading">
+                    <el-option
+                        v-for="item in options4"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                    </el-option>
                 </el-select>
 
                 <el-select v-model="eat_type" placeholder="请选择就餐类型" style="width: 180px;margin-left: 30px;">
-                  <el-option
-                    v-for="item in eatOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
+                    <el-option
+                        v-for="item in eatOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                    </el-option>
                 </el-select>
                 <el-select v-model="user_type" placeholder="请选择违规类型" style="width: 180px;margin-left: 30px;">
-                  <el-option
-                    v-for="item in usertOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
+                    <el-option
+                        v-for="item in usertOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                    </el-option>
                 </el-select>
 
                 <el-date-picker
-                  style="margin-left: 20px;width:420px;"
-                  v-model="date"
-                  type="daterange"
-                  range-separator="至"
-                  format="yyyy 年 MM 月 dd 日"
-                  value-format="yyyy-MM-dd"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期">
+                    style="margin-left: 20px;width:420px;"
+                    v-model="date"
+                    type="daterange"
+                    range-separator="至"
+                    format="yyyy 年 MM 月 dd 日"
+                    value-format="yyyy-MM-dd"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
                 </el-date-picker>
                 
                 <el-button type="warning" style="margin-left: 30px;" @click="searchClick">查询</el-button>
@@ -62,78 +62,183 @@
           <el-tree :data="data"    @node-click="handleNodeClick"></el-tree>
         </div> -->
         <el-dialog title="违规图片" :visible.sync="case_detail_dialog">
-          <img :src="lookPicSrc" class="lookPicClass">  
+            <img :src="lookPicSrc" class="lookPicClass">  
         </el-dialog>
         <div id="container" style="width: 100%;height: 110%;  float: right;">
+            
           
-          
-          <div class="tableList">
-            <el-table
-              :data="caseList"
-              :header-cell-style="{ 'background-color': '#deedf4','color':'#000'}"
-              :row-style="rowStyle"
-              class="tableClass"
-              >
-              <el-table-column
-                type="index"
-                align="center"
-                width="50">
-              </el-table-column>
-              <el-table-column
-                label="违规时间"
-                align="center"
-                prop="eat_time">
+            <div class="tableList">
+                <el-table
+                :data="caseList"
+                :header-cell-style="{ 'background-color': '#deedf4','color':'#000'}"
+                :row-style="rowStyle"
+                class="tableClass"
+                >
+                <el-table-column
+                    type="index"
+                    align="center"
+                    width="50">
+                </el-table-column>
+                <el-table-column
+                    label="违规时间"
+                    align="center"
+                    prop="eat_time">
+                    
+                </el-table-column>
+                <el-table-column
+                    label="就餐类型"
+                    align="center"
+                    >
+                    <template slot-scope="props">
+                    <span>{{props.row.eat_type=='breakfast'?'早餐':''}}</span>
+                    <span>{{props.row.eat_type=='lunch'?'午餐':''}}</span>
+                    <span>{{props.row.eat_type=='dinner'?'晚餐':''}}</span>
+                    </template>
+                </el-table-column>
+                <!--  <el-table-column
+                    label="刷卡手机"
+                    align="center"
+                    prop="user_tel"
+                    >
+                </el-table-column> -->
+                <el-table-column
+                    label="违规人"
+                    align="center"
+                    prop="user_true_name"
+                    >
+                </el-table-column>
                 
-              </el-table-column>
-              <el-table-column
-                label="就餐类型"
-                align="center"
-                >
-                <template slot-scope="props">
-                  <span>{{props.row.eat_type=='breakfast'?'早餐':''}}</span>
-                  <span>{{props.row.eat_type=='lunch'?'午餐':''}}</span>
-                  <span>{{props.row.eat_type=='dinner'?'晚餐':''}}</span>
-                </template>
-              </el-table-column>
-             <!--  <el-table-column
-                label="刷卡手机"
-                align="center"
-                prop="user_tel"
-                >
-              </el-table-column> -->
-              <el-table-column
-                label="违规人"
-                align="center"
-                prop="user_true_name"
-                >
-              </el-table-column>
-              
-              <!-- <el-table-column
-                label="匹配得分"
-                align="center"
-                prop="face_score"
-                >
-              </el-table-column>
-              <el-table-column
-                label="实际刷卡人"
-                align="center"
-                prop="borrow_user_name"
-                >
-              </el-table-column> -->
-              
-              <el-table-column
-                label="操作"
-                width="300px"
-                align="center"
-                >
-                <template slot-scope="props">
-                  <el-button  type="warning" size="mini" style="margin-left: 0px;" @click="lookPic(props.row)">查看违规照片</el-button>
-                </template>
-              </el-table-column>
-            </el-table> 
+                <!-- <el-table-column
+                    label="匹配得分"
+                    align="center"
+                    prop="face_score"
+                    >
+                </el-table-column>
+                <el-table-column
+                    label="实际刷卡人"
+                    align="center"
+                    prop="borrow_user_name"
+                    >
+                </el-table-column> -->
                 
-          </div>
-          <el-pagination
+                <el-table-column
+                    label="操作"
+                    width="300px"
+                    align="center"
+                    >
+                    <template slot-scope="props">
+                        <el-button  type="warning" size="mini" style="margin-left: 0px;" @click="lookPic(props.row)">查看违规照片</el-button>
+                        <el-button  type="warning" size="mini" style="margin-left: 10px;" @click="bindingPolice(props.row)">绑定已知干警</el-button>
+                    </template>
+                </el-table-column>
+                </el-table> 
+                    
+            </div>
+
+            <el-dialog
+                title="绑定已知干警"
+                :visible.sync="bindingDialogVisible"
+                width="60%">
+                <div class="block">
+                    <el-select
+                        v-model="officersname"
+                        style="width: 200px;margin-left: 30px;"
+                        filterable
+                        remote
+                        clearable
+                        reserve-keyword
+                        placeholder="请输入姓名"
+                        :remote-method="remoteMethod1"
+                        @focus="focus"
+                        :loading="loading">
+                        <el-option
+                            v-for="item in officersList"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.label">
+                        </el-option>
+                    </el-select>
+                    <el-button type="warning" style="margin-left: 30px;" @click="officerssearchClick">查询</el-button>
+                </div>
+                <div class="tableList1">
+                    <el-table
+                        :data="policeList"
+                        :header-cell-style="{ 'background-color': '#deedf4','color':'#000'}"
+                        :row-style="rowStyle"
+                        class="tableClass"
+                        >
+                        <el-table-column
+                            type="index"
+                            align="center"
+                            width="50">
+                        </el-table-column>
+                        <el-table-column
+                            label="姓名"
+                            align="center"
+                            prop="user_true_name">
+                            
+                        </el-table-column>
+                        <el-table-column
+                            label="是否免检"
+                            align="center"
+                            >
+                            <template slot-scope="props">
+                            <span>{{props.row.exempt=='0'?'不免检':''}}</span>
+                            <span>{{props.row.exempt=='1'?'免检':''}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            label="用户类型"
+                            align="center"
+                            >
+                            <template slot-scope="props">
+                            <span>{{props.row.user_type=='fangke'?'访客':''}}</span>
+                            <span>{{props.row.user_type=='yuangong'?'单位干警':''}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            label="部门"
+                            align="center"
+                            prop="dept_name"
+                            >
+                            <template slot-scope="props">
+                            <span v-for="item in props.row.userDepts">{{item.dept_name}},</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            label="手机号"
+                            align="center"
+                            prop="user_tel"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            label="操作"
+                            width="300px"
+                            align="center"
+                            >
+                            <template slot-scope="props">
+                                <el-button  type="warning" size="mini" style="margin-left: 0px;" @click="bindingClick(props.row)">绑定干警</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table> 
+                    
+                </div>
+                <el-pagination
+                    small
+                    background
+                    style="text-align: center;margin-top: 20px;"
+                    @current-change="pageChange1"
+                    :current-page.sync="pageNum1"
+                    :page-size="pageSize1"
+                    layout="prev, pager, next, jumper"
+                    :total="total1">
+                </el-pagination>
+                <span slot="footer" class="dialog-footer">
+                    <!-- <el-button @click="bindingDialogVisible = false">取 消</el-button> -->
+                    <el-button type="primary" @click="bindingDialogVisible = false">关 闭</el-button>
+                </span>
+            </el-dialog>
+            <el-pagination
                 small
                 background
                 style="text-align: center;margin-top: 20px;"
@@ -142,7 +247,7 @@
                 :page-size="pageSize"
                 layout="prev, pager, next, jumper"
                 :total="total">
-          </el-pagination>
+            </el-pagination>
         </div>
         
 
@@ -150,93 +255,172 @@
 </template>
 
 <script>
-  import  TMap from '../../TMap';
-  import md5 from 'js-md5';
-  export default {
-      data: function(){
-          return {
-              case_detail_dialog:false,
-              case_number:'',
-              options4: [],
-              case_name: [],
-              user_true_name:'',
-              list: [],
-              loading: false,
-              states: [],
-              date:[],
-              caseList: [
+    import  TMap from '../../TMap';
+    import md5 from 'js-md5';
+    export default {
+        data: function(){
+            return {
+                case_detail_dialog:false,
+                bindingDialogVisible:false,
+                policeList:[],
+                case_number:'',
+                options4: [],
+                case_name: [],
+                user_true_name:'',
+                list: [],
+                loading: false,
+                states: [],
+                date:[],
+                caseList: [
+                    
+                ],
+                exhibits:[],
+                total:0,
+                pageNum:1,
+                pageSize:10,
+                pageNum1:1,
+                pageSize1:10,
+                total1:0,
+                lookPicSrc:'',
+                eat_type:'',
+                user_type:'',
+                user_tel:'',
+                eat_log_id:'',
+                eatOptions:[
+                    {
+                    value: '',
+                    label: '全部'
+                    },
+                    {
+                    value: 'breakfast',
+                    label: '早餐'
+                    },
+                    {
+                    value: 'lunch',
+                    label: '午餐'
+                    },
+                    {
+                    value: 'dinner',
+                    label: '晚餐'
+                    },
+                ],
+                usertOptions:[
+                    {
+                    value: '',
+                    label: '全部'
+                    },
+                    {
+                    value: 'yuangong',
+                    label: '未刷卡'
+                    },
+                    {
+                    value: 'moshengren',
+                    label: '陌生人'
+                    },
+                ],
+                officersList:[],
+                officersname:'',
+                }
                 
-              ],
-              exhibits:[],
-              total:0,
-              pageNum:1,
-              pageSize:10,
-              total2:0,
-              pageNum2:1,
-              pageSize2:10,
-              lookPicSrc:'',
-              eat_type:'',
-              user_type:'',
-              user_tel:'',
-              eatOptions:[
-                {
-                  value: '',
-                  label: '全部'
-                },
-                {
-                  value: 'breakfast',
-                  label: '早餐'
-                },
-                {
-                  value: 'lunch',
-                  label: '午餐'
-                },
-                {
-                  value: 'dinner',
-                  label: '晚餐'
-                },
-              ],
-              usertOptions:[
-                {
-                  value: '',
-                  label: '全部'
-                },
-                {
-                  value: 'yuangong',
-                  label: '未刷卡'
-                },
-                {
-                  value: 'moshengren',
-                  label: '陌生人'
-                },
-              ]
-            }
-              
-      },
-      mounted() {
-          this.getDataList();
-          
-      },
-      methods: {
-          lookPic(e){
-            this.lookPicSrc = '';
-            this.lookPicSrc = e.face_url;
-            this.case_detail_dialog = true;
-          },
-          getConfigResult(e){
-            console.log(e)
-            // if(e.data==101){
-            //   router.push('/readme')
-            // }else if(e.data==102){
-            //   router.push('/jiedurenliebiao')
-            // }else if(e.data==103){
-            //   router.push('/jiedurendangan')
-            // }else{
-            //   router.push('/jingyuanliebiao')
-            // }
-          },
-          //案卷详情点击事件
-          caseDetailClick(res){
+        },
+        mounted() {
+            this.getDataList();
+            this.getNameList1('');
+            
+        },
+        methods: {
+            lookPic(e){
+                this.lookPicSrc = '';
+                this.lookPicSrc = e.face_url;
+                this.case_detail_dialog = true;
+            },
+            // 绑定干警弹窗
+            bindingPolice(res){
+                var self = this;
+                self.bindingDialogVisible = true;
+                self.eat_log_id = res.eat_log_id;
+                self.getpoliceList();
+            },
+            // 查询警员列表
+            getpoliceList(){
+                const self = this;
+                var params = new URLSearchParams();
+                var token = localStorage.getItem('auth');
+                params.append('pageNum',self.pageNum1); 
+                params.append('pageSize',self.pageSize1); 
+                params.append('user_true_name',self.officersname); 
+                // params.append('user_tel',self.user_tel);
+                params.append('user_type',"yuangong");
+
+                self.$axios({
+                    method: 'post',
+                    url: '/user/getByPage',
+                    data: params,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                 }).then(function(data){
+                    if(data.data.code==0){
+                      self.policeList = data.data.data.list;
+                      self.total1 = data.data.data.total;
+                      
+                    }else{
+                      self.$response(data,self);
+                    }
+                 });
+            },
+            // 警员列表分页器
+            pageChange1(){
+                this.getpoliceList();
+            },
+            bindingClick(res){
+                
+                const self = this;
+                var params = new URLSearchParams();
+                var token = localStorage.getItem('auth');
+                params.append('eat_log_id',self.eat_log_id); 
+                params.append('user_id',res.user_id); 
+                self.$confirm('此操作将绑定该干警, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                    }).then(() => {
+                        self.$axios({
+                            method: 'post',
+                            url: '/log/eat-log/changeToYuanGong',
+                            data: params,
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                        }).then(function(data){
+                            if(data.data.code==0){
+                                self.$message({
+                                    message: '绑定成功',
+                                    type: 'success'
+                                });
+                                self.bindingDialogVisible = false;
+                                self.getDataList();
+                            }else{
+                                self.$response(data,self);
+                            }
+                        });
+                    }).catch(() => {
+                        self.$message({
+                            type: 'info',
+                            message: '已取消绑定'
+                        });          
+                });
+            },
+            getConfigResult(e){
+                console.log(e)
+                // if(e.data==101){
+                //   router.push('/readme')
+                // }else if(e.data==102){
+                //   router.push('/jiedurenliebiao')
+                // }else if(e.data==103){
+                //   router.push('/jiedurendangan')
+                // }else{
+                //   router.push('/jingyuanliebiao')
+                // }
+            },
+            //案卷详情点击事件
+            caseDetailClick(res){
                 var self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
@@ -245,223 +429,281 @@
                 params.append('stock_log_id',res.stock_log_id);
                 
                 const loading = self.$loading({
-                  lock: true,
-                  text: '打印中',
-                  spinner: 'el-icon-loading',
-                  background: 'rgba(0, 0, 0, 0.6)'
+                    lock: true,
+                    text: '打印中',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.6)'
                 });
                 self.$axios({
                     method: 'post',
                     url: '/stock/stock-log/printWord',
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                 }).then(function(data){
+                }).then(function(data){
                     
                     if(data.data.code==0){
-                      loading.close();
-                      self.$message({
+                    loading.close();
+                    self.$message({
                         type: 'success',
                         message: '已发送打印请求'
-                      });
+                    });
                     }else{
-                      self.$response(data,self);
+                    self.$response(data,self);
                     }
-                 });
-          },
-          //查询事件
-          searchClick(){
-            this.getDataList();
-          },
-          //补打条码
-          printAgain(res){
-                var self = this;
-                var params = new URLSearchParams();
-                var token = localStorage.getItem('auth');
-
-                
-                params.append('exhibit_id',res.exhibit_id);
-                
-                const loading = self.$loading({
-                  lock: true,
-                  text: '打印中',
-                  spinner: 'el-icon-loading',
-                  background: 'rgba(0, 0, 0, 0.6)'
                 });
-                self.$axios({
-                    method: 'post',
-                    url: '/exhibit/exhibit/printAgain',
-                    data: params,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                 }).then(function(data){
+            },
+            //查询事件
+            searchClick(){
+                this.getDataList();
+            },
+            officerssearchClick(){
+                this.getpoliceList();
+            },
+            //补打条码
+            printAgain(res){
+                    var self = this;
+                    var params = new URLSearchParams();
+                    var token = localStorage.getItem('auth');
+
                     
-                    if(data.data.code==0){
-                      loading.close();
-                      self.$message({
-                        type: 'success',
-                        message: '已发送打印请求'
-                      });
-                    }else{
-                      self.$response(data,self);
-                    }
-                 });
-          },
-          //条码打印事件
-          printClick(res){
-            var self = this;
-            var numCount = res.exhibits.length+1;
-            this.$confirm('即将打印该案件的第'+numCount+'份案卷条码, 是否继续?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-
-                const loading = self.$loading({
-                  lock: true,
-                  text: '打印中',
-                  spinner: 'el-icon-loading',
-                  background: 'rgba(0, 0, 0, 0.6)'
-                });
-                var params = new URLSearchParams();
-                var token = localStorage.getItem('auth');
-
-                params.append('case_id',res.case_id);
-                params.append('exhibit_name','');
-                
-
-                self.$axios({
-                    method: 'post',
-                    url: '/exhibit/exhibit/add',
-                    data: params,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                 }).then(function(data){
+                    params.append('exhibit_id',res.exhibit_id);
                     
-                    if(data.data.code==0){
-                      loading.close();
-                      self.$message({
-                        type: 'success',
-                        message: '已发送打印请求'
-                      });
-                      self.getDataList();
-                    }else{
-
-                      self.$response(data,self);
-                      loading.close();
-                    }
-                 });
-              
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消打印'
-              });          
-            });
-          },
-          //分页器点击事件
-          pageChange(){
-            this.getDataList();
-          },
-          //分页器点击事件
-          pageChange2(){
-
-          },
-          //关键字模糊查询提示
-          remoteMethod(query) {
-            if (query !== '') {
-              this.loading = true;
-              this.user_true_name = query;
-              this.getNameList(query);
-              setTimeout(() => {
-                this.loading = false;
-                this.options4 = this.list.filter(item => {
-                  return item.label.toLowerCase()
-                    .indexOf(query.toLowerCase()) > -1;
-                });
-              }, 500);
-            } else {
-              this.options4 = [];
-            }
-          },
-          
-          //关键字模糊查询提示
-          getNameList(query){
-                const self = this;
-                self.case_name = query;
-                var params = new URLSearchParams();
-                var token = localStorage.getItem('auth');
-                params.append('user_true_name',self.user_true_name);
-                params.append('pageNum',0);
-                params.append('pageSize',100);
-                self.$axios({
-                    method: 'post',
-                    url: '/user/getByPage',
-                    data: params,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                 }).then(function(data){
-                    
-                    if(data.data.code==0){
-                        self.states = data.data.data.list;
-                        self.list = self.states.map(item => {
-                          return { value: item.user_id, label: item.user_true_name};
+                    const loading = self.$loading({
+                    lock: true,
+                    text: '打印中',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.6)'
+                    });
+                    self.$axios({
+                        method: 'post',
+                        url: '/exhibit/exhibit/printAgain',
+                        data: params,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                    }).then(function(data){
+                        
+                        if(data.data.code==0){
+                        loading.close();
+                        self.$message({
+                            type: 'success',
+                            message: '已发送打印请求'
                         });
-                    }else{
-                      self.$response(data,self);
-                    }
-                 });
-          },
-          //获取默认列表数据
-          getDataList(){
+                        }else{
+                        self.$response(data,self);
+                        }
+                    });
+            },
+            //条码打印事件
+            printClick(res){
+                var self = this;
+                var numCount = res.exhibits.length+1;
+                this.$confirm('即将打印该案件的第'+numCount+'份案卷条码, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+                }).then(() => {
+
+                    const loading = self.$loading({
+                    lock: true,
+                    text: '打印中',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.6)'
+                    });
+                    var params = new URLSearchParams();
+                    var token = localStorage.getItem('auth');
+
+                    params.append('case_id',res.case_id);
+                    params.append('exhibit_name','');
+                    
+
+                    self.$axios({
+                        method: 'post',
+                        url: '/exhibit/exhibit/add',
+                        data: params,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                    }).then(function(data){
+                        
+                        if(data.data.code==0){
+                        loading.close();
+                        self.$message({
+                            type: 'success',
+                            message: '已发送打印请求'
+                        });
+                        self.getDataList();
+                        }else{
+
+                        self.$response(data,self);
+                        loading.close();
+                        }
+                    });
+                
+                }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消打印'
+                });          
+                });
+            },
+            //分页器点击事件
+            pageChange(){
+                this.getDataList();
+            },
+            //分页器点击事件
+            pageChange2(){
+
+            },
+            //关键字模糊查询提示
+            remoteMethod(query) {
+                if (query !== '') {
+                this.loading = true;
+                this.user_true_name = query;
+                this.getNameList(query);
+                setTimeout(() => {
+                    this.loading = false;
+                    this.options4 = this.list.filter(item => {
+                        return item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
+                    });
+                }, 500);
+                } else {
+                    this.options4 = [];
+                }
+            },
+            
+            //关键字模糊查询提示
+            getNameList(query){
+                    const self = this;
+                    self.case_name = query;
+                    var params = new URLSearchParams();
+                    var token = localStorage.getItem('auth');
+                    params.append('user_true_name',self.user_true_name);
+                    params.append('pageNum',0);
+                    params.append('pageSize',100);
+                    self.$axios({
+                        method: 'post',
+                        url: '/user/getByPage',
+                        data: params,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                    }).then(function(data){
+                        
+                        if(data.data.code==0){
+                            self.states = data.data.data.list;
+                            self.list = self.states.map(item => {
+                            return { value: item.user_id, label: item.user_true_name};
+                            });
+                        }else{
+                            self.$response(data,self);
+                        }
+                    });
+            },
+            //关键字模糊查询提示
+            remoteMethod1(query) {
+                console.log(query)
+                
+                if (query !== '') {
+                    this.loading = true;
+                    this.user_true_name = query;
+                    this.getNameList1(query);
+                setTimeout(() => {
+                    this.loading = false;
+                    this.officersList = this.list.filter(item => {
+                        return item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
+                    });
+                }, 500);
+                } else {
+                    this.officersList = [];
+                    console.log(this.officersList)
+                }
+            },
+            
+            //关键字模糊查询提示
+            getNameList1(query){
+                
+                    const self = this;
+                    console.log(self.officersname)
+                    
+                    self.officersname = query;
+                    var params = new URLSearchParams();
+                    var token = localStorage.getItem('auth');
+                    params.append('user_true_name',self.officersname);
+                    params.append('pageNum',0);
+                    params.append('pageSize',100);
+                    params.append('user_type',"yuangong");
+                    self.$axios({
+                        method: 'post',
+                        url: '/user/getByPage',
+                        data: params,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                    }).then(function(data){
+                        
+                        if(data.data.code==0){
+                            self.states = data.data.data.list;
+                            self.list = self.states.map(item => {
+                                return { value: item.user_id, label: item.user_true_name};
+                            });
+                            self.officersList = self.list;
+                        }else{
+                            self.$response(data,self);
+                        }
+                    });
+            },
+            focus(){
+                // console.log(this.officersname)
+                
+                this.getNameList1()
+            },
+            //获取默认列表数据
+            getDataList(){
                 const self = this;
-               
+            
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
                 if(self.date==null||self.date.length==0){
-                  var begin_time = '';
-                  var end_time = '';
+                    var begin_time = '';
+                    var end_time = '';
                 }else{
-                  var begin_time = self.date[0];
-                  var end_time = self.date[1];
+                    var begin_time = self.date[0];
+                    var end_time = self.date[1];
                 }
-                params.append('begin_time',begin_time);
-                params.append('end_time',end_time);
-                params.append('card',0);
-                params.append('pageNum',self.pageNum);
-                params.append('pageSize',self.pageSize);
-                params.append('user_id',self.user_true_name);
-                params.append('eat_type',self.eat_type);
-                params.append('user_tel',self.user_tel);
-                params.append('user_type',self.user_type);
+                    params.append('begin_time',begin_time);
+                    params.append('end_time',end_time);
+                    params.append('card',0);
+                    params.append('pageNum',self.pageNum);
+                    params.append('pageSize',self.pageSize);
+                    params.append('user_id',self.user_true_name);
+                    params.append('eat_type',self.eat_type);
+                    params.append('user_tel',self.user_tel);
+                    params.append('user_type',self.user_type);
 
-                self.$axios({
-                    method: 'post',
-                    url: '/log/eat-log/getByPage',
-                    data: params,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                 }).then(function(data){
-                    
-                    if(data.data.code==0){
-                        self.caseList = data.data.data.list;
-                        self.total = data.data.data.total;
-                    }else{
-                      self.$response(data,self);
-                    }
-                 });
-          },
-          
-         //修改单元行颜色
-          rowStyle({ row, rowIndex}){
-            if(rowIndex%2 ==0){
-              return 'background:#eee;color:#000;'
-            }else{
-             return 'background:#e5e7e8;color:#000;'
-            }
-          },      
-         
-          
-          
-         
-      }
+                    self.$axios({
+                        method: 'post',
+                        url: '/log/eat-log/getByPage',
+                        data: params,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                    }).then(function(data){
+                        
+                        if(data.data.code==0){
+                            self.caseList = data.data.data.list;
+                            self.total = data.data.data.total;
+                        }else{
+                        self.$response(data,self);
+                        }
+                    });
+            },
+            
+            //修改单元行颜色
+            rowStyle({ row, rowIndex}){
+                if(rowIndex%2 ==0){
+                return 'background:#eee;color:#000;'
+                }else{
+                return 'background:#e5e7e8;color:#000;'
+                }
+            },      
+            
+            
+            
+            
+        }
      
-  }
+    }
     window.addEventListener('message', function(event) {
         // 接收位置信息，用户选择确认位置点后选点组件会触发该事件，回传用户的位置信息
         var loc = event.data;
@@ -515,7 +757,35 @@
             border-radius: 0;
             background: rgba(0,0,0,0.1);
     }
-    
+    .tableList1{
+        border: 1px solid #ccc!important;
+        color: #000!important;
+        padding-top: 50px;
+        background-image: url(../../../static/img/data.jpg)!important;
+        background-repeat: no-repeat!important;
+        background-color: #fff!important;
+        width: 99%;
+        height: 560px!important;
+        overflow-y: scroll;
+        border:1px solid #231a75;
+        /* border-radius: 20px;*/
+        margin-top: 20px;
+        background-color: #231a75;
+    }
+    .tableList1::-webkit-scrollbar {/*滚动条整体样式*/
+            width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+            height: 4px;
+    }
+    .tableList1::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+            border-radius: 5px;
+            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.2);
+    }
+    .tableList1::-webkit-scrollbar-track {/*滚动条里面轨道*/
+            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            border-radius: 0;
+            background: rgba(0,0,0,0.1);
+    }
     .tableTitle{
       width: 200px;
       height: 60px;

@@ -1,114 +1,121 @@
 <template>
     <div class="login-wrap">
-        <div class="userBox">
-            <div class="normal">
-                <div class="normalTitle">
-                    正常餐卡
-                </div>
-                <div class="normalTitle2">
-                    今日应刷：{{yuangongQuantity}}
-                </div>
-                <div class="normalTitle2">
-                    今日实刷：{{yuangongEatQuantity}}
-                </div>
-            </div>
-             <div class="normal">
-                <div class="normalTitle">
-                    临时餐卡
-                </div>
-                <div class="normalTitle2">
-                    今日应刷：{{fangkeQuantity}}
-                </div>
-                <div class="normalTitle2">
-                    今日实刷：{{fangkeEatQuantity}}
-                </div>
-            </div>
-             <div class="normal">
-                <div class="normalTitle">
-                    特殊餐卡
-                </div>
-                <div class="normalTitle2">
-                    今日应刷：{{moshengrenQuantity}}
-                </div>
-                <div class="normalTitle2">
-                    今日实刷：{{moshengrenEatQuantity}}
-                </div>
-            </div>
-            <!-- <div class="userBoxItem">
-                <div class="userFace">
-                    <img style="width: 100%;height: 100%;" src="../../../static/img/test.png">
-                </div>
-                <div class="userType">
-                    陌生人
-                </div>
-            </div> -->
-        
+        <div class="head-img">
+            <img src="../../../static/img/head1.png" alt="">
+            <img src="../../../static/img/head2.png" alt="">
         </div>
-        <div class="userBox" style="height: 90%;margin-top: 4%;">
-            <div class="outruleBox">
-                <div class="outruleBoxTitle">
-                    <div class="outruleBoxTitleItem">
-                        时间
+        <div class="back-white">
+            <div class="userBox1">
+                <div class="normal">
+                    <div class="normalTitle">
+                        干警
                     </div>
-                    <div class="outruleBoxTitleItem">
-                        姓名
+                    <div class="normalTitle2">
+                        干警总数：{{yuangongQuantity}}
                     </div>
-                    <div class="outruleBoxTitleItem" style="border-right: none;">
-                        违规类型
-                    </div>
-                </div>
-                <div class="outruleBoxTitle" v-for="(outruleItem,index) in outruleItems" :key="index">
-                    <div class="outruleBoxTitleItem">
-                        <!-- 2019-08-01 23：23：23 -->
-                        {{outruleItem.eat_time}}
-                    </div>
-                    <div class="outruleBoxTitleItem">
-                        {{outruleItem.user_true_name}}
-                    </div>
-                    <div class="outruleBoxTitleItem" style="border-right: none;">
-                        未刷卡
+                    <div class="normalTitle2">
+                        今日实刷：{{yuangongEatQuantity}}
                     </div>
                 </div>
-            </div>
-        
-        </div>
-        <div class="userBox">
-            <div class="normal" style="height: 92%;">
-                <div class="normalTitle">
-                    陌生人
+                <div class="normal">
+                    <div class="normalTitle">
+                        临时餐卡
+                    </div>
+                    <div class="normalTitle2">
+                        餐卡总数：{{fangkeQuantity}}
+                    </div>
+                    <div class="normalTitle2">
+                        今日实刷：{{fangkeEatQuantity}}
+                    </div>
                 </div>
-                <div class="userBoxItem" v-for="(stranger,index) in strangers" :key="index">
-                    <div class="userFace">
-                        <img style="width: 100%;height: 100%;" :src="stranger.face_url">
+                <div class="normal">
+                    <div class="normalTitle">
+                        特殊餐卡
+                    </div>
+                    <div class="normalTitle2">
+                        餐卡总数：{{teshuQuantity}}
+                    </div>
+                    <div class="normalTitle2">
+                        今日实刷：{{teshuEatQuantity}}
                     </div>
                 </div>
                 <!-- <div class="userBoxItem">
                     <div class="userFace">
                         <img style="width: 100%;height: 100%;" src="../../../static/img/test.png">
                     </div>
-                </div>
-                <div class="userBoxItem">
-                    <div class="userFace">
-                        <img style="width: 100%;height: 100%;" src="../../../static/img/test.png">
-                    </div>
-                </div>
-                <div class="userBoxItem">
-                    <div class="userFace">
-                        <img style="width: 100%;height: 100%;" src="../../../static/img/test.png">
+                    <div class="userType">
+                        陌生人
                     </div>
                 </div> -->
+            
             </div>
-             
-            <!-- <div class="userBoxItem">
-                <div class="userFace">
-                    <img style="width: 100%;height: 100%;" src="../../../static/img/test.png">
+            <div class="userBox2">
+                <div class="outruleBox">
+                    <div class="outruleBoxTitle">
+                        <div class="outruleBoxTitleItem">
+                            时间
+                        </div>
+                        <div class="outruleBoxTitleItem">
+                            姓名
+                        </div>
+                        <div class="outruleBoxTitleItem" style="border-right: none;">
+                            违规类型
+                        </div>
+                    </div>
+                    <div class="outruleBoxTitle" v-for="(outruleItem,index) in outruleItems" :key="index">
+                        <div class="outruleBoxTitleItem">
+                            <!-- 2019-08-01 23：23：23 -->
+                            {{outruleItem.eat_time}}
+                        </div>
+                        <div class="outruleBoxTitleItem">
+                            {{outruleItem.user_true_name}}
+                        </div>
+                        <div class="outruleBoxTitleItem" style="border-right: none;">
+                            未刷卡
+                        </div>
+                    </div>
                 </div>
-                <div class="userType">
-                    陌生人
+            
+            </div>
+            <div class="userBox3">
+                <div class="normal1">
+                    <div class="normalTitle">
+                        陌生人
+                    </div>
+                    <div class="userBoxItem" v-for="(stranger,index) in strangers" :key="index">
+                        <div class="userFace">
+                            <img style="width: 100%;height: 100%;" :src="stranger.face_url">
+                        </div>
+                    </div>
+                    <!-- <div class="userBoxItem">
+                        <div class="userFace">
+                            <img style="width: 100%;height: 100%;" src="../../../static/img/test.png">
+                        </div>
+                    </div>
+                    <div class="userBoxItem">
+                        <div class="userFace">
+                            <img style="width: 100%;height: 100%;" src="../../../static/img/test.png">
+                        </div>
+                    </div>
+                    <div class="userBoxItem">
+                        <div class="userFace">
+                            <img style="width: 100%;height: 100%;" src="../../../static/img/test.png">
+                        </div>
+                    </div> -->
                 </div>
-            </div> -->
-        
+                
+                <!-- <div class="userBoxItem">
+                    <div class="userFace">
+                        <img style="width: 100%;height: 100%;" src="../../../static/img/test.png">
+                    </div>
+                    <div class="userType">
+                        陌生人
+                    </div>
+                </div> -->
+            
+            </div>
         </div>
+        
     </div>
 </template>
 
@@ -138,8 +145,8 @@
                 yuangongQuantity:'',
                 fangkeQuantity:'',
                 fangkeEatQuantity:"",
-                moshengrenQuantity:'',
-                moshengrenEatQuantity:'',
+                teshuQuantity:'',
+                teshuEatQuantity:'',
                 outruleItems:[],
                 strangers:'',
             }
@@ -192,8 +199,8 @@
                         self.yuangongQuantity = data.data.data.yuangong_quantity;
                         self.fangkeQuantity = data.data.data.fangke_quantity;
                         self.fangkeEatQuantity = data.data.data.fangke_eat_quantity;
-                        self.moshengrenQuantity = data.data.data.moshengren_quantity;
-                        self.moshengrenEatQuantity = data.data.data.moshengren_eat_quantity;
+                        self.teshuQuantity = data.data.data.teshu_quantity;
+                        self.teshuEatQuantity = data.data.data.teshu_eat_quantity;
                         self.strangers = data.data.data.msr;
 
                     }else{
@@ -239,14 +246,32 @@
         position: relative;
         width:100%;
         height:100%;
-        background-image: url(../../../static/img/banner.png);
+        background-image: url(../../../static/img/banner2.png);
         background-size: 100% 100%;
         overflow: hidden;
+    }
+    .head-img{
+        margin-top: 2px;
+        text-align: center;
+    }
+    .back-white{
+        /* position: relative;
+        width:100%;
+        height:100%;
+        background-image: url(../../../static/img/radius.png);
+        background-size: 100% 100%;
+        overflow: hidden; */
+        width: 96%;
+        height: 90%;
+        margin: 20px auto;
+        background-color: #ffffff;
+        border-radius: 12px;
+        
     }
     .outruleBoxTitle{
         width: 100%;
         height: 50px;
-        /*background-color: red;*/
+        background-color: #012770;
     }
     .outruleBoxTitleItem{
         width: 33.1%;
@@ -261,22 +286,22 @@
     }
     .outruleBox{
         width: 100%;
-        height: 100%;
+        height: 92%;
         overflow: hidden;
-        border:2px solid #0AE0D7;
+        border:2px solid #012770;
     }
     .normalTitle{
-        width: 98%;
-        height: 32px;
-        margin: 0 auto;
-        line-height: 30px;
+        width: 100%;
+        height: 36px;
+        /* margin: 0 auto; */
+        line-height: 36px;
         font-size: 24px;
         text-align: center;
         color: #fff;
-        margin-top: 9px;
+        /* margin-top: 9px; */
         letter-spacing: 10px;
-        border-bottom: 1px solid #fff;
-        background-color: #0AE0D7;
+        /* border-bottom: 1px solid #fff; */
+        background-color: #002770;
     }
     .normalTitle2{
         width: 100%;
@@ -291,9 +316,17 @@
     .normal{
         width: 100%;
         height: 30%;
-        margin-top: 1%;
-        /*background-color: blue;*/
-        background-image: url(../../../static/img/banner1.png);
+        margin-top: 2%;
+        background-color: #2A5CAA;
+        /* background-image: url(../../../static/img/banner1.png); */
+        background-size: 100% 100%; 
+        overflow: hidden;
+    }
+    .normal1{
+        width: 100%;
+        height: 92.5%;
+        /* margin-top: 3%; */
+        background-color: #2A5CAA;
         background-size: 100% 100%; 
         overflow: hidden;
     }
@@ -338,14 +371,26 @@
         width:100%;
         height:36px;
     }
-    .userBox{
-        width: 31.5%;
+    .userBox1,.userBox2,.userBox3{
+        
         height: 100%;
         margin:0 auto;
-        margin-top: 3.2%;
+        
         margin-left: 1.2%;
         float: left;
         /*background-color: red;*/
+    }
+    .userBox1{
+        width: 27.5%;
+        margin-top: 1.4%;
+    }
+    .userBox2{
+        width: 40.5%;
+        margin-top: 2%;
+    }
+    .userBox3{
+        width: 27.5%;
+        margin-top: 2%;
     }
     .userBoxItem{
         width: 160px;
