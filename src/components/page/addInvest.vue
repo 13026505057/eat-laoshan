@@ -12,6 +12,7 @@
                 remote 
                 reserve-keyword 
                 :remote-method="remoteMethod" 
+                @focus="focusName"
                 :loading="loading" 
                 filterable 
                 placeholder="姓名查询">
@@ -591,8 +592,12 @@
           },
           //搜索点击事件
           searchClick(){
-            this.getDataList();
+              this.currentPage = 1;
+                this.getDataList();
           },
+          focusName(){
+                this.getNameList('');
+            },
           //默认获取用户列表页面
           getDataList(){
                 const self = this;
@@ -602,7 +607,7 @@
                 params.append('pageSize',self.pageSize); 
                 params.append('user_true_name',self.user_true_name); 
                 params.append('user_tel',self.user_tel);
-                params.append('user_type','yuangong');
+                // params.append('user_type','yuangong');
                 self.$axios({
                     method: 'post',
                     url: '/user/getByPage',

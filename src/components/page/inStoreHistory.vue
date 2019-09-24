@@ -15,13 +15,14 @@
                   clearable
                   reserve-keyword
                   placeholder="请输入姓名"
+                  @focus="focusName"
                   :remote-method="remoteMethod"
                   :loading="loading">
                   <el-option
                     v-for="item in options4"
                     :key="item.value"
                     :label="item.label"
-                    :value="item.value">
+                    :value="item.label">
                   </el-option>
                 </el-select>
 
@@ -46,6 +47,7 @@
                 </el-date-picker>
                 
                 <el-button type="warning" style="margin-left: 30px;" @click="searchClick">查询</el-button>
+                <el-button type="warning" style="margin-left: 30px;" @click="TedaysearchClick">查询今天</el-button>
             </div>
 
           
@@ -247,7 +249,57 @@
           },
           //查询事件
           searchClick(){
-            this.getDataList();
+              this.pageNum = 1;
+                this.getDataList();
+          },
+
+            TedaysearchClick(){
+                this.getToday();
+            },
+            getToday(){
+                const self = this;
+               
+                var params = new URLSearchParams();
+                var token = localStorage.getItem('auth');
+                var date1 = new Date(new Date(new Date().toLocaleDateString()).getTime());
+                var date2 = new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1);
+                var endTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + date2.getHours() + ':' + date2.getMinutes() + ':' + date2.getSeconds()
+                
+                var startTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + "00" + ':' + "00" + ':' + "00"
+                var finishTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + "24" + ':' + "00" + ':' + "00"
+                console.log(startTime)
+                console.log(finishTime)
+                // if(self.date==null||self.date.length==0){
+                //   var begin_time = '';
+                //   var end_time = '';
+                // }else{
+                  var begin_time = startTime;
+                  var end_time = finishTime;
+                // }
+                params.append('begin_time',begin_time);
+                params.append('end_time',end_time);
+                params.append('card',1);
+                params.append('pageNum',self.pageNum);
+                params.append('pageSize',self.pageSize);
+                // params.append('user_id',self.user_true_name);
+                params.append('user_true_name',self.user_true_name);
+                params.append('eat_type',self.eat_type);
+                params.append('user_tel',self.user_tel);
+
+                self.$axios({
+                    method: 'post',
+                    url: '/log/eat-log/getByPage',
+                    data: params,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                 }).then(function(data){
+                    
+                    if(data.data.code==0){
+                        self.caseList = data.data.data.list;
+                        self.total = data.data.data.total;
+                    }else{
+                      self.$response(data,self);
+                    }
+                 });
           },
           //补打条码
           printAgain(res){
@@ -341,6 +393,7 @@
           pageChange2(){
 
           },
+          
           //关键字模糊查询提示
           remoteMethod(query) {
             if (query !== '') {
@@ -358,11 +411,13 @@
               this.options4 = [];
             }
           },
-          
+            focusName(){
+                this.getNameList('');
+            },
           //关键字模糊查询提示
           getNameList(query){
                 const self = this;
-                self.case_name = query;
+                self.user_true_name = query;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
                 params.append('user_true_name',self.user_true_name);
@@ -380,6 +435,8 @@
                         self.list = self.states.map(item => {
                           return { value: item.user_id, label: item.user_true_name};
                         });
+                        self.options4 = self.list;
+
                     }else{
                       self.$response(data,self);
                     }
@@ -403,7 +460,8 @@
                 params.append('card',1);
                 params.append('pageNum',self.pageNum);
                 params.append('pageSize',self.pageSize);
-                params.append('user_id',self.user_true_name);
+                // params.append('user_id',self.user_true_name);
+                params.append('user_true_name',self.user_true_name);
                 params.append('eat_type',self.eat_type);
                 params.append('user_tel',self.user_tel);
 

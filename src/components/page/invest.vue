@@ -15,13 +15,15 @@
                   clearable
                   reserve-keyword
                   placeholder="请输入姓名"
+                  @focus="focusName"
+            
                   :remote-method="remoteMethod"
                   :loading="loading">
                   <el-option
                     v-for="item in options4"
                     :key="item.value"
                     :label="item.label"
-                    :value="item.value">
+                    :value="item.label">
                   </el-option>
                 </el-select>
                 <el-date-picker
@@ -284,12 +286,12 @@
                     }
                  });
           },
-          //查询事件
-          searchClick(){
-            var self = this;
-            console.log(self.user_true_name)
-            this.getDataList();
-          },
+            //查询事件
+            searchClick(){
+                var self = this;
+                this.pageNum = 1;
+                this.getDataList();
+            },
           //补打条码
           printAgain(res){
                 var self = this;
@@ -400,7 +402,9 @@
               this.options4 = [];
             }
           },
-          
+          focusName(){
+                this.getNameList('');
+            },
           //关键字模糊查询提示
           getNameList(query){
                 const self = this;
@@ -422,6 +426,7 @@
                         self.list = self.states.map(item => {
                           return { value: item.user_id, label: item.user_true_name};
                         });
+                        self.options4 = self.list
                     }else{
                       self.$response(data,self);
                     }
@@ -443,7 +448,8 @@
                 params.append('month',self.month);
                 params.append('pageNum',self.pageNum);
                 params.append('pageSize',self.pageSize);
-                params.append('user_id',self.user_true_name);
+                // params.append('user_id',self.user_true_name);
+                params.append('user_true_name',self.user_true_name);
                 params.append('user_tel',self.user_tel);
                 params.append('bank_type','add');
                 // params.append('stock_log_type','in');

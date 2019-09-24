@@ -21,7 +21,7 @@
                     v-for="item in options4"
                     :key="item.value"
                     :label="item.label"
-                    :value="item.value">
+                    :value="item.label">
                   </el-option>
                 </el-select>
                 <el-date-picker
@@ -301,6 +301,7 @@
           //查询事件
           searchClick(){
             var self = this;
+            self.pageNum =1;
             console.log(self.user_true_name)
             this.getDataList();
           },
@@ -436,6 +437,7 @@
                         self.list = self.states.map(item => {
                           return { value: item.user_id, label: item.user_true_name};
                         });
+                        self.options4 = self.list;
                     }else{
                       self.$response(data,self);
                     }
@@ -457,7 +459,8 @@
                 params.append('month',self.month);
                 params.append('pageNum',self.pageNum);
                 params.append('pageSize',self.pageSize);
-                params.append('user_id',self.user_true_name);
+                // params.append('user_id',self.user_true_name);
+                params.append('user_true_name',self.user_true_name);
                 params.append('user_tel',self.user_tel);
                 params.append('bank_type','del');
                 // params.append('stock_log_type','in');

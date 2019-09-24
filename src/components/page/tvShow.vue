@@ -51,6 +51,7 @@
             </div>
             <div class="userBox2">
                 <div class="outruleBox">
+                    <div class="outruleBoxHeadline">未打卡</div>
                     <div class="outruleBoxTitle">
                         <div class="outruleBoxTitleItem">
                             时间
@@ -80,7 +81,7 @@
             <div class="userBox3">
                 <div class="normal1">
                     <div class="normalTitle">
-                        陌生人
+                        未注册人员
                     </div>
                     <div class="userBoxItem" v-for="(stranger,index) in strangers" :key="index">
                         <div class="userFace">
@@ -113,6 +114,13 @@
                     </div>
                 </div> -->
             
+            </div>
+            <div class="clear"></div>
+            <div class="eattime">{{eat_date}}/
+                <span>{{eat_type=="breakfast"?"早餐":""}}</span>
+                <span>{{eat_type=="lunch"?"午餐":""}}</span>
+                <span>{{eat_type=="dinner"?"晚餐":""}}</span>
+                打卡情况
             </div>
         </div>
         
@@ -149,6 +157,8 @@
                 teshuEatQuantity:'',
                 outruleItems:[],
                 strangers:'',
+                eat_date:'',
+                eat_type:'',
             }
         },
         methods: {
@@ -202,6 +212,8 @@
                         self.teshuQuantity = data.data.data.teshu_quantity;
                         self.teshuEatQuantity = data.data.data.teshu_eat_quantity;
                         self.strangers = data.data.data.msr;
+                        self.eat_type = data.data.data.eat_type;
+                        self.eat_date = data.data.data.eat_date;
 
                     }else{
                       self.$response(data,self);
@@ -242,6 +254,16 @@
 </script>
 
 <style scoped>
+    .clear{
+        clear: both;
+    }
+    .eattime{
+        color: #002770;
+        font-size: 20px;
+        text-align: right;
+        margin-right: 20px;
+        margin-top: 10px;
+    }
     .login-wrap{
         position: relative;
         width:100%;
@@ -271,7 +293,16 @@
     .outruleBoxTitle{
         width: 100%;
         height: 50px;
+        background-color: #2B5CA9;
+    }
+    .outruleBoxHeadline{
+        width: 100%;
+        height: 50px;
         background-color: #012770;
+        color:#ffffff;
+        text-align: center;
+        line-height: 50px;
+        font-size: 24px;
     }
     .outruleBoxTitleItem{
         width: 33.1%;
@@ -286,7 +317,7 @@
     }
     .outruleBox{
         width: 100%;
-        height: 92%;
+        height: 100%;
         overflow: hidden;
         border:2px solid #012770;
     }
@@ -315,7 +346,7 @@
     }
     .normal{
         width: 100%;
-        height: 30%;
+        height: 32.6%;
         margin-top: 2%;
         background-color: #2A5CAA;
         /* background-image: url(../../../static/img/banner1.png); */
@@ -324,7 +355,7 @@
     }
     .normal1{
         width: 100%;
-        height: 92.5%;
+        height: 100%;
         /* margin-top: 3%; */
         background-color: #2A5CAA;
         background-size: 100% 100%; 
@@ -373,7 +404,7 @@
     }
     .userBox1,.userBox2,.userBox3{
         
-        height: 100%;
+        height: 90%;
         margin:0 auto;
         
         margin-left: 1.2%;
@@ -381,21 +412,21 @@
         /*background-color: red;*/
     }
     .userBox1{
-        width: 27.5%;
+        width: 28.5%;
         margin-top: 1.4%;
     }
     .userBox2{
-        width: 40.5%;
+        width: 38.5%;
         margin-top: 2%;
     }
     .userBox3{
-        width: 27.5%;
+        width: 28.5%;
         margin-top: 2%;
     }
     .userBoxItem{
-        width: 160px;
-        height: 180px;
-        margin-left: 30px;
+        width: 150px;
+        height: 170px;
+        margin-left: 20px;
         margin-top: 20px;
         float: left;
         /*background-color: blue;*/

@@ -12,6 +12,7 @@
                     remote 
                     reserve-keyword 
                     :remote-method="remoteMethod" 
+                    @focus="focusName"
                     :loading="loading" 
                     filterable 
                     placeholder="姓名查询">
@@ -33,7 +34,7 @@
 
                 <el-select v-model="user_type" placeholder="请用户类型" style="width: 180px;margin-left: 30px;">
                     <el-option
-                        v-for="item in userTypeList"
+                        v-for="item in userTypeList1"
                         :key="item.type_value"
                         :label="item.type_name"
                         :value="item.type_value">
@@ -82,12 +83,12 @@
                     </el-form-item>
                     <el-form-item label="是否免检" style="display: inline-block;">
                         <el-select  filterable v-model="form.exempt" placeholder="请选择" style="width:208px;float: left;">
-                        <el-option
-                            v-for="item in exemptList"
-                            :key="item.exempt_value"
-                            :label="item.exempt_name"
-                            :value="item.exempt_value">
-                        </el-option>
+                            <el-option
+                                v-for="item in exemptList"
+                                :key="item.exempt_value"
+                                :label="item.exempt_name"
+                                :value="item.exempt_value">
+                            </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="手机卡号" style="display: inline-block;margin-left:72px;">
@@ -228,8 +229,10 @@
                         align="center"
                         >
                         <template slot-scope="props">
-                        <span>{{props.row.user_type=='fangke'?'访客':''}}</span>
-                        <span>{{props.row.user_type=='yuangong'?'单位干警':''}}</span>
+                            <span>{{props.row.user_type=='fangke'?'访客人员':''}}</span>
+                            <span>{{props.row.user_type=='yuangong'?'单位干警':''}}</span>
+                            <span>{{props.row.user_type=='wuye'?'物业人员':''}}</span>
+                            <span>{{props.row.user_type=='zhuchang'?'驻场人员':''}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -286,90 +289,121 @@
 </template>
 
 <script>
-  import  TMap from '../../TMap';
-  import md5 from 'js-md5';
-  import vBreadcrumb from '../common/breadcrumb.vue';
-  export default {
-      components:{
-            vBreadcrumb
-      },
-      data: function(){
-          return {
-              user_type:'',
-              face_url: '',
-              user_tel:'',
-              loading:false,
-              user_true_name:'',
-              addManyUserUploadUrl:'',
-              dept_id:'',
-              bumenList:[],
-              importUsers:false,
-              addUser:false,
-              show_btn:true,
-              dialogFormVisible:false,
-              currentPage:1,
-              total:4,
-              pageSize:10,
-              name:'',
-              number:'',
-              userNameList:[],
-              powerList:[],
-              restaurants: [],
-              value1:'',
-              value2:'',
-              selectedOptions: [],
-              options: [],
-              options1:[],
-              exemptList:[
-                {
-                  exempt_value:'0',
-                  exempt_name:'不免检'
-                },
-                {
-                  exempt_value:'1',
-                  exempt_name:'免检'
-                }
-              ],
-              value:'',
-              tableData5: [],
-              expands: [],
-              org_idList:[],
-              zhiyeList:[],
-              changeform:{
-                dept_id:[],
-                group_id:[],
-                position_id:[],
-                username:'',
-                user_true_name:'',
-                password:'',
-                user_id:'',
-                user_status:''
-              },
-              form:{
-                user_true_name:'',
+    import  TMap from '../../TMap';
+    import md5 from 'js-md5';
+    import vBreadcrumb from '../common/breadcrumb.vue';
+    export default {
+        components:{
+                vBreadcrumb
+        },
+        data: function(){
+            return {
+                user_type:'',
+                face_url: '',
                 user_tel:'',
-                dept_ids:[],
-                face_url:'',
-                card_num:'',
-                user_type:''
-              },
-              zhiweiList:[],
-              bumenList: [],
-              uploadUserFaceUrl:'',
-              uploadHeader:'',
-              userTypeList:[
-                {
-                  type_value:'yuangong',
-                  type_name:'单位干警'
+                loading:false,
+                user_true_name:'',
+                addManyUserUploadUrl:'',
+                dept_id:'',
+                bumenList:[],
+                importUsers:false,
+                addUser:false,
+                show_btn:true,
+                dialogFormVisible:false,
+                currentPage:1,
+                total:4,
+                pageSize:10,
+                name:'',
+                number:'',
+                userNameList:[],
+                powerList:[],
+                restaurants: [],
+                value1:'',
+                value2:'',
+                selectedOptions: [],
+                options: [],
+                options1:[],
+                exemptList:[
+                    {
+                    exempt_value:'0',
+                    exempt_name:'不免检'
+                    },
+                    {
+                    exempt_value:'1',
+                    exempt_name:'免检'
+                    }
+                ],
+                value:'',
+                tableData5: [],
+                expands: [],
+                org_idList:[],
+                zhiyeList:[],
+                changeform:{
+                    dept_id:[],
+                    group_id:[],
+                    position_id:[],
+                    username:'',
+                    user_true_name:'',
+                    password:'',
+                    user_id:'',
+                    user_status:''
                 },
-                {
-                  type_value:'fangke',
-                  type_name:'访客'
-                }
-              ]
+                form:{
+                    user_true_name:'',
+                    user_tel:'',
+                    dept_ids:[],
+                    face_url:'',
+                    card_num:'',
+                    user_type:'',
+                    exempt:"0",
+                },
+                zhiweiList:[],
+                bumenList: [],
+                uploadUserFaceUrl:'',
+                uploadHeader:'',
+                userTypeList:[
+                    {
+                        type_value:'yuangong',
+                        type_name:'单位干警'
+                    },
+                    {
+                        type_value:'zhuchang',
+                        type_name:'驻场人员'
+                    },
+                    {
+                        type_value:'wuye',
+                        type_name:'物业人员'
+                    },
+                    {
+                        type_value:'fangke',
+                        type_name:'访客人员'
+                    },
+                ],
+                userTypeList1:[
+                    {
+                        type_value:'yuangong',
+                        type_name:'单位干警'
+                    },
+                    {
+                        type_value:'zhuchang',
+                        type_name:'驻场人员'
+                    },
+                    {
+                        type_value:'wuye',
+                        type_name:'物业人员'
+                    },
+                    {
+                        type_value:'fangke',
+                        type_name:'访客人员'
+                    },{
+                        type_value:'quanbu',
+                        type_name:'全部'
+                    },
+                ]
+                
             }
-              
-      },
+                
+        },
         mounted() {
             
             var addManyUserUploadUrl = this.$axios.defaults.baseURL+'/user/addByExcel';
@@ -394,7 +428,8 @@
                 dept_ids:[],
                 face_url:'',
                 card_num:'',
-                user_type:''
+                user_type:'',
+                exempt:"0",
             };
             this.addUser = true;
             this.face_url = "";
@@ -481,6 +516,7 @@
             // this.$router.push('/justXiugai');
             
             this.form = data;
+            console.log(this.form)
             this.dialogFormVisible = true;
             this.face_url = data.face_url;
             // alert(11)
@@ -491,7 +527,7 @@
                 const self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
-                console.log(self.form.dept_ids)
+                console.log(self.form)
                 params.append('user_true_name',self.form.user_true_name);
                 params.append('user_tel',self.form.user_tel);
                 params.append('dept_ids',self.form.dept_ids.join(","));
@@ -601,9 +637,9 @@
             //修改单元行颜色
             rowStyle({ row, rowIndex}){
                 if(rowIndex%2 ==0){
-                return 'background:#eee;color:#000;'
+                    return 'background:#eee;color:#000;'
                 }else{
-                return 'background:#e5e7e8;color:#000;'
+                    return 'background:#e5e7e8;color:#000;'
                 }
             },      
             handleChange(value) {
@@ -628,6 +664,8 @@
             },
             //搜索点击事件
             searchClick(){
+                
+                this.currentPage = 1;
                 this.getDataList();
             },
             //默认获取用户列表页面
@@ -639,6 +677,9 @@
                 params.append('pageSize',self.pageSize); 
                 params.append('user_true_name',self.user_true_name); 
                 params.append('user_tel',self.user_tel);
+                if(self.user_type == "quanbu"){
+                    self.user_type = ""
+                }
                 params.append('user_type',self.user_type);
                 self.$axios({
                     method: 'post',
@@ -694,6 +735,9 @@
                 } else {
                     this.userNameList = [];
                 }
+            },
+            focusName(){
+                this.getNameSearchList('');
             },
             getNameSearchList(query){
                 const self = this;

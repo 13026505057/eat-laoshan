@@ -15,13 +15,14 @@
                     clearable
                     reserve-keyword
                     placeholder="请输入姓名"
+                    @focus="focusName"
                     :remote-method="remoteMethod"
                     :loading="loading">
                     <el-option
                         v-for="item in options4"
                         :key="item.value"
                         :label="item.label"
-                        :value="item.value">
+                        :value="item.label">
                     </el-option>
                 </el-select>
 
@@ -54,6 +55,7 @@
                 </el-date-picker>
                 
                 <el-button type="warning" style="margin-left: 30px;" @click="searchClick">查询</el-button>
+                <el-button type="warning" style="margin-left: 0px;" @click="TedaysearchClick">查询今天</el-button>
             </div>
 
           
@@ -78,6 +80,14 @@
                     type="index"
                     align="center"
                     width="50">
+                </el-table-column>
+                 <el-table-column
+                    label="照片"
+                    align="center"
+                    prop="">
+                    <template  slot-scope="props">
+                        <img  @click="lookPic(props.row)" class="headImg1" :src="props.row.face_url" alt="">
+                    </template>
                 </el-table-column>
                 <el-table-column
                     label="违规时间"
@@ -127,8 +137,10 @@
                     align="center"
                     >
                     <template slot-scope="props">
-                        <el-button  type="warning" size="mini" style="margin-left: 0px;" @click="lookPic(props.row)">查看违规照片</el-button>
+                        <!-- <el-button  type="warning" size="mini" style="margin-left: 0px;" @click="lookPic(props.row)">查看违规照片</el-button> -->
+                        
                         <el-button  type="warning" size="mini" style="margin-left: 10px;" @click="bindingPolice(props.row)">绑定已知干警</el-button>
+                        <el-button  type="warning" size="mini" style="margin-left: 10px;" @click="deleStranger(props.row)">删除</el-button>
                     </template>
                 </el-table-column>
                 </el-table> 
@@ -173,6 +185,15 @@
                             width="50">
                         </el-table-column>
                         <el-table-column
+                            label="照片"
+                            align="center"
+                            prop="">
+                            <template slot-scope="props">
+                                <img :src="props.row.face_url" alt="" class="headImg">
+                            </template>
+                            
+                        </el-table-column>
+                        <el-table-column
                             label="姓名"
                             align="center"
                             prop="user_true_name">
@@ -192,8 +213,10 @@
                             align="center"
                             >
                             <template slot-scope="props">
-                            <span>{{props.row.user_type=='fangke'?'访客':''}}</span>
+                           <span>{{props.row.user_type=='fangke'?'访客人员':''}}</span>
                             <span>{{props.row.user_type=='yuangong'?'单位干警':''}}</span>
+                            <span>{{props.row.user_type=='wuye'?'物业人员':''}}</span>
+                            <span>{{props.row.user_type=='zhuchang'?'驻场人员':''}}</span>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -325,6 +348,7 @@
         },
         mounted() {
             this.getDataList();
+            this.getNameList('');
             this.getNameList1('');
             
         },
@@ -333,6 +357,43 @@
                 this.lookPicSrc = '';
                 this.lookPicSrc = e.face_url;
                 this.case_detail_dialog = true;
+            },
+            // 删除陌生人
+            deleStranger(row){
+                const self = this;
+                var params = new URLSearchParams();
+                var token = localStorage.getItem('auth');
+                
+                params.append('eat_log_id',row.eat_log_id);
+                
+                self.$confirm('此操作将永久删除该条记录, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    self.$axios({
+                        method: 'post',
+                        url: '/log/eat-log/del',
+                        data: params,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                    }).then(function(data){
+                        if(data.data.code==0){
+                            self.$message({
+                                type: 'success',
+                                message: '删除成功!'
+                            });
+                            self.getDataList();
+                        }else{
+                            self.$response(data,self);
+                        }
+                    });
+                    
+                }).catch(() => {
+                    self.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });          
+                });
             },
             // 绑定干警弹窗
             bindingPolice(res){
@@ -348,9 +409,10 @@
                 var token = localStorage.getItem('auth');
                 params.append('pageNum',self.pageNum1); 
                 params.append('pageSize',self.pageSize1); 
+                
                 params.append('user_true_name',self.officersname); 
                 // params.append('user_tel',self.user_tel);
-                params.append('user_type',"yuangong");
+                params.append('user_type',"normal");
 
                 self.$axios({
                     method: 'post',
@@ -395,6 +457,7 @@
                                     type: 'success'
                                 });
                                 self.bindingDialogVisible = false;
+                                self.user_true_name="";
                                 self.getDataList();
                             }else{
                                 self.$response(data,self);
@@ -454,9 +517,59 @@
             },
             //查询事件
             searchClick(){
+                this.pageNum = 1;
                 this.getDataList();
             },
+            // 查询今天
+            TedaysearchClick(){
+                this.getToday();
+            },
+            getToday(){
+                const self = this;
+            
+                var params = new URLSearchParams();
+                var token = localStorage.getItem('auth');
+                 var date2 = new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1);
+                var endTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + date2.getHours() + ':' + date2.getMinutes() + ':' + date2.getSeconds()
+                
+                var startTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + "00" + ':' + "00" + ':' + "00"
+                var finishTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + "24" + ':' + "00" + ':' + "00"
+                console.log(startTime)
+                console.log(finishTime)
+                // if(self.date==null||self.date.length==0){
+                //   var begin_time = '';
+                //   var end_time = '';
+                // }else{
+                  var begin_time = startTime;
+                  var end_time = finishTime;
+                    params.append('begin_time',begin_time);
+                    params.append('end_time',end_time);
+                    params.append('card',0);
+                    params.append('pageNum',self.pageNum);
+                    params.append('pageSize',self.pageSize);
+                    // params.append('user_id',self.user_true_name);
+                    params.append('user_true_name',self.user_true_name);
+                    params.append('eat_type',self.eat_type);
+                    params.append('user_tel',self.user_tel);
+                    params.append('user_type',self.user_type);
+
+                    self.$axios({
+                        method: 'post',
+                        url: '/log/eat-log/getByPage',
+                        data: params,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                    }).then(function(data){
+                        
+                        if(data.data.code==0){
+                            self.caseList = data.data.data.list;
+                            self.total = data.data.data.total;
+                        }else{
+                        self.$response(data,self);
+                        }
+                    });
+            },
             officerssearchClick(){
+                this.pageNum1 = 1;
                 this.getpoliceList();
             },
             //补打条码
@@ -553,27 +666,32 @@
             },
             //关键字模糊查询提示
             remoteMethod(query) {
+                
                 if (query !== '') {
-                this.loading = true;
-                this.user_true_name = query;
-                this.getNameList(query);
-                setTimeout(() => {
-                    this.loading = false;
-                    this.options4 = this.list.filter(item => {
-                        return item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
-                    });
-                }, 500);
+                    this.loading = true;
+                    this.user_true_name = query;
+                    // console.log(this.user_true_name)
+                    this.getNameList(query);
+                    setTimeout(() => {
+                        this.loading = false;
+                        this.options4 = this.list.filter(item => {
+                            return item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
+                        });
+                    }, 500);
                 } else {
                     this.options4 = [];
                 }
             },
-            
+            focusName(){
+                this.getNameList('');
+            },
             //关键字模糊查询提示
             getNameList(query){
                     const self = this;
-                    self.case_name = query;
+                    self.user_true_name = query;
                     var params = new URLSearchParams();
                     var token = localStorage.getItem('auth');
+                    // console.log(this.user_true_name)
                     params.append('user_true_name',self.user_true_name);
                     params.append('pageNum',0);
                     params.append('pageSize',100);
@@ -587,8 +705,10 @@
                         if(data.data.code==0){
                             self.states = data.data.data.list;
                             self.list = self.states.map(item => {
-                            return { value: item.user_id, label: item.user_true_name};
+                                return { value: item.user_id, label: item.user_true_name};
                             });
+                            // self.options4 = self.list;
+                            // console.log(self.options4)
                         }else{
                             self.$response(data,self);
                         }
@@ -596,7 +716,6 @@
             },
             //关键字模糊查询提示
             remoteMethod1(query) {
-                console.log(query)
                 
                 if (query !== '') {
                     this.loading = true;
@@ -616,34 +735,31 @@
             
             //关键字模糊查询提示
             getNameList1(query){
-                
-                    const self = this;
-                    console.log(self.officersname)
+                const self = this;
+                self.officersname = query;
+                var params = new URLSearchParams();
+                var token = localStorage.getItem('auth');
+                params.append('user_true_name',self.officersname);
+                params.append('pageNum',0);
+                params.append('pageSize',100);
+                params.append('user_type',"yuangong");
+                self.$axios({
+                    method: 'post',
+                    url: '/user/getByPage',
+                    data: params,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                }).then(function(data){
                     
-                    self.officersname = query;
-                    var params = new URLSearchParams();
-                    var token = localStorage.getItem('auth');
-                    params.append('user_true_name',self.officersname);
-                    params.append('pageNum',0);
-                    params.append('pageSize',100);
-                    params.append('user_type',"yuangong");
-                    self.$axios({
-                        method: 'post',
-                        url: '/user/getByPage',
-                        data: params,
-                        headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                    }).then(function(data){
-                        
-                        if(data.data.code==0){
-                            self.states = data.data.data.list;
-                            self.list = self.states.map(item => {
-                                return { value: item.user_id, label: item.user_true_name};
-                            });
-                            self.officersList = self.list;
-                        }else{
-                            self.$response(data,self);
-                        }
-                    });
+                    if(data.data.code==0){
+                        self.states = data.data.data.list;
+                        self.list = self.states.map(item => {
+                            return { value: item.user_id, label: item.user_true_name};
+                        });
+                        self.officersList = self.list;
+                    }else{
+                        self.$response(data,self);
+                    }
+                });
             },
             focus(){
                 // console.log(this.officersname)
@@ -668,7 +784,8 @@
                     params.append('card',0);
                     params.append('pageNum',self.pageNum);
                     params.append('pageSize',self.pageSize);
-                    params.append('user_id',self.user_true_name);
+                    // params.append('user_id',self.user_true_name);
+                    params.append('user_true_name',self.user_true_name);
                     params.append('eat_type',self.eat_type);
                     params.append('user_tel',self.user_tel);
                     params.append('user_type',self.user_type);
@@ -723,6 +840,10 @@
       width: 20%;
       height: 600px;
       
+    }
+    .headImg{
+        width: 120px;
+        height: 140px;
     }
     .el-tree{
       background: rgba(255,215,0,0.3);
@@ -794,9 +915,13 @@
     }
     .lookPicClass{
       width: 500px;
-      height: 500px;
+      /* height: 500px; */
       margin: 0 auto;
       margin-left: 200px;
+    }
+    .headImg1{
+        width: 120px;
+        /* height: 130px; */
     }
     .numData{
       width: 99%;

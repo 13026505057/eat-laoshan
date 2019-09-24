@@ -21,7 +21,7 @@ Vue.use(ElementUI);
 
 // axios.defaults.baseURL = "http://106.12.68.167:8080/canting";
 // axios.defaults.baseURL = "http://192.168.100.222/canting";
- axios.defaults.baseURL = "http://192.168.2.115:8080/canting";
+ axios.defaults.baseURL = "http://192.168.2.99:8080/canting";
 Vue.prototype.$axios = axios;
 Vue.prototype.$moment = Moment;
 Vue.prototype.$echarts = echarts;

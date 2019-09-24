@@ -154,6 +154,21 @@
                 <el-button type="primary" @click="sureToChange">确定修改</el-button>
               </div>
           </el-dialog>
+            <el-dialog  title="是否检测陌生人" :visible.sync="strangerDialogVisible">
+                <el-form ref="form"  label-width="140px" label-position="left" style="margin-left:20px;">
+                      
+                    <el-form-item label="是否检测陌生人" style="display: inline-block;">
+                        <el-radio v-model="strangerValue" label="1">是</el-radio>
+                        <el-radio v-model="strangerValue" label="0">否</el-radio>
+                    </el-form-item>
+                      
+                    </el-form>          
+
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="strangerDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="strangerToChange">确定修改</el-button>
+              </div>
+          </el-dialog>
           <div class="tableList">
             <el-table
               :data="tableData5"
@@ -273,7 +288,12 @@
               options: [],
               options1:[],
               value:'',
-              tableData5: [],
+              tableData5: [{
+                  config_name:"陌生人检测",
+                  config_id:111,
+                  config_value:0,
+              }],
+              strangerDialogVisible:false,
               expands: [],
               org_idList:[],
               zhiyeList:[],
@@ -294,6 +314,7 @@
               },
               zhiweiList:[],
               bumenList: [],
+              strangerValue:'',
             }
               
       },
@@ -358,12 +379,44 @@
           updataClick(data){
             // localStorage.setItem('xiugai_card_id',data.user_card_id);
             // this.$router.push('/justXiugai');
-            
+            if(data.config_name == "陌生人检测"){
+                this.strangerDialogVisible = true;
+                this.form = data;
+                return false;
+            }
             this.form = data;
             this.dialogFormVisible = true;
             // alert(11)
             // console.log(this.changeform)
           },
+            strangerToChange(){
+                // strangerValue
+                const self = this;
+                var params = new URLSearchParams();
+                var token = localStorage.getItem('auth');
+               
+                params.append('config_id',self.form.config_id);
+                // params.append('config_value1',self.form.config_value1); 
+                // params.append('config_value2',self.form.config_value2);
+                params.append("config_value1",self.strangerValue);
+                self.$axios({
+                    method: 'post',
+                    url: '/config/update',
+                    data: params,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                }).then(function(data){
+                    if(data.data.code==0){
+                        self.$message({
+                          type: 'success',
+                          message: '修改成功'
+                        }); 
+                        self.strangerDialogVisible=false;
+                        self.getDataList();
+                    }else{
+                      self.$response(data,self);
+                    }
+                });
+            },
           //新增单个用户
           addUserClick(){
                 const self = this;
@@ -488,6 +541,7 @@
           },
           //搜索点击事件
           searchClick(){
+              this.currentPage = 1;
             this.getDataList();
           },
           //默认获取用户列表页面

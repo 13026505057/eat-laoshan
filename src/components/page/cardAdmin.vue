@@ -510,10 +510,11 @@
           handleSelect(item) {
             this.getDataList();
           },
-          //搜索点击事件
-          searchClick(){
-            this.getDataList();
-          },
+            //搜索点击事件
+            searchClick(){
+                this.currentPage = 1;
+                this.getDataList();
+            },
           //默认获取用户列表页面
           getDataList(){
                 const self = this;
