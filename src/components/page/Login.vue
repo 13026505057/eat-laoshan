@@ -58,8 +58,15 @@
                        
                         localStorage.setItem('auth',data.data.data.token);
                         localStorage.setItem('ad_user_true_name',data.data.data.user.username);
+                        if(data.data.data.user.userPositions.length==0){
+                            self.$message.error('没有权限登录');
+                        }else{
+                            localStorage.setItem('position_id',data.data.data.user.userPositions[0].position_id);
+                            self.$router.push('/readme');
+                        }
+                        
                         // localStorage.setItem('user_type',data.data.data.user.userGroups[0].group_id);
-                        self.$router.push('/readme');
+                        
                     }else{
                         self.$response(data,self);
                     }

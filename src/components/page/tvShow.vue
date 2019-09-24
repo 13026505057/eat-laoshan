@@ -1,8 +1,8 @@
 <template>
     <div class="login-wrap">
         <div class="head-img">
-            <img src="../../../static/img/head1.png" alt="">
-            <img src="../../../static/img/head2.png" alt="">
+            <!-- <img src="../../../static/img/head1.png" alt="">
+            <img src="../../../static/img/head2.png" alt=""> -->
         </div>
         <div class="back-white">
             <div class="userBox1">
@@ -123,15 +123,25 @@
                 打卡情况
             </div>
         </div>
-        
+        <!-- <el-dialog
+          title="打卡成功"
+          :visible.sync="dialogCard"
+          width="40%"
+          >
+          <span>{{msg_card}}</span>
+        </el-dialog> -->
+
     </div>
 </template>
 
 <script>
-   import md5 from 'js-md5';
+    import md5 from 'js-md5';
+    import {bus} from '../../main.js';
     export default {
         data: function(){
             return {
+                dialogCard:false,
+                msg_card:'',
                 tableData: [{
                       date: '2016-05-02',
                       name: '王小虎',
@@ -212,6 +222,7 @@
                         self.teshuQuantity = data.data.data.teshu_quantity;
                         self.teshuEatQuantity = data.data.data.teshu_eat_quantity;
                         self.strangers = data.data.data.msr;
+                        console.log(data.data.data)
                         self.eat_type = data.data.data.eat_type;
                         self.eat_date = data.data.data.eat_date;
 
@@ -238,6 +249,29 @@
                     }
                 });
             },
+            showCard(val,code){
+                var self  = this;
+                self.msg_card = val;
+                // self.dialogCard = true;
+                if(code == 0){
+                    self.$notify({
+                        title: '打卡成功',
+                        message: val,
+                        type: 'success',
+                        duration:3000,
+                    });
+                }else{
+                    self.$notify.error({
+                        title: '打卡失败',
+                        message: val,
+                        duration:3000,
+                    });
+                }
+                
+                // setTimeout(function(){
+                    // self.dialogCard = false;
+                // },2000)
+            },
 
         },
         mounted(){
@@ -248,7 +282,10 @@
             setInterval(function(){
                 self.getCard();
                 self.getOutOfLine();
-            },60000)
+            },60000);
+            bus.$on('isCard',function(val, code){
+                self.showCard(val,code);
+            })
         }
     }
 </script>
@@ -274,7 +311,11 @@
     }
     .head-img{
         margin-top: 2px;
-        text-align: center;
+        /* text-align: center; */
+        width: 100%;
+        height: 90px;
+        background-image: url(../../../static/img/headjpg.jpg);
+        background-size: 100% 100%;
     }
     .back-white{
         /* position: relative;
@@ -285,7 +326,7 @@
         overflow: hidden; */
         width: 96%;
         height: 90%;
-        margin: 20px auto;
+        margin: 0px auto 20px;
         background-color: #ffffff;
         border-radius: 12px;
         

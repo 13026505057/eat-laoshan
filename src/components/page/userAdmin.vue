@@ -91,8 +91,19 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
+                    
                     <el-form-item label="手机卡号" style="display: inline-block;margin-left:72px;">
                         <el-input v-model="form.card_num" style="width: 200px;float: left;"></el-input>
+                    </el-form-item>
+                    <el-form-item label="权限" style="display: inline-block;">
+                        <el-select filterable v-model="form.position_id" placeholder="请选择" style="width:208px;float: left;">
+                            <el-option
+                                v-for="item in positionList"
+                                :key="item.position_id"
+                                :label="item.position_name"
+                                :value="item.position_id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="所在部门" style="display: block;">
                         <el-select multiple filterable v-model="form.dept_ids" placeholder="请选择" style="width:208px;float: left;">
@@ -104,6 +115,7 @@
                         </el-option>
                         </el-select>
                     </el-form-item>
+                    
                     <el-form-item label="用户类型" style="display: inline-block;">
                         <el-select  filterable v-model="form.user_type" placeholder="请选择" style="width:208px;float: left;">
                             <el-option
@@ -114,6 +126,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
+                    
                     <el-form-item label="人员照片" style="display: block;">
                         <el-upload
                             class="avatar-uploader"
@@ -152,6 +165,16 @@
                     </el-form-item>
                     <el-form-item label="手机卡号" style="display: inline-block;margin-left:72px;">
                         <el-input v-model="form.card_num" style="width: 200px;float: left;"></el-input>
+                    </el-form-item>
+                    <el-form-item label="权限" style="display: inline-block;">
+                        <el-select  filterable v-model="form.position_id" placeholder="请选择" style="width:208px;float: left;">
+                            <el-option
+                                v-for="item in positionList"
+                                :key="item.position_id"
+                                :label="item.position_name"
+                                :value="item.position_id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="所在部门" style="display: block;">
                         <el-select multiple filterable v-model="form.dept_ids" placeholder="请选择" style="width:208px;">
@@ -399,7 +422,8 @@
                         type_value:'quanbu',
                         type_name:'全部'
                     },
-                ]
+                ],
+                positionList:[]
                 
             }
                 
@@ -418,7 +442,8 @@
             // this.getPowerList();
             this.getDataList();
             // this.getZhiweiList();
-            this.getNameSearchList('')
+            this.getNameSearchList('');
+            this.getPosition();
         },
         methods: {
           addUserNew(){
@@ -514,14 +539,44 @@
           updataClick(data){
             // localStorage.setItem('xiugai_card_id',data.user_card_id);
             // this.$router.push('/justXiugai');
-            
+            console.log(data)
             this.form = data;
-            console.log(this.form)
+            if(data.userPositions.length == 0){
+
+            }else{
+                this.form.position_id = data.userPositions[0].position_id;
+            }
+            
+            
             this.dialogFormVisible = true;
             this.face_url = data.face_url;
             // alert(11)
             // console.log(this.changeform)
           },
+        //   查询职责信息
+            getPosition(){
+                const self = this;
+                var params = new URLSearchParams();
+                var token = localStorage.getItem('auth');
+                params.append('pageNum',1);
+                params.append('pageSize',100);
+        
+      
+                
+                self.$axios({
+                    method: 'post',
+                    url: '/position/getByPage',
+                    data: params,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                 }).then(function(data){
+                    if(data.data.code==0){
+                        self.positionList = data.data.data.list;
+                    }else{
+                        loading.close();
+                        self.$response(data,self);
+                    }
+                 });
+            },
             //新增单个用户
             addUserClick(){
                 const self = this;
@@ -535,6 +590,7 @@
                 params.append('exempt',self.form.exempt);
                 params.append('card_num',self.form.card_num);
                 params.append('user_type',self.form.user_type);
+                params.append('position_ids',self.form.position_id);
                 const loading = self.$loading({
                   lock: true,
                   text: '加载中...',
@@ -581,6 +637,7 @@
                 params.append('exempt',self.form.exempt);
                 params.append('card_num',self.form.card_num);
                 params.append('user_type',self.form.user_type);
+                params.append('position_ids',self.form.position_id);
                 
                 const loading = self.$loading({
                   lock: true,
