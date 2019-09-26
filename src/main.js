@@ -134,7 +134,7 @@ function websoketInit(val){
 
     //将此处的地址改为正确的地址
     // var wsuri = "ws://192.168.2.99:8080/canting/websocket/"+val;
-    var wsuri = "ws://192.168.100.222/canting/websocket/"+val;
+    var wsuri = "ws://192.168.100.222:8080/canting/websocket/"+val;
     websock = new WebSocket(wsuri);
     websock.onmessage = function(e){
        // console.log(e)

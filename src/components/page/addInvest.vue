@@ -210,23 +210,23 @@
                 align="center"
                 prop="create_time">
               </el-table-column> -->
-              <el-table-column
+              <!-- <el-table-column
                 label="操作"
                 align="center">
                 <template slot-scope="props">
-                  <!-- <el-button
+                  <el-button
                   size="mini"
                   @click="updataClick(props.row)">修改</el-button>
                   <el-button
                   size="mini"
                   type="danger"
-                  @click="handleEdit(props.row)">删除</el-button> -->
+                  @click="handleEdit(props.row)">删除</el-button>
                   <el-button
                   size="mini"
                   type="danger"
                   @click="addInvest(props.row)">充值</el-button>
                 </template>
-              </el-table-column>
+              </el-table-column> -->
               
              
             </el-table> 

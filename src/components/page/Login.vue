@@ -62,7 +62,12 @@
                             self.$message.error('没有权限登录');
                         }else{
                             localStorage.setItem('position_id',data.data.data.user.userPositions[0].position_id);
-                            self.$router.push('/readme');
+                            if(data.data.data.user.userPositions[0].position_id =="1"){
+                                self.$router.push('/readme');
+                            }else{
+                                self.$router.push('/rechargeCard');
+                            }
+                            
                         }
                         
                         // localStorage.setItem('user_type',data.data.data.user.userGroups[0].group_id);

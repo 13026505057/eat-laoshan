@@ -1,6 +1,6 @@
 <template>
     <div class="header" style="position:reactive">
-        <div class="top">
+        <div :class="position=='1'?'top':'top1'">
             <div class="logo"></div>
             <!-- <div class="logo1"><img src="../../../static/img/logo.png"></div> -->
             <div class="user-info">
@@ -61,6 +61,7 @@ import md5 from 'js-md5';
                 org_name:'',
                 top_name:'',
                 top_head:'',
+                position:'',
                 items: [
                     {
                         icon: 'el-icon-setting',
@@ -288,6 +289,17 @@ import md5 from 'js-md5';
             //    this.$route.path.replace('/','');
             // }
         },
+        created(){
+            
+            this.position = localStorage.getItem('position_id');
+            console.log(this.position)
+            // // 1是管理员，2是财务
+            // if(position=='1'){
+                
+            // }else{
+
+            // }
+        },
         methods:{
             open(index,indexPath){
                 console.log(index)
@@ -366,6 +378,12 @@ import md5 from 'js-md5';
         width: 100%;
         height:80px;
         background-image: url(../../../static/img/top_head.jpg);
+        background-size:100%100%;  
+    }
+    .top1{
+        width: 100%;
+        height:80px;
+        background-image: url(../../../static/img/top_head1.jpg);
         background-size:100%100%;  
     }
     .el-menu--horizontal{

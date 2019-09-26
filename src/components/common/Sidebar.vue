@@ -53,21 +53,21 @@ import md5 from 'js-md5';
                     //     index: 'outRule',
                     //     title: '违规记录查询'
                     // },
-                    {
-                        icon: 'el-icon-setting',
-                        index: 'inStoreHistory',
-                        title: '就餐记录查询'
-                    },
-                    {
-                        icon: 'el-icon-setting',
-                        index: 'moneyByMonth',
-                        title: '就餐费用查询'
-                    },
-                    {
-                        icon: 'el-icon-setting',
-                        index: 'invest',
-                        title: '充值记录查询'
-                    },
+                    // {
+                    //     icon: 'el-icon-setting',
+                    //     index: 'inStoreHistory',
+                    //     title: '就餐记录查询'
+                    // },
+                    // {
+                    //     icon: 'el-icon-setting',
+                    //     index: 'moneyByMonth',
+                    //     title: '就餐费用查询'
+                    // },
+                    // {
+                    //     icon: 'el-icon-setting',
+                    //     index: 'invest',
+                    //     title: '充值记录查询'
+                    // },
                     // {
                     //     icon: 'el-icon-setting',
                     //     index: 'addInvest',
@@ -104,30 +104,50 @@ import md5 from 'js-md5';
                 return this.$route.path.replace('/','');
             }
         },
-        mounted(){
+        created(){
             
             var position = localStorage.getItem('position_id');
             console.log(position)
             // 1.是管理员   2，是财务
-            if(position=='2'){
-                
-                // var obj = 
-                // this.items.unshift(obj)
-                // this.items.push(obj)
-            }else{
+            if(position=='1'){
                 console.log("wew")
-                this.items.unshift(
+                // this.items.unshift(
+                //     {
+                //         icon: 'el-icon-setting',
+                //         index: 'readme',
+                //         title: '首页'
+                //     },{
+                //         icon: 'el-icon-setting',
+                //         index: 'outRule',
+                //         title: '违规记录查询'
+                //     }
+                // );
+                this.items.push(
                     {
                         icon: 'el-icon-setting',
                         index: 'readme',
                         title: '首页'
-                    },{
+                    },
+                    {
                         icon: 'el-icon-setting',
                         index: 'outRule',
                         title: '违规记录查询'
-                    }
-                );
-                this.items.push(
+                    },
+                    {
+                        icon: 'el-icon-setting',
+                        index: 'inStoreHistory',
+                        title: '就餐记录查询'
+                    },
+                    {
+                        icon: 'el-icon-setting',
+                        index: 'moneyByMonth',
+                        title: '就餐费用查询'
+                    },
+                    {
+                        icon: 'el-icon-setting',
+                        index: 'invest',
+                        title: '充值记录查询'
+                    },
                     {
                         icon: 'el-icon-setting',
                         index: 'addInvest',
@@ -155,6 +175,35 @@ import md5 from 'js-md5';
                     },
                 );
 
+                // var obj = 
+                // this.items.unshift(obj)
+                // this.items.push(obj)
+            }else{
+                this.items.push({
+                        icon: 'el-icon-setting',
+                        index: 'rechargeCard',
+                        title: '充值'
+                    },
+                    {
+                        icon: 'el-icon-setting',
+                        index: 'addInvest',
+                        title: '余额'
+                    },{
+                        icon: 'el-icon-setting',
+                        index: 'invest',
+                        title: '账户充值记账'
+                    },{
+                        icon: 'el-icon-setting',
+                        index: 'inStoreHistory',
+                        title: '消费记录记账'
+                    },
+                    {
+                        icon: 'el-icon-setting',
+                        index: 'moneyByMonth',
+                        title: '消费记录按月记账统计'
+                    },
+                   
+                    )
             }
         },
         methods:{

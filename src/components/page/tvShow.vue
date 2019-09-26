@@ -222,7 +222,6 @@
                         self.teshuQuantity = data.data.data.teshu_quantity;
                         self.teshuEatQuantity = data.data.data.teshu_eat_quantity;
                         self.strangers = data.data.data.msr;
-                        console.log(data.data.data)
                         self.eat_type = data.data.data.eat_type;
                         self.eat_date = data.data.data.eat_date;
 
@@ -251,9 +250,9 @@
             },
             showCard(val,code){
                 var self  = this;
-                self.msg_card = val;
+                // self.msg_card = val;
                 // self.dialogCard = true;
-                if(code == 0){
+                if(code == "0"){
                     self.$notify({
                         title: '打卡成功',
                         message: val,
@@ -277,12 +276,17 @@
         mounted(){
             var self = this;
             // this.onload();
+            
             this.getCard();
             this.getOutOfLine();
             setInterval(function(){
                 self.getCard();
                 self.getOutOfLine();
-            },60000);
+            },10000);
+            
+        },
+        created(){
+            var self = this;
             bus.$on('isCard',function(val, code){
                 self.showCard(val,code);
             })

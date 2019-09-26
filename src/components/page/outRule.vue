@@ -533,7 +533,7 @@
                 var endTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + date2.getHours() + ':' + date2.getMinutes() + ':' + date2.getSeconds()
                 
                 var startTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + "00" + ':' + "00" + ':' + "00"
-                var finishTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + "24" + ':' + "00" + ':' + "00"
+                var finishTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + "23" + ':' + "59" + ':' + "59"
                 console.log(startTime)
                 console.log(finishTime)
                 // if(self.date==null||self.date.length==0){

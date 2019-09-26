@@ -39,6 +39,11 @@ export default new Router({
                 },
                 {
                     name: '充值',
+                    path: '/rechargeCard',
+                    component: resolve => require(['../components/page/rechargeCard.vue'], resolve) // Vue-Quill-Editor组件
+                },
+                {
+                    name: '余额',
                     path: '/addInvest',
                     component: resolve => require(['../components/page/addInvest.vue'], resolve) // Vue-Quill-Editor组件
                 },
