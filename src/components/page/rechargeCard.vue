@@ -25,7 +25,7 @@
                     <div class="rightmsg">
                         <el-form ref="form" :model="form" label-width="140px">
                             <el-form-item label="卡号">
-                                <el-input clearable autofocus  @input="balanceChange" v-model="form.card_num" style="width:700px;"></el-input>
+                                <el-input clearable ref="getFocus"  @input="balanceChange" v-model="form.card_num" style="width:700px;"></el-input>
                             </el-form-item>
                             <el-form-item label="姓名">
                                 <el-input disabled @input="balanceChange" v-model="form.user_true_name" style="width:700px;"></el-input>
@@ -66,8 +66,6 @@
             
         </div>
         
-        
-
     </div>
 </template>
 
@@ -126,6 +124,10 @@
                 var self = this;
                 self.content1Hid = false;
                 self.content2Hid = true;
+                setTimeout(function(){
+                    self.$refs.getFocus.focus();
+                },1000)
+                
                 self.title = "充值";
                 self.topUpHid = true;
                 self.form = {

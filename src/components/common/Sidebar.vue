@@ -108,7 +108,7 @@ import md5 from 'js-md5';
             
             var position = localStorage.getItem('position_id');
             console.log(position)
-            // 1.是管理员   2，是财务
+            // 1.是管理员   2，是财务  3.是管理权限
             if(position=='1'){
                 console.log("wew")
                 // this.items.unshift(
@@ -178,32 +178,44 @@ import md5 from 'js-md5';
                 // var obj = 
                 // this.items.unshift(obj)
                 // this.items.push(obj)
-            }else{
+            }else if(position == "2"){
                 this.items.push({
+                    icon: 'el-icon-setting',
+                    index: 'rechargeCard',
+                    title: '充值'
+                },
+                {
+                    icon: 'el-icon-setting',
+                    index: 'addInvest',
+                    title: '余额'
+                },{
+                    icon: 'el-icon-setting',
+                    index: 'invest',
+                    title: '账户充值记账'
+                },{
+                    icon: 'el-icon-setting',
+                    index: 'inStoreHistory',
+                    title: '消费记录记账'
+                },
+                {
+                    icon: 'el-icon-setting',
+                    index: 'moneyByMonth',
+                    title: '消费记录按月记账统计'
+                },{
                         icon: 'el-icon-setting',
-                        index: 'rechargeCard',
-                        title: '充值'
+                        index: 'outRuleCaiwu',
+                        title: '违规记录查询'
                     },
+                )
+            }else{
+                 this.items.push(
                     {
                         icon: 'el-icon-setting',
-                        index: 'addInvest',
-                        title: '余额'
-                    },{
-                        icon: 'el-icon-setting',
-                        index: 'invest',
-                        title: '账户充值记账'
-                    },{
-                        icon: 'el-icon-setting',
-                        index: 'inStoreHistory',
-                        title: '消费记录记账'
+                        index: 'outRuleMan',
+                        title: '违规记录查询'
                     },
-                    {
-                        icon: 'el-icon-setting',
-                        index: 'moneyByMonth',
-                        title: '消费记录按月记账统计'
-                    },
-                   
-                    )
+                    
+                );
             }
         },
         methods:{

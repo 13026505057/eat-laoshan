@@ -5,7 +5,14 @@
             <!-- <div class="titleBg">案件档案归档操作记录</div> -->
             <div class="block">
                 
-                <el-input style="width:250px;" v-model="user_tel" placeholder="手机号查询"></el-input>
+                <el-select v-model="user_type" placeholder="请选择类型" style="width: 180px;margin-left: 30px;">
+                  <el-option
+                    v-for="item in eatOptions"
+                    :key="item.type_value"
+                    :label="item.type_name"
+                    :value="item.type_value">
+                  </el-option>
+                </el-select>
                 <!-- 关键词联想组建 -->
                 <el-select
                   v-model="user_true_name"
@@ -36,6 +43,7 @@
                 
                 
                 <el-button type="warning" style="margin-left: 30px;" @click="searchClick">查询</el-button>
+                <el-button type="warning" style="margin-left: 100px;" @click="downClick">导出报表</el-button>
             </div>
 
           
@@ -214,7 +222,29 @@
               user_true_name:'',
               eatList:[],
               user_id:'',
-              user_tel:''
+              user_tel:'',
+              eatOptions:[
+                    {
+                        type_value:'yuangong',
+                        type_name:'单位干警'
+                    },
+                    {
+                        type_value:'zhuchang',
+                        type_name:'驻场人员'
+                    },
+                    {
+                        type_value:'wuye',
+                        type_name:'物业人员'
+                    },
+                    {
+                        type_value:'fangke',
+                        type_name:'访客人员'
+                    },{
+                        type_value:'',
+                        type_name:'全部'
+                    },
+              ],
+              user_type:''
             }
               
       },
@@ -223,6 +253,15 @@
           
       },
       methods: {
+          downClick(){
+            var self = this;
+            if(self.month==''||self.month==null){
+              window.open(self.$axios.defaults.baseURL+'/exoprtBankLog?bank_type=add&&user_type='+self.user_type+'&user_true_name='+self.user_true_name);
+            }else{
+              window.open(self.$axios.defaults.baseURL+'/exoprtBankLogByMonth?bank_type=add&&user_type='+self.user_type+'&user_true_name='+self.user_true_name+'&month='+self.month);
+            }
+            
+          },
           getConfigResult(e){
             console.log(e)
             // if(e.data==101){
@@ -452,7 +491,7 @@
                 params.append('user_true_name',self.user_true_name);
                 params.append('user_tel',self.user_tel);
                 params.append('bank_type','add');
-                // params.append('stock_log_type','in');
+                params.append('user_type',self.user_type);
 
                 self.$axios({
                     method: 'post',

@@ -139,16 +139,42 @@
                     <template slot-scope="props">
                         <!-- <el-button  type="warning" size="mini" style="margin-left: 0px;" @click="lookPic(props.row)">查看违规照片</el-button> -->
                         
-                        <el-button  type="warning" size="mini" style="margin-left: 10px;" @click="bindingPolice(props.row)">绑定已知干警</el-button>
-                        <el-button  type="warning" size="mini" style="margin-left: 10px;" @click="deleStranger(props.row)">删除</el-button>
+                        <el-button  type="warning" size="mini" style="margin-left: 10px;" @click="bindingPolice(props.row)">纠正识别错误</el-button>
+                        <el-button disabled type="warning" size="mini" style="margin-left: 10px;" @click="repairCard(props.row)">接待审核</el-button>
+                        <!-- <el-button  type="warning" size="mini" style="margin-left: 10px;" @click="deleStranger(props.row)">删除</el-button> -->
                     </template>
                 </el-table-column>
                 </el-table> 
                     
             </div>
+            <el-dialog
+                title="补打卡"
+                :visible.sync="cardDialogVisible"
+                @close = "closeClick"
+                width="50%">
+                <div class="msgContent">
+                    <div class="rightmsg">
+                        <el-form ref="cardForm" :model="cardForm" label-width="80px">
+                            <el-form-item label="卡号">
+                                <el-input clearable ref="getFocus"  @input="balanceChange" v-model="cardForm.card_num" style="width:550px;"></el-input>
+                            </el-form-item>
+                            <el-form-item label="姓名">
+                                <el-input disabled @input="balanceChange" v-model="cardForm.user_true_name" style="width:550px;"></el-input>
+                            </el-form-item>
+                        </el-form>
+                    </div>
+                    <div class="lefthead">
+                        <img class="user_head" :src="face_url" alt="">
+                    </div>
+                </div>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="cardDialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="repairCardClick">确 定</el-button>
+                </span>
+                </el-dialog>
 
             <el-dialog
-                title="绑定已知干警"
+                title="纠正识别错误"
                 :visible.sync="bindingDialogVisible"
                 width="60%">
                 <div class="block">
@@ -240,7 +266,7 @@
                             align="center"
                             >
                             <template slot-scope="props">
-                                <el-button  type="warning" size="mini" style="margin-left: 0px;" @click="bindingClick(props.row)">绑定干警</el-button>
+                                <el-button  type="warning" size="mini" style="margin-left: 0px;" @click="bindingClick(props.row)">纠正</el-button>
                             </template>
                         </el-table-column>
                     </el-table> 
@@ -294,7 +320,10 @@
                 loading: false,
                 states: [],
                 date:[],
-                caseList: [
+                caseList: [{
+                    eat_time:"2018-02-03"
+                },
+
                     
                 ],
                 exhibits:[],
@@ -309,6 +338,15 @@
                 user_type:'',
                 user_tel:'',
                 eat_log_id:'',
+                cardDialogVisible:false,
+                autofcousHid:false,
+                face_url:'',
+                cardForm:{
+                    card_num:'',
+                    amount:'',
+                    quantity:'',
+                    user_true_name:'',
+                },
                 eatOptions:[
                     {
                     value: '',
@@ -395,6 +433,94 @@
                     });          
                 });
             },
+            // 关闭窗口
+            closeClick(){
+                
+            },
+            // 补打卡
+            repairCard(res){
+                const self = this;
+                self.cardDialogVisible = true;
+                console.log(self.autofcousHid)
+                // self.autofcousHid = true;
+                console.log(self.autofcousHid)
+                self.eat_log_id = res.eat_log_id;
+                // self.$refs.getFocus.focus();
+                setTimeout(function(){
+                   self.$refs.getFocus.focus();
+                },1000)
+            },
+            repairCardClick(){
+                const self = this;
+                var params = new URLSearchParams();
+                var token = localStorage.getItem('auth');
+                
+                params.append('eat_log_id',self.eat_log_id); 
+
+                self.$axios({
+                    method: 'post',
+                    url: '/log/eat-log/buDaKa',
+                    data: params,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                 }).then(function(data){
+                    if(data.data.code==0){
+                        self.$message({
+                            message: '补打成功',
+                            type: 'success'
+                        });    
+                        elf.cardDialogVisible = false;
+                        self.autofcousHid = false;
+                        self.getDataList();
+                      
+                    }else{
+                      self.$response(data,self);
+                    }
+                 });
+            },
+            // 输入框值
+            balanceChange(val){
+                console.log(val);
+                var self = this;
+                if(val == ""){
+                    // self.topupIpt = true;
+                    self.cardForm.user_true_name = "";
+                    self.face_url = "";
+                }else{
+                    // self.topupIpt = false;
+                    console.log(self.topupIpt)
+                    var params = new URLSearchParams();
+                    var token = localStorage.getItem('auth');
+                    params.append('pageNum',1); 
+                    params.append('pageSize',10); 
+                    params.append('card_num',self.cardForm.card_num); 
+                    // params.append('user_type','yuangong');
+                    self.$axios({
+                        method: 'post',
+                        url: '/user/getByPage',
+                        data: params,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                    }).then(function(data){
+                        if(data.data.code==0){
+                            if(data.data.data.list.length == 0 ){
+                                // self.form.user_true_name = "";
+                                // self.face_url = "";
+                                // self.form.amount = "";
+                            }else{
+                                self.cardForm.user_true_name = data.data.data.list[0].user_true_name;
+                                self.face_url = data.data.data.list[0].face_url;
+                                // self.form.amount = data.data.data.list[0].amount/100;
+                                self.user_id = data.data.data.list[0].user_id;
+                            }
+                            
+                            // self.total = data.data.data.total;
+                        
+                        }else{
+                            self.$response(data,self);
+                        }
+                    });
+                }
+                
+            },
             // 绑定干警弹窗
             bindingPolice(res){
                 var self = this;
@@ -402,7 +528,8 @@
                 self.eat_log_id = res.eat_log_id;
                 self.getpoliceList();
             },
-            // 查询警员列表
+            // 查询其他人列表
+
             getpoliceList(){
                 const self = this;
                 var params = new URLSearchParams();
@@ -412,7 +539,7 @@
                 
                 params.append('user_true_name',self.officersname); 
                 // params.append('user_tel',self.user_tel);
-                params.append('user_type',"normal");
+                // params.append('user_type',"normal");
 
                 self.$axios({
                     method: 'post',
@@ -433,7 +560,7 @@
             pageChange1(){
                 this.getpoliceList();
             },
-            // 绑定到警员
+            // 绑定到其他人
             bindingClick(res){
                 
                 const self = this;
@@ -441,20 +568,20 @@
                 var token = localStorage.getItem('auth');
                 params.append('eat_log_id',self.eat_log_id); 
                 params.append('user_id',res.user_id); 
-                self.$confirm('此操作将绑定该干警, 是否继续?', '提示', {
+                self.$confirm('是否继续执行此操作?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                     }).then(() => {
                         self.$axios({
                             method: 'post',
-                            url: '/log/eat-log/changeToYuanGong',
+                            url: '/log/eat-log/changeEatLogToOtherUser',
                             data: params,
                             headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
                         }).then(function(data){
                             if(data.data.code==0){
                                 self.$message({
-                                    message: '绑定成功',
+                                    message: '操作成功',
                                     type: 'success'
                                 });
                                 self.bindingDialogVisible = false;
@@ -1000,5 +1127,22 @@
     }
     .colorRed{
       color: red;
+    }
+    .msgContent{
+        display: flex;
+        justify-content: space-around; 
+    }
+    .lefthead{
+        width: 20%;
+        text-align: center;
+        /* border-left: 2px solid #B8B8B8; */
+    } 
+    .rightmsg{
+        width: 79%;
+    }
+    .user_head{
+        width: 150px;
+        height: 200px;
+        border: 1px solid #888888;
     }
 </style>

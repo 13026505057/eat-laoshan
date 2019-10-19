@@ -62,6 +62,16 @@ export default new Router({
                     path: '/outRule',
                     component: resolve => require(['../components/page/outRule.vue'], resolve) // Vue-Quill-Editor组件
                 },
+                 {
+                    name: '违规纪律查询',
+                    path: '/outRuleMan',
+                    component: resolve => require(['../components/page/outRuleMan.vue'], resolve) // Vue-Quill-Editor组件
+                },
+                {
+                    name: '违规纪律查询',
+                    path: '/outRuleCaiwu',
+                    component: resolve => require(['../components/page/outRuleCaiwu.vue'], resolve) // Vue-Quill-Editor组件
+                },
                 {
                     name: '待出库',
                     path: '/waitForOutStore',
@@ -287,6 +297,10 @@ export default new Router({
         {
             path: '/tvShow',
             component: resolve => require(['../components/page/tvShow.vue'], resolve)
+        },
+        {
+            path: '/bigTvShow',
+            component: resolve => require(['../components/page/bigTvShow.vue'], resolve)
         },
     ]
 })

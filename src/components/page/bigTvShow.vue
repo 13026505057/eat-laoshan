@@ -39,72 +39,17 @@
                         今日实刷：{{teshuEatQuantity}}
                     </div>
                 </div>
-                <!-- <div class="userBoxItem">
-                    <div class="userFace">
-                        <img style="width: 100%;height: 100%;" src="../../../static/img/test.png">
-                    </div>
-                    <div class="userType">
-                        陌生人
-                    </div>
-                </div> -->
-            
-            </div>
-            <div class="userBox2">
-                <div class="outruleBox">
-                    <div class="outruleBoxHeadline">未打卡</div>
-                    <div class="outruleBoxTitle">
-                        <div class="outruleBoxTitleItem">
-                            时间
-                        </div>
-                        <div class="outruleBoxTitleItem">
-                            姓名
-                        </div>
-                        <div class="outruleBoxTitleItem" style="border-right: none;">
-                            违规类型
-                        </div>
-                    </div>
-                    <div class="outruleBoxTitle" v-for="(outruleItem,index) in outruleItems" :key="index">
-                        <div class="outruleBoxTitleItem">
-                            <!-- 2019-08-01 23：23：23 -->
-                            {{outruleItem.eat_time}}
-                        </div>
-                        <div class="outruleBoxTitleItem">
-                            {{outruleItem.user_true_name}}
-                        </div>
-                        <div class="outruleBoxTitleItem" style="border-right: none;">
-                            未刷卡
-                        </div>
-                    </div>
-                </div>
-            
-            </div>
-            <div class="userBox3">
-                <div class="normal1">
+                <div class="normal">
                     <div class="normalTitle">
-                        未注册人员
+                        非本人打卡
                     </div>
-                    <!-- <div class="userBoxItem" v-for="(stranger,index) in strangers" :key="index">
-                        <div class="userFace">
-                            <img style="width: 100%;height: 100%;" :src="stranger.face_url">
-                        </div>
-                    </div> -->
-                    <!-- <div class="userBoxItem">
-                        <div class="userFace">
-                            <img style="width: 100%;height: 100%;" src="../../../static/img/test.png">
-                        </div>
+                    <div class="normalTitle2">
+                       打卡人数：{{feibeiren_quantity}}
                     </div>
-                    <div class="userBoxItem">
-                        <div class="userFace">
-                            <img style="width: 100%;height: 100%;" src="../../../static/img/test.png">
-                        </div>
+                    <div class="normalTitle2">
+                        
                     </div>
-                    <div class="userBoxItem">
-                        <div class="userFace">
-                            <img style="width: 100%;height: 100%;" src="../../../static/img/test.png">
-                        </div>
-                    </div> -->
                 </div>
-                
                 <!-- <div class="userBoxItem">
                     <div class="userFace">
                         <img style="width: 100%;height: 100%;" src="../../../static/img/test.png">
@@ -115,12 +60,14 @@
                 </div> -->
             
             </div>
+            
             <div class="clear"></div>
-             <div class="eattime">
+            <div class="eattime">
                 {{eat_date}}/
                 <span>{{eat_type=="breakfast"?"早餐":""}}</span>
                 <span>{{eat_type=="lunch"?"午餐":""}}</span>
                 <span>{{eat_type=="dinner"?"晚餐":""}}</span>
+                打卡情况
                 <!-- 2019-09-27/午餐打卡情况 -->
             </div>
         </div>
@@ -166,6 +113,7 @@
                 fangkeEatQuantity:"",
                 teshuQuantity:'',
                 teshuEatQuantity:'',
+                feibeiren_quantity:'',
                 outruleItems:[],
                 strangers:'',
                 eat_date:'',
@@ -222,6 +170,7 @@
                         self.fangkeEatQuantity = data.data.data.fangke_eat_quantity;
                         self.teshuQuantity = data.data.data.teshu_quantity;
                         self.teshuEatQuantity = data.data.data.teshu_eat_quantity;
+                        self.feibeiren_quantity = data.data.data.feibeiren_quantity;
                         self.strangers = data.data.data.msr;
                         self.eat_type = data.data.data.eat_type;
                         self.eat_date = data.data.data.eat_date;
@@ -301,10 +250,14 @@
     }
     .eattime{
         color: #002770;
-        font-size: 20px;
+        font-size: 35px;
         text-align: right;
         margin-right: 20px;
         margin-top: 10px;
+        position: absolute;
+        top: 120px;
+        left: 50%;
+        margin-left: -190px;
     }
     .login-wrap{
         position: relative;
@@ -369,9 +322,9 @@
     }
     .normalTitle{
         width: 100%;
-        height: 36px;
+        height: 56px;
         /* margin: 0 auto; */
-        line-height: 36px;
+        line-height: 56px;
         font-size: 24px;
         text-align: center;
         color: #fff;
@@ -382,8 +335,8 @@
     }
     .normalTitle2{
         width: 100%;
-        height: 50px;
-        line-height: 30px;
+        height: 100px;
+        line-height: 100px;
         font-size: 24px;
         text-align: center;
         color: #fff;
@@ -391,9 +344,12 @@
         letter-spacing: 20px;
     }
     .normal{
-        width: 100%;
-        height: 32.6%;
+        width: 24%;
+        margin-left: 1%;
+        height: 60.6%;
+        float: left;
         margin-top: 2%;
+        margin-top: 150px;
         background-color: #2A5CAA;
         /* background-image: url(../../../static/img/banner1.png); */
         background-size: 100% 100%; 
@@ -449,7 +405,7 @@
         height:36px;
     }
     .userBox1,.userBox2,.userBox3{
-        
+        width: 100%;
         height: 90%;
         margin:0 auto;
         
@@ -458,7 +414,7 @@
         /*background-color: red;*/
     }
     .userBox1{
-        width: 28.5%;
+        width: 97%;
         margin-top: 1.4%;
     }
     .userBox2{

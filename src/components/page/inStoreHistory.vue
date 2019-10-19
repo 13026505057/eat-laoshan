@@ -5,7 +5,14 @@
             <!-- <div class="titleBg">案件档案归档操作记录</div> -->
             <div class="block">
                 
-                <el-input style="width:250px;" v-model="user_tel" placeholder="手机号查询"></el-input>
+                <el-select v-model="user_type" placeholder="请选择类型" style="width: 180px;margin-left: 30px;">
+                  <el-option
+                    v-for="item in eatOptions"
+                    :key="item.type_value"
+                    :label="item.type_name"
+                    :value="item.type_value">
+                  </el-option>
+                </el-select>
                 <!-- 关键词联想组建 -->
                 <el-select
                   v-model="user_true_name"
@@ -48,6 +55,8 @@
                 
                 <el-button type="warning" style="margin-left: 30px;" @click="searchClick">查询</el-button>
                 <el-button type="warning" style="margin-left: 30px;" @click="TedaysearchClick">查询今天</el-button>
+                <el-button type="warning" style="margin-left: 30px;" @click="downClick">报表导出</el-button>
+                
             </div>
 
           
@@ -200,7 +209,29 @@
                   value: 'dinner',
                   label: '晚餐'
                 },
-              ]
+              ],
+              eatOptions:[
+                    {
+                        type_value:'yuangong',
+                        type_name:'单位干警'
+                    },
+                    {
+                        type_value:'zhuchang',
+                        type_name:'驻场人员'
+                    },
+                    {
+                        type_value:'wuye',
+                        type_name:'物业人员'
+                    },
+                    {
+                        type_value:'fangke',
+                        type_name:'访客人员'
+                    },{
+                        type_value:'',
+                        type_name:'全部'
+                    },
+              ],
+              user_type:''
             }
               
       },
@@ -209,6 +240,15 @@
           
       },
       methods: {
+          downClick(){
+            var self = this;
+            if(self.date==''||self.date==null){
+              window.open(self.$axios.defaults.baseURL+'/exoprtBankLog?bank_type=del&&user_type='+self.user_type+'&user_true_name='+self.user_true_name+'&eat_type'+self.eat_type);
+            }else{
+              window.open(self.$axios.defaults.baseURL+'/exoprtBankLogByMonth?bank_type=del&&user_type='+self.user_type+'&user_true_name='+self.user_true_name+'&begin_time='+self.date[0]+'&end_time='+self.date[1]+'&eat_type'+self.eat_type);
+            }
+            
+          },
           lookPic(e){
             this.lookPicSrc = '';
             this.lookPicSrc = e.face_url;
@@ -476,6 +516,7 @@
                 params.append('user_true_name',self.user_true_name);
                 params.append('eat_type',self.eat_type);
                 params.append('user_tel',self.user_tel);
+                params.append('user_type',self.user_type);
 
                 self.$axios({
                     method: 'post',

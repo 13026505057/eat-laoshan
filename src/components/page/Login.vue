@@ -63,9 +63,14 @@
                         }else{
                             localStorage.setItem('position_id',data.data.data.user.userPositions[0].position_id);
                             if(data.data.data.user.userPositions[0].position_id =="1"){
+                                // 系统管理员
                                 self.$router.push('/readme');
-                            }else{
+                            }else if(data.data.data.user.userPositions[0].position_id =="2"){
+                                // 财务
                                 self.$router.push('/rechargeCard');
+                            }else{
+                                // 管理
+                                self.$router.push('/outRuleMan');
                             }
                             
                         }

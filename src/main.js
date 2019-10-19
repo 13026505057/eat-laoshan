@@ -27,6 +27,9 @@ Vue.prototype.$axios = axios;
 Vue.prototype.$moment = Moment;
 Vue.prototype.$echarts = echarts;
 Vue.prototype.$socketApi = socketApi;
+Vue.directive('focus', function (el) {
+    el.focus()
+  })
 Vue.prototype.$response = function(data, self) {
     var statu = data.data.code.substr(0, 1);
     if (statu == 2) {

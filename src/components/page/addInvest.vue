@@ -25,14 +25,16 @@
                   </el-option>
                 </el-select>
                 
-                <el-input
-                    clearable
-                    placeholder="手机号查询"
-                    style="width: 200px;margin-left: 60px;"
-                    v-model="user_tel"
-                    clearable>
-                </el-input>
+                <el-select v-model="user_type" placeholder="请选择类型" style="width: 180px;margin-left: 30px;">
+                  <el-option
+                    v-for="item in eatOptions"
+                    :key="item.type_value"
+                    :label="item.type_name"
+                    :value="item.type_value">
+                  </el-option>
+                </el-select>
                 <el-button type="warning" style="margin-left: 30px;" @click="searchClick">查询</el-button>
+                <el-button type="warning" style="margin-left: 100px;" @click="downClick">导出报表</el-button>
                 <!-- <el-button type="primary" style="margin-left: 80px;" @click="importUsers = true">批量导入</el-button> -->
                 <!-- <el-button type="primary" style="margin-left: 60px;" @click="downLoadFile">导入模板下载</el-button> -->
                 <!-- <el-button type="primary" style="margin-left: 60px;" @click="addUserNew">单人新增</el-button> -->
@@ -273,11 +275,33 @@
               total:4,
               pageSize:10,
               name:'',
+              user_type:'',
               number:'',
               userNameList:[],
               powerList:[],
               restaurants: [],
               value1:'',
+              eatOptions:[
+                    {
+                        type_value:'yuangong',
+                        type_name:'单位干警'
+                    },
+                    {
+                        type_value:'zhuchang',
+                        type_name:'驻场人员'
+                    },
+                    {
+                        type_value:'wuye',
+                        type_name:'物业人员'
+                    },
+                    {
+                        type_value:'fangke',
+                        type_name:'访客人员'
+                    },{
+                        type_value:'',
+                        type_name:'全部'
+                    },
+              ],
               value2:'',
               selectedOptions: [],
               options: [],
@@ -337,6 +361,11 @@
           this.getNameSearchList('')
       },
       methods: {
+          downClick(){
+            var self = this;
+            window.open(self.$axios.defaults.baseURL+'/exportUsers?user_type='+self.user_type)
+            
+          },
           addInvest(res){
             var self = this;
             self.$prompt('请输入充值金额', '提示', {
@@ -607,7 +636,7 @@
                 params.append('pageSize',self.pageSize); 
                 params.append('user_true_name',self.user_true_name); 
                 params.append('user_tel',self.user_tel);
-                // params.append('user_type','yuangong');
+                params.append('user_type',self.user_type);
                 self.$axios({
                     method: 'post',
                     url: '/user/getByPage',
