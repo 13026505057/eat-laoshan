@@ -80,14 +80,14 @@
                   <span >{{props.row.eat_type=='dinner'?'晚餐':''}}</span>
                 </template>
               </el-table-column>
-              <el-table-column
+              <!-- <el-table-column
                 label="消费前余额"
                 align="center"
                 >
                 <template slot-scope="props">
                   <span >{{props.row.before_amount/100}}元</span>
                 </template>
-              </el-table-column>
+              </el-table-column> -->
               <el-table-column
                 label="消费金额"
                 align="center"
@@ -96,14 +96,14 @@
                   <span >{{props.row.quantity/100}}元</span>
                 </template>
               </el-table-column>
-              <el-table-column
+              <!-- <el-table-column
                 label="消费后余额"
                 align="center"
                 >
                 <template slot-scope="props">
                   <span >{{props.row.after_amount/100}}元</span>
                 </template>
-              </el-table-column>
+              </el-table-column> -->
               <el-table-column
                 label="消费图片"
                 align="center"

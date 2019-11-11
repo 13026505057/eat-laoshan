@@ -79,14 +79,14 @@
                   <span v-bind:class="[props.row.stock_status=='in'?'':'colorRed']">{{props.row.stock_status=='in'?'已入库':'待入库'}}</span>
                 </template> -->
               </el-table-column>
-              <el-table-column
+              <!-- <el-table-column
                 label="充值前余额"
                 align="center"
                 >
                 <template slot-scope="props">
                   <span >{{props.row.before_amount/100}}元</span>
                 </template>
-              </el-table-column>
+              </el-table-column> -->
               <el-table-column
                 label="充值金额"
                 align="center"
@@ -95,14 +95,14 @@
                   <span >{{props.row.quantity/100}}元</span>
                 </template>
               </el-table-column>
-              <el-table-column
+              <!-- <el-table-column
                 label="充值后余额"
                 align="center"
                 >
                 <template slot-scope="props">
                   <span >{{props.row.after_amount/100}}元</span>
                 </template>
-              </el-table-column>
+              </el-table-column> -->
               <el-table-column
                 label="操作员"
                 align="center"

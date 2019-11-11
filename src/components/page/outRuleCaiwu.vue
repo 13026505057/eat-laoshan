@@ -5,11 +5,11 @@
             <!-- <div class="titleBg">案件档案归档操作记录</div> -->
             <div class="block">
                 
-                <el-input style="width:250px;" v-model="user_tel" placeholder="手机号查询"></el-input>
+                <!-- <el-input style="width:250px;" v-model="user_tel" placeholder="手机号查询"></el-input> -->
                 <!-- 关键词联想组建 -->
                 <el-select
                     v-model="user_true_name"
-                    style="width: 200px;margin-left: 30px;"
+                    style="width: 200px;"
                     filterable
                     remote
                     clearable
@@ -37,6 +37,14 @@
                 <el-select v-model="user_type" placeholder="请选择违规类型" style="width: 180px;margin-left: 30px;">
                     <el-option
                         v-for="item in usertOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                    </el-option>
+                </el-select>
+                <el-select v-model="user_status" placeholder="请选择处理状态" style="width: 180px;margin-left: 30px;">
+                    <el-option
+                        v-for="item in usertStatus"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value">
@@ -117,7 +125,16 @@
                     prop="user_true_name"
                     >
                 </el-table-column>
-                
+                <el-table-column
+                    label="状态"
+                    align="center"
+                    >
+                    <template slot-scope="props">
+                    <span>{{props.row.bd_card=='0'?'未处理':''}}</span>
+                    <span>{{props.row.bd_card=='1'?'已补打':''}}</span>
+                    <span>{{props.row.bd_card=='2'?'接待访客':''}}</span>
+                    </template>
+                </el-table-column>
                 <!-- <el-table-column
                     label="匹配得分"
                     align="center"
@@ -138,9 +155,9 @@
                     >
                     <template slot-scope="props">
                         <!-- <el-button  type="warning" size="mini" style="margin-left: 0px;" @click="lookPic(props.row)">查看违规照片</el-button> -->
-                        
+                        <!-- disabled -->
                         <el-button  type="warning" size="mini" style="margin-left: 10px;" @click="bindingPolice(props.row)">纠正识别错误</el-button>
-                        <el-button disabled type="warning" size="mini" style="margin-left: 10px;" @click="repairCard(props.row)">接待审核</el-button>
+                        <el-button  type="warning" size="mini" style="margin-left: 10px;" @click="repairCard(props.row)">接待审核</el-button>
                         <!-- <el-button  type="warning" size="mini" style="margin-left: 10px;" @click="deleStranger(props.row)">删除</el-button> -->
                     </template>
                 </el-table-column>
@@ -148,18 +165,21 @@
                     
             </div>
             <el-dialog
-                title="补打卡"
+                title="接待审核"
                 :visible.sync="cardDialogVisible"
                 @close = "closeClick"
                 width="50%">
                 <div class="msgContent">
                     <div class="rightmsg">
-                        <el-form ref="cardForm" :model="cardForm" label-width="80px">
-                            <el-form-item label="卡号">
+                        <el-form ref="cardForm" :model="cardForm" label-width="120px">
+                            <!-- <el-form-item label="卡号">
                                 <el-input clearable ref="getFocus"  @input="balanceChange" v-model="cardForm.card_num" style="width:550px;"></el-input>
                             </el-form-item>
                             <el-form-item label="姓名">
                                 <el-input disabled @input="balanceChange" v-model="cardForm.user_true_name" style="width:550px;"></el-input>
+                            </el-form-item> -->
+                            <el-form-item label="接待人及原因">
+                                <el-input placeholder="例：张三，业务考察" clearable  v-model="cardForm.jiedai_name" style="width:600px;"></el-input>
                             </el-form-item>
                         </el-form>
                     </div>
@@ -346,6 +366,7 @@
                     amount:'',
                     quantity:'',
                     user_true_name:'',
+                    jiedai_name:'',
                 },
                 eatOptions:[
                     {
@@ -371,13 +392,29 @@
                     label: '全部'
                     },
                     {
-                    value: 'yuangong',
+                    value: 'normal',
                     label: '未刷卡'
                     },
                     {
                     value: 'moshengren',
                     label: '陌生人'
                     },
+                ],
+                user_status:'',
+                usertStatus:[
+                    {
+                        value:'',
+                        label:'全部'
+                    },{
+                        value:'0',
+                        label:'未处理'
+                    },{
+                        value:'1',
+                        label:'已补打'
+                    },{
+                        value:'2',
+                        label:'接待访客'
+                    }
                 ],
                 officersList:[],
                 officersname:'',
@@ -446,6 +483,7 @@
                 console.log(self.autofcousHid)
                 self.eat_log_id = res.eat_log_id;
                 // self.$refs.getFocus.focus();
+                self.cardForm.jiedai_name = "";
                 setTimeout(function(){
                    self.$refs.getFocus.focus();
                 },1000)
@@ -456,26 +494,46 @@
                 var token = localStorage.getItem('auth');
                 
                 params.append('eat_log_id',self.eat_log_id); 
-
+                params.append('jiedai_name',self.cardForm.jiedai_name); 
                 self.$axios({
                     method: 'post',
-                    url: '/log/eat-log/buDaKa',
+                    url: '/log/eat-log/jiedai',
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                 }).then(function(data){
+                }).then(function(data){
                     if(data.data.code==0){
                         self.$message({
-                            message: '补打成功',
+                            message: '处理成功',
                             type: 'success'
                         });    
-                        elf.cardDialogVisible = false;
+                        self.cardDialogVisible = false;
                         self.autofcousHid = false;
                         self.getDataList();
-                      
                     }else{
                       self.$response(data,self);
                     }
-                 });
+                });
+
+                
+                // self.$axios({
+                //     method: 'post',
+                //     url: '/log/eat-log/buDaKa',
+                //     data: params,
+                //     headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                //  }).then(function(data){
+                //     if(data.data.code==0){
+                //         self.$message({
+                //             message: '补打成功',
+                //             type: 'success'
+                //         });    
+                //         elf.cardDialogVisible = false;
+                //         self.autofcousHid = false;
+                //         self.getDataList();
+                      
+                //     }else{
+                //       self.$response(data,self);
+                //     }
+                //  });
             },
             // 输入框值
             balanceChange(val){
@@ -680,6 +738,8 @@
                     params.append('eat_type',self.eat_type);
                     params.append('user_tel',self.user_tel);
                     params.append('user_type',self.user_type);
+                    params.append('bd_card',self.user_status);
+                    
 
                     self.$axios({
                         method: 'post',
@@ -917,6 +977,7 @@
                     params.append('eat_type',self.eat_type);
                     params.append('user_tel',self.user_tel);
                     params.append('user_type',self.user_type);
+                     params.append('bd_card',self.user_status);
 
                     self.$axios({
                         method: 'post',
@@ -1048,7 +1109,7 @@
       margin-left: 200px;
     }
     .headImg1{
-        width: 120px;
+        width: 100px;
         /* height: 130px; */
     }
     .numData{

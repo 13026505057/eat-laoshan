@@ -1,6 +1,6 @@
 <template>
     <div class="header" style="position:reactive">
-        <div :class="position=='1'?'top':'top1'">
+        <div :class="positionClass">
             <div class="logo"></div>
             <!-- <div class="logo1"><img src="../../../static/img/logo.png"></div> -->
             <div class="user-info">
@@ -62,6 +62,7 @@ import md5 from 'js-md5';
                 top_name:'',
                 top_head:'',
                 position:'',
+                positionClass:'',
                 items: [
                     {
                         icon: 'el-icon-setting',
@@ -294,11 +295,13 @@ import md5 from 'js-md5';
             this.position = localStorage.getItem('position_id');
             console.log(this.position)
             // // 1是管理员，2是财务
-            // if(position=='1'){
-                
-            // }else{
-
-            // }
+            if(this.position=='1'){
+                this.positionClass = "top"
+            }else if(this.position=='2'){
+                this.positionClass = "top1"
+            }else{
+                this.positionClass = "top2"
+            }
         },
         methods:{
             open(index,indexPath){
@@ -384,6 +387,12 @@ import md5 from 'js-md5';
         width: 100%;
         height:80px;
         background-image: url(../../../static/img/top_head1.jpg);
+        background-size:100%100%;  
+    }
+    .top2{
+        width: 100%;
+        height:80px;
+        background-image: url(../../../static/img/top_head2.jpg);
         background-size:100%100%;  
     }
     .el-menu--horizontal{

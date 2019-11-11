@@ -299,6 +299,10 @@ export default new Router({
             component: resolve => require(['../components/page/tvShow.vue'], resolve)
         },
         {
+            path: '/publicity',
+            component: resolve => require(['../components/page/publicity.vue'], resolve)//竖屏
+        },
+        {
             path: '/bigTvShow',
             component: resolve => require(['../components/page/bigTvShow.vue'], resolve)
         },

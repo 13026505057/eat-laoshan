@@ -333,7 +333,7 @@
                     label: '全部'
                     },
                     {
-                    value: 'yuangong',
+                    value: 'normal',
                     label: '未刷卡'
                     },
                     {
@@ -530,7 +530,7 @@
             
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
-                 var date2 = new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1);
+                var date2 = new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1);
                 var endTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + date2.getHours() + ':' + date2.getMinutes() + ':' + date2.getSeconds()
                 
                 var startTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + "00" + ':' + "00" + ':' + "00"

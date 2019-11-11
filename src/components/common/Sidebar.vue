@@ -108,7 +108,7 @@ import md5 from 'js-md5';
             
             var position = localStorage.getItem('position_id');
             console.log(position)
-            // 1.是管理员   2，是财务  3.是管理权限
+            // 1.是管理员   2，是财务  3.是食堂管理权限
             if(position=='1'){
                 console.log("wew")
                 // this.items.unshift(

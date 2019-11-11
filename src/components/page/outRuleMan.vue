@@ -5,7 +5,7 @@
             <!-- <div class="titleBg">案件档案归档操作记录</div> -->
             <div class="block">
                 
-                <el-input style="width:250px;" v-model="user_tel" placeholder="手机号查询"></el-input>
+                <!-- <el-input style="width:250px;" v-model="user_tel" placeholder="手机号查询"></el-input> -->
                 <!-- 关键词联想组建 -->
                 <el-select
                     v-model="user_true_name"
@@ -42,6 +42,15 @@
                         :value="item.value">
                     </el-option>
                 </el-select>
+                 <el-select v-model="user_status" placeholder="请选择处理状态" style="width: 180px;margin-left: 30px;">
+                    <el-option
+                        v-for="item in usertStatus"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                    </el-option>
+                </el-select>
+
 
                 <el-date-picker
                     style="margin-left: 20px;width:420px;"
@@ -117,7 +126,16 @@
                     prop="user_true_name"
                     >
                 </el-table-column>
-                
+                <el-table-column
+                    label="状态"
+                    align="center"
+                    >
+                    <template slot-scope="props">
+                    <span>{{props.row.bd_card=='0'?'未处理':''}}</span>
+                    <span>{{props.row.bd_card=='1'?'已补打':''}}</span>
+                    <span>{{props.row.bd_card=='2'?'接待访客':''}}</span>
+                    </template>
+                </el-table-column>
                 <!-- <el-table-column
                     label="匹配得分"
                     align="center"
@@ -140,7 +158,7 @@
                         <!-- <el-button  type="warning" size="mini" style="margin-left: 0px;" @click="lookPic(props.row)">查看违规照片</el-button> -->
                         
                         <el-button  type="warning" size="mini" style="margin-left: 10px;" @click="bindingPolice(props.row)">纠正识别错误</el-button>
-                        <el-button disabled type="warning" size="mini" style="margin-left: 10px;" @click="repairCard(props.row)">补打卡</el-button>
+                        <el-button type="warning" size="mini" style="margin-left: 10px;" @click="repairCard(props.row)">补打卡</el-button>
                         <!-- <el-button  type="warning" size="mini" style="margin-left: 10px;" @click="deleStranger(props.row)">删除</el-button> -->
                     </template>
                 </el-table-column>
@@ -371,13 +389,29 @@
                     label: '全部'
                     },
                     {
-                    value: 'yuangong',
+                    value: 'normal',
                     label: '未刷卡'
                     },
                     {
                     value: 'moshengren',
                     label: '陌生人'
                     },
+                ],
+                user_status:'',
+                usertStatus:[
+                    {
+                        value:'',
+                        label:'全部'
+                    },{
+                        value:'0',
+                        label:'未处理'
+                    },{
+                        value:'1',
+                        label:'已补打'
+                    },{
+                        value:'2',
+                        label:'接待访客'
+                    }
                 ],
                 officersList:[],
                 officersname:'',
@@ -650,6 +684,7 @@
             },
             // 查询今天
             TedaysearchClick(){
+                this.pageNum = 1;
                 this.getToday();
             },
             getToday(){
@@ -680,6 +715,7 @@
                     params.append('eat_type',self.eat_type);
                     params.append('user_tel',self.user_tel);
                     params.append('user_type',self.user_type);
+                    params.append('bd_card',self.user_status);
 
                     self.$axios({
                         method: 'post',
@@ -917,6 +953,7 @@
                     params.append('eat_type',self.eat_type);
                     params.append('user_tel',self.user_tel);
                     params.append('user_type',self.user_type);
+                    params.append('bd_card',self.user_status);
 
                     self.$axios({
                         method: 'post',
@@ -937,13 +974,11 @@
             //修改单元行颜色
             rowStyle({ row, rowIndex}){
                 if(rowIndex%2 ==0){
-                return 'background:#eee;color:#000;'
+                    return 'background:#eee;color:#000;'
                 }else{
-                return 'background:#e5e7e8;color:#000;'
+                    return 'background:#e5e7e8;color:#000;'
                 }
             },      
-            
-            
             
             
         }
