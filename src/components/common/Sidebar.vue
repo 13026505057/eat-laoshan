@@ -202,10 +202,18 @@ import md5 from 'js-md5';
                     index: 'moneyByMonth',
                     title: '消费记录按月记账统计'
                 },{
-                        icon: 'el-icon-setting',
-                        index: 'outRuleCaiwu',
-                        title: '违规记录查询'
-                    },
+                    icon: 'el-icon-setting',
+                    index: 'outRuleCaiwu',
+                    title: '违规记录查询'
+                },{
+                    icon: 'el-icon-setting',
+                    index: 'sendCard',
+                    title: '发卡'
+                },{
+                    icon: 'el-icon-setting',
+                    index: 'temporary',
+                    title: '暂存/收入'
+                },
                 )
             }else{
                  this.items.push(

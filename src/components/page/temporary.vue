@@ -5,7 +5,7 @@
 
             <div class="block">
                
-                <el-select 
+                <!-- <el-select 
                     clearable 
                     v-model="user_true_name" 
                     style="height:40px;" 
@@ -23,9 +23,9 @@
                         :label="item.label"
                         :value="item.label">
                     </el-option>
-                </el-select>
+                </el-select> -->
                 
-                <el-input
+                <!-- <el-input
                     placeholder="手机号查询"
                     style="width: 200px;margin-left: 60px;"
                     v-model="user_tel"
@@ -39,11 +39,17 @@
                         :label="item.type_name"
                         :value="item.type_value">
                     </el-option>
-                </el-select>
+                </el-select> -->
+                <el-date-picker
+                    v-model="month"
+                    type="month"
+                    value-format="yyyy-MM"
+                    placeholder="选择月">
+                </el-date-picker>
                 <el-button type="warning" style="margin-left: 30px;" @click="searchClick">查询</el-button>
                 <!-- <el-button type="primary" style="margin-left: 80px;" @click="importUsers = true">批量导入</el-button> -->
                 <!-- <el-button type="primary" style="margin-left: 60px;" @click="downLoadFile">导入模板下载</el-button> -->
-                <el-button type="primary" style="margin-left: 60px;" @click="addUserNew">单人新增</el-button>
+                <!-- <el-button type="primary" style="margin-left: 60px;" @click="addUserNew">新增人员发卡</el-button> -->
                 
             </div>
 
@@ -71,10 +77,13 @@
                 </span>
             </el-dialog>
             <el-dialog
-                title="新增单个人员"
+                title="新增人员发卡"
                 :visible.sync="addUser"
                 >
                 <el-form ref="form" :model="form" label-width="120px" label-position="left" style="margin-left:20px;">
+                    <el-form-item label="卡号" style="">
+                        <el-input v-model="form.card_num" ref="getFocus" style="width: 200px;float: left;"></el-input>
+                    </el-form-item>
                     <el-form-item label="真实姓名" style="display: inline-block;">
                         <el-input v-model="form.user_true_name" style="width: 200px;float: left;"></el-input>
                     </el-form-item>
@@ -92,10 +101,8 @@
                         </el-select>
                     </el-form-item>
                     
-                    <el-form-item label="手机卡号" style="display: inline-block;margin-left:72px;">
-                        <el-input v-model="form.card_num" style="width: 200px;float: left;"></el-input>
-                    </el-form-item>
-                    <el-form-item label="权限" style="display: inline-block;">
+                    
+                    <el-form-item label="权限" style="display: inline-block;margin-left:80px;">
                         <el-select filterable v-model="form.position_id" placeholder="请选择" style="width:208px;float: left;">
                             <el-option
                                 v-for="item in positionList"
@@ -106,7 +113,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="所在部门" style="display: block;">
-                        <el-select multiple filterable v-model="form.dept_ids"  placeholder="请选择" style="width:208px;float: left;">
+                        <el-select multiple filterable v-model="form.dept_ids" placeholder="请选择" style="width:208px;float: left;">
                         <el-option
                             v-for="item in bumenList"
                             :key="item.dept_id"
@@ -147,13 +154,16 @@
             </el-dialog>
             <el-dialog  title="修改用户资料" :visible.sync="dialogFormVisible">
                 <el-form ref="form" :model="form" label-width="120px" label-position="left" style="margin-left:20px;">
-                    <el-form-item label="真实姓名" style="display: inline-block;">
+                    <el-form-item label="卡号" style="display: inline-block;">
+                        <el-input v-model="form.card_num"  ref="getFocus" style="width: 200px;float: left;"></el-input>
+                    </el-form-item>
+                    <el-form-item label="真实姓名" style="display: inline-block;margin-left:72px;">
                         <el-input v-model="form.user_true_name" style="width: 200px;float: left;"></el-input>
                     </el-form-item>
-                    <el-form-item label="手机号码" style="display: inline-block;margin-left:80px;">
+                    <el-form-item label="手机号码" style="display: inline-block;">
                         <el-input v-model="form.user_tel" style="width: 200px;float: left;"></el-input>
                     </el-form-item>
-                    <el-form-item label="是否免检" style="display: inline-block;">
+                    <el-form-item label="是否免检" style="display: inline-block;margin-left:72px;">
                         <el-select  filterable v-model="form.exempt" placeholder="请选择" style="width:208px;float: left;">
                             <el-option
                             v-for="item in exemptList"
@@ -163,9 +173,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="手机卡号" style="display: inline-block;margin-left:72px;">
-                        <el-input v-model="form.card_num" style="width: 200px;float: left;"></el-input>
-                    </el-form-item>
+                    
                     <el-form-item label="权限" style="display: inline-block;">
                         <el-select  filterable v-model="form.position_id" placeholder="请选择" style="width:208px;float: left;">
                             <el-option
@@ -234,51 +242,35 @@
                         prop="username">
                     </el-table-column> -->
                     <el-table-column
-                        label="姓名"
+                        label="月份"
                         align="center"
-                        prop="user_true_name">
+                        prop="month">
                     </el-table-column>
+                    
                     <el-table-column
-                        label="是否免检"
+                        label="当月充值总计"
                         align="center"
-                        >
-                        <template slot-scope="props">
-                        <span>{{props.row.exempt=='0'?'不免检':''}}</span>
-                        <span>{{props.row.exempt=='1'?'免检':''}}</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        label="用户类型"
-                        align="center"
-                        >
-                        <template slot-scope="props">
-                            <span>{{props.row.user_type=='fangke'?'访客人员':''}}</span>
-                            <span>{{props.row.user_type=='yuangong'?'单位干警':''}}</span>
-                            <span>{{props.row.user_type=='wuye'?'物业人员':''}}</span>
-                            <span>{{props.row.user_type=='zhuchang'?'驻场人员':''}}</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        label="部门"
-                        align="center"
-                        prop="dept_name"
-                        >
-                        <template slot-scope="props">
-                            <span v-for="item in props.row.userDepts">{{item.dept_name}};</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        label="手机号"
-                        align="center"
-                        prop="user_tel"
+                        prop="this_month_add"
                         >
                     </el-table-column>
                     <el-table-column
-                        label="手机卡号"
+                        label="当月消费总计"
                         align="center"
-                        prop="card_num">
+                        prop="this_month_del"
+                        >
                     </el-table-column>
                     <el-table-column
+                        label="当月暂存总计"
+                        align="center"
+                        prop="this_month_zancun"
+                        >
+                    </el-table-column>
+                    <el-table-column
+                        label="上月暂存结余"
+                        align="center"
+                        prop="last_month_zancun">
+                    </el-table-column>
+                    <!-- <el-table-column
                         label="操作"
                         align="center">
                         <template slot-scope="props">
@@ -290,7 +282,7 @@
                         type="danger"
                         @click="handleEdit(props.row)">删除</el-button>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
               
                 </el-table> 
                 
@@ -369,8 +361,7 @@
                     user_true_name:'',
                     password:'',
                     user_id:'',
-                    user_status:'',
-                    // dept_ids:[],
+                    user_status:''
                 },
                 form:{
                     user_true_name:'',
@@ -380,7 +371,6 @@
                     card_num:'',
                     user_type:'',
                     exempt:"0",
-                    position_id:'',
                 },
                 zhiweiList:[],
                 bumenList: [],
@@ -425,7 +415,8 @@
                         type_name:'全部'
                     },
                 ],
-                positionList:[]
+                positionList:[],
+                month:'',
                 
             }
                 
@@ -448,20 +439,25 @@
             this.getPosition();
         },
         methods: {
-          addUserNew(){
-            this.form = {
-                user_true_name:'',
-                user_tel:'',
-                dept_ids:[],
-                face_url:'',
-                card_num:'',
-                user_type:'',
-                exempt:"0",
-            };
-            this.addUser = true;
-            this.face_url = "";
+            addUserNew(){
+                var self = this;
+                setTimeout(function(){
+                    self.$refs.getFocus.focus();
+                },500)
+                this.form = {
+                    user_true_name:'',
+                    user_tel:'',
+                    dept_ids:[],
+                    face_url:'',
+                    card_num:'',
+                    user_type:'',
+                    exempt:"0",
+                };
+                
+                this.addUser = true;
+                this.face_url = "";
 
-          },
+            },
           handleAvatarSuccess(res, file) {
             if(res.code==0){
               this.form.face_url = res.data;
@@ -516,66 +512,26 @@
                     }
                  });
           },
-          //下载文件
-          downLoadFile(){
-            var url = this.$axios.defaults.baseURL+'/ejk/file/物料批量导入模板.xls';
-            try{ 
-                var elemIF = document.createElement("iframe");   
-                elemIF.src = url;   
-                elemIF.style.display = "none";   
-                document.body.appendChild(elemIF);   
-            }catch(e){ 
      
-            } 
-          },
-          handleChange1(value) {
-              // console.log(value)
-          },
-          
-          //跳转档案页面
-          danganClick(data){
-            localStorage.setItem('user_true_name',data.user_true_name);
-            this.$router.push('/jiedurendangan');
-          },
+            handleChange1(value) {
+                // console.log(value)
+            },
+        
             //打开修改弹窗
             updataClick(data){
-                var self = this;
                 // localStorage.setItem('xiugai_card_id',data.user_card_id);
                 // this.$router.push('/justXiugai');
                 console.log(data)
-                // this.form = data;
-                this.form.dept_ids = [];
-                if(data.userDepts.length > 0){
-                    for(var i=0;i<data.userDepts.length;i++){
-                        this.form.dept_ids.push(data.userDepts[i].dept_id)
-                    }
-                    console.log(self.form.dept_ids)
-                }else{
-                    this.form.dept_ids = [];
-                }
-                
-                
-                // this.form.dept_ids = data.userDepts;
-                this.form.user_true_name = data.user_true_name;
-                this.form.user_tel = data.user_tel;
-                this.form.face_url = data.face_url;
-                this.form.card_num = data.card_num;
-                this.form.user_type = data.user_type;
-                this.form.user_id = data.user_id;
-   
-                // console.log(data.userPositions)
+                var self = this;
+                setTimeout(function(){
+                    self.$refs.getFocus.focus();
+                },500)
+                this.form = data;
                 if(data.userPositions.length == 0){
-                    // this.form.position_id = "";
-                    this.form.position_id = data.userPositions;
+
                 }else{
                     this.form.position_id = data.userPositions[0].position_id;
-                    console.log(this.form.position_id)
                 }
-                // if(data.userPositions.length == 0){
-
-                // }else{
-                //     this.form.position_id = data.userPositions[0].position_id;
-                // }
                 
                 
                 this.dialogFormVisible = true;
@@ -583,7 +539,7 @@
                 // alert(11)
                 // console.log(this.changeform)
             },
-        //   查询职责信息
+            //   查询职责信息
             getPosition(){
                 const self = this;
                 var params = new URLSearchParams();
@@ -653,17 +609,12 @@
                 const self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
-                console.log(self.form.dept_ids)
-                // var arr = [];
-                // for(var i = 0;i<self.form.dept_ids.length;i++){
-                //     arr.push(self.form.dept_ids[i].dept_id)
-                // }
-                // if(arr){
-                //   var dept_ids = arr.join(",")
-                // }else{
-                //   var dept_ids = '';
-                // }
-                var dept_ids = self.form.dept_ids.join(",")
+                
+                if(self.form.dept_ids){
+                  var dept_ids = self.form.dept_ids.join(",")
+                }else{
+                  var dept_ids = '';
+                }
                 params.append('user_id',self.form.user_id);
                 params.append('user_true_name',self.form.user_true_name);
                 params.append('user_tel',self.form.user_tel);
@@ -765,17 +716,19 @@
                 const self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
+                console.log(self.month)
+                 params.append('month',self.month);
                 params.append('pageNum',self.currentPage); 
                 params.append('pageSize',self.pageSize); 
-                params.append('user_true_name',self.user_true_name); 
-                params.append('user_tel',self.user_tel);
-                if(self.user_type == "quanbu"){
-                    self.user_type = ""
-                }
-                params.append('user_type',self.user_type);
+                // params.append('user_true_name',self.user_true_name); 
+                // params.append('user_tel',self.user_tel);
+                // if(self.user_type == "quanbu"){
+                //     self.user_type = ""
+                // }
+                // params.append('user_type',self.user_type);
                 self.$axios({
                     method: 'post',
-                    url: '/user/getByPage',
+                    url: '/bank/bank-log/getMonthBankLog',
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
                  }).then(function(data){

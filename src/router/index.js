@@ -138,6 +138,16 @@ export default new Router({
                     component: resolve => require(['../components/page/userAdmin.vue'], resolve) // Vue-Quill-Editor组件
                 },
                 {
+                    name: '发卡',
+                    path: '/sendCard',
+                    component: resolve => require(['../components/page/sendCard.vue'], resolve) // Vue-Quill-Editor组件
+                },
+                {
+                    name: '暂存/收入',
+                    path: '/temporary',
+                    component: resolve => require(['../components/page/temporary.vue'], resolve) // Vue-Quill-Editor组件
+                },
+                {
                     name: '摄像头设置',
                     path: '/camera',
                     component: resolve => require(['../components/page/camera.vue'], resolve) // Vue-Quill-Editor组件
@@ -301,6 +311,10 @@ export default new Router({
         {
             path: '/publicity',
             component: resolve => require(['../components/page/publicity.vue'], resolve)//竖屏
+        },
+        {
+            path: '/publicity1',
+            component: resolve => require(['../components/page/publicity1.vue'], resolve)//竖屏
         },
         {
             path: '/bigTvShow',

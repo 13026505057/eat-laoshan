@@ -10,10 +10,15 @@
             <!-- </div> -->
             <div class="etui">
                 <div class="btncenter">
-                    <div @click="topupClick" class="topup">充 值</div>
-                    <div @click="balanceClick" class="balance">余 额</div>
+                    <div class="btnLeft">
+                        <div @click="topupClick" class="topup">充 值</div>
+                        <div @click="balanceClick" class="balance">余 额</div>
+                    </div>
+                    <div class="btnRight">
+                        <div @click="returnClick" class="topup">退 卡</div>
+                        <div @click="sendCardClick" class="balance">发 卡</div>
+                    </div>
                 </div>
-                
             </div>
           
         </div>
@@ -33,7 +38,10 @@
                             <el-form-item label="余额">
                                 <el-input disabled v-model="form.amount" style="width:700px;"></el-input>
                             </el-form-item>
-                            <el-form-item label="充值金额"  v-if="topUpHid"
+                            <el-form-item v-if="topUpHid2" label="可退金额">
+                                <el-input disabled v-model="form.amount" style="width:700px;"></el-input>
+                            </el-form-item>
+                            <el-form-item label="充值金额"  v-if="topUpHid1"
                                 prop="quantity"
                                 :rules="[
                                 {
@@ -51,7 +59,8 @@
                             
 
                             <el-form-item >
-                                <el-button v-if="topUpHid" type="primary" @click="onSubmit('form')">充值</el-button>
+                                <el-button v-if="topUpHid1" type="primary" @click="onSubmit('form')">充值</el-button>
+                                <el-button v-if="topUpHid2" type="primary" @click="returnCard('form')">退卡</el-button>
                                 <el-button @click="cancelClick">关闭</el-button>
                             </el-form-item>
                         </el-form>
@@ -65,6 +74,7 @@
             </div>
             
         </div>
+        
         
     </div>
 </template>
@@ -88,10 +98,12 @@
                     quantity:'',
                     user_true_name:'',
                 },
-                topUpHid:false,
+                topUpHid1:false,
+                topUpHid2:false,
                 topupIpt:true,
                 user_id:'',
                 face_url:'',
+                
             }
                 
         },
@@ -113,7 +125,7 @@
                     headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
                 }).then(function(data){
                     if(data.data.code==0){
-                    self.powerList = data.data.data;
+                        self.powerList = data.data.data;
                     }else{
                     self.$response(data,self);
                     }
@@ -126,10 +138,11 @@
                 self.content2Hid = true;
                 setTimeout(function(){
                     self.$refs.getFocus.focus();
-                },1000)
+                },500)
                 
                 self.title = "充值";
-                self.topUpHid = true;
+                self.topUpHid1 = true;
+                self.topUpHid2 = false;
                 self.form = {
                     card_num:'',
                     amount:'',
@@ -137,14 +150,19 @@
                     user_true_name:'',
                 };
                 self.face_url = '';
+                self.user_id = '';
             },
             // 余额
             balanceClick(){
                 var self = this;
                 self.content1Hid = false;
                 self.content2Hid = true;
+                setTimeout(function(){
+                    self.$refs.getFocus.focus();
+                },500)
                 self.title = "余额";
-                self.topUpHid = false;
+                self.topUpHid1 = false;
+                self.topUpHid2 = false;
                 self.form = {
                     card_num:'',
                     amount:'',
@@ -152,6 +170,33 @@
                     user_true_name:'',
                 };
                 self.face_url="";
+                self.user_id = '';
+            },
+            // 退卡
+            returnClick(){
+                var self = this;
+                self.content1Hid = false;
+                self.content2Hid = true;
+                setTimeout(function(){
+                    self.$refs.getFocus.focus();
+                },500)
+                self.title = "退 卡";
+                self.topUpHid1 = false;
+                self.topUpHid2 = true;
+                self.form = {
+                    card_num:'',
+                    amount:'',
+                    quantity:'',
+                    user_true_name:'',
+                };
+                self.face_url="";
+                self.user_id = '';
+            },
+            // 发卡
+            sendCardClick(){
+                console.log("llll")
+                var self = this;
+                self.$router.push('/sendCard');
             },
             // 输入框值
             balanceChange(val){
@@ -201,6 +246,7 @@
             },
             // 点击充值
             onSubmit(formName){
+                console.log(formName)
                  this.$refs[formName].validate((valid) => {
                     if (valid) {
                         const self = this;
@@ -247,6 +293,42 @@
                         return false;
                     }
                 });
+            },
+            // 点击退卡
+            returnCard(){
+                const self = this;
+                if(self.user_id == ""){
+                    self.$message({
+                        type: 'error',
+                        message: '请刷卡'
+                    });
+                }else{
+                    var params = new URLSearchParams();
+                    var token = localStorage.getItem('auth');
+                    params.append('user_id',self.user_id);
+                    self.$axios({
+                        method: 'post',
+                        url: '/user/tuiKa',
+                        data: params,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                    }).then(function(data){
+                        if(data.data.code==0){
+                            self.$message({
+                                type: 'success',
+                                message: "退卡成功"
+                            });
+                            setTimeout(function(){
+                                self.content1Hid = true;
+                                self.content2Hid = false;
+                            },2000)
+                            
+                            
+                        }else{
+                            self.$response(data,self);
+                        }
+                    });
+                }
+                
             },
             cancelClick(){
                 var self = this;
@@ -296,12 +378,19 @@
         /* border: 2px solid #ff0000; */
         margin: 0 auto;
         align-self: center;
-        display: flex;
+        /* display: flex; */
     }
     .btncenter{
         margin: 0 auto;
-        align-self: center;
+        /* align-self: center; */
+        display: flex;
+        justify-content: space-between;
     }
+    .btnLeft,.btnRight{
+        width: 50%;
+
+    }  
+
     .content2{
         width:100%;
         height:100%;

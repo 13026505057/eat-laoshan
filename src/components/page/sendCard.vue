@@ -25,7 +25,7 @@
                     </el-option>
                 </el-select>
                 
-                <el-input
+                <!-- <el-input
                     placeholder="手机号查询"
                     style="width: 200px;margin-left: 60px;"
                     v-model="user_tel"
@@ -39,11 +39,11 @@
                         :label="item.type_name"
                         :value="item.type_value">
                     </el-option>
-                </el-select>
+                </el-select> -->
                 <el-button type="warning" style="margin-left: 30px;" @click="searchClick">查询</el-button>
                 <!-- <el-button type="primary" style="margin-left: 80px;" @click="importUsers = true">批量导入</el-button> -->
                 <!-- <el-button type="primary" style="margin-left: 60px;" @click="downLoadFile">导入模板下载</el-button> -->
-                <el-button type="primary" style="margin-left: 60px;" @click="addUserNew">单人新增</el-button>
+                <el-button type="primary" style="margin-left: 60px;" @click="addUserNew">新增人员发卡</el-button>
                 
             </div>
 
@@ -71,10 +71,13 @@
                 </span>
             </el-dialog>
             <el-dialog
-                title="新增单个人员"
+                title="新增人员发卡"
                 :visible.sync="addUser"
                 >
                 <el-form ref="form" :model="form" label-width="120px" label-position="left" style="margin-left:20px;">
+                    <el-form-item label="卡号" style="">
+                        <el-input v-model="form.card_num" ref="getFocus" style="width: 200px;float: left;"></el-input>
+                    </el-form-item>
                     <el-form-item label="真实姓名" style="display: inline-block;">
                         <el-input v-model="form.user_true_name" style="width: 200px;float: left;"></el-input>
                     </el-form-item>
@@ -92,10 +95,8 @@
                         </el-select>
                     </el-form-item>
                     
-                    <el-form-item label="手机卡号" style="display: inline-block;margin-left:72px;">
-                        <el-input v-model="form.card_num" style="width: 200px;float: left;"></el-input>
-                    </el-form-item>
-                    <el-form-item label="权限" style="display: inline-block;">
+                    
+                    <el-form-item label="权限" style="display: inline-block;margin-left:80px;">
                         <el-select filterable v-model="form.position_id" placeholder="请选择" style="width:208px;float: left;">
                             <el-option
                                 v-for="item in positionList"
@@ -106,7 +107,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="所在部门" style="display: block;">
-                        <el-select multiple filterable v-model="form.dept_ids"  placeholder="请选择" style="width:208px;float: left;">
+                        <el-select multiple filterable v-model="form.dept_ids" placeholder="请选择" style="width:208px;float: left;">
                         <el-option
                             v-for="item in bumenList"
                             :key="item.dept_id"
@@ -147,13 +148,16 @@
             </el-dialog>
             <el-dialog  title="修改用户资料" :visible.sync="dialogFormVisible">
                 <el-form ref="form" :model="form" label-width="120px" label-position="left" style="margin-left:20px;">
-                    <el-form-item label="真实姓名" style="display: inline-block;">
+                    <el-form-item label="卡号" style="display: inline-block;">
+                        <el-input v-model="form.card_num"  ref="getFocus" style="width: 200px;float: left;"></el-input>
+                    </el-form-item>
+                    <el-form-item label="真实姓名" style="display: inline-block;margin-left:72px;">
                         <el-input v-model="form.user_true_name" style="width: 200px;float: left;"></el-input>
                     </el-form-item>
-                    <el-form-item label="手机号码" style="display: inline-block;margin-left:80px;">
+                    <el-form-item label="手机号码" style="display: inline-block;">
                         <el-input v-model="form.user_tel" style="width: 200px;float: left;"></el-input>
                     </el-form-item>
-                    <el-form-item label="是否免检" style="display: inline-block;">
+                    <el-form-item label="是否免检" style="display: inline-block;margin-left:72px;">
                         <el-select  filterable v-model="form.exempt" placeholder="请选择" style="width:208px;float: left;">
                             <el-option
                             v-for="item in exemptList"
@@ -163,9 +167,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="手机卡号" style="display: inline-block;margin-left:72px;">
-                        <el-input v-model="form.card_num" style="width: 200px;float: left;"></el-input>
-                    </el-form-item>
+                    
                     <el-form-item label="权限" style="display: inline-block;">
                         <el-select  filterable v-model="form.position_id" placeholder="请选择" style="width:208px;float: left;">
                             <el-option
@@ -218,7 +220,7 @@
             <div class="tableList">
                 <el-table
                     :data="tableData5"
-                    :header-cell-style="{ 'background-color': '#deedf4','color':'#000'}"
+                    :header-cell-style="headStyle"
                     :row-style="rowStyle"
                     row-key="user_card_id"
                     class="tableClass"
@@ -264,7 +266,7 @@
                         prop="dept_name"
                         >
                         <template slot-scope="props">
-                            <span v-for="item in props.row.userDepts">{{item.dept_name}};</span>
+                            <span v-for="item in props.row.userDepts">{{item.dept_name}},</span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -274,7 +276,7 @@
                         >
                     </el-table-column>
                     <el-table-column
-                        label="手机卡号"
+                        label="卡号"
                         align="center"
                         prop="card_num">
                     </el-table-column>
@@ -369,8 +371,7 @@
                     user_true_name:'',
                     password:'',
                     user_id:'',
-                    user_status:'',
-                    // dept_ids:[],
+                    user_status:''
                 },
                 form:{
                     user_true_name:'',
@@ -448,20 +449,25 @@
             this.getPosition();
         },
         methods: {
-          addUserNew(){
-            this.form = {
-                user_true_name:'',
-                user_tel:'',
-                dept_ids:[],
-                face_url:'',
-                card_num:'',
-                user_type:'',
-                exempt:"0",
-            };
-            this.addUser = true;
-            this.face_url = "";
+            addUserNew(){
+                var self = this;
+                setTimeout(function(){
+                    self.$refs.getFocus.focus();
+                },500)
+                this.form = {
+                    user_true_name:'',
+                    user_tel:'',
+                    dept_ids:[],
+                    face_url:'',
+                    card_num:'',
+                    user_type:'',
+                    exempt:"0",
+                };
+                
+                this.addUser = true;
+                this.face_url = "";
 
-          },
+            },
           handleAvatarSuccess(res, file) {
             if(res.code==0){
               this.form.face_url = res.data;
@@ -528,33 +534,31 @@
      
             } 
           },
-          handleChange1(value) {
-              // console.log(value)
-          },
-          
-          //跳转档案页面
-          danganClick(data){
-            localStorage.setItem('user_true_name',data.user_true_name);
-            this.$router.push('/jiedurendangan');
-          },
+            handleChange1(value) {
+                // console.log(value)
+            },
+            
+            //跳转档案页面
+            danganClick(data){
+                localStorage.setItem('user_true_name',data.user_true_name);
+                this.$router.push('/jiedurendangan');
+            },
             //打开修改弹窗
             updataClick(data){
-                var self = this;
                 // localStorage.setItem('xiugai_card_id',data.user_card_id);
                 // this.$router.push('/justXiugai');
                 console.log(data)
-                // this.form = data;
-                this.form.dept_ids = [];
-                if(data.userDepts.length > 0){
-                    for(var i=0;i<data.userDepts.length;i++){
-                        this.form.dept_ids.push(data.userDepts[i].dept_id)
-                    }
-                    console.log(self.form.dept_ids)
-                }else{
-                    this.form.dept_ids = [];
+                var self = this;
+                setTimeout(function(){
+                    self.$refs.getFocus.focus();
+                },500)
+                var deptArr = [];
+                for(var i=0;i<data.userDepts.length;i++){
+                    deptArr.push(data.userDepts[i].dept_id)
                 }
-                
-                
+                console.log(deptArr)
+                this.form.dept_ids = deptArr;
+                // this.form = data;
                 // this.form.dept_ids = data.userDepts;
                 this.form.user_true_name = data.user_true_name;
                 this.form.user_tel = data.user_tel;
@@ -563,19 +567,14 @@
                 this.form.user_type = data.user_type;
                 this.form.user_id = data.user_id;
    
-                // console.log(data.userPositions)
+                console.log(data.userPositions)
                 if(data.userPositions.length == 0){
                     // this.form.position_id = "";
-                    this.form.position_id = data.userPositions;
+                    // this.form.position_id = data.userPositions;
                 }else{
                     this.form.position_id = data.userPositions[0].position_id;
                     console.log(this.form.position_id)
                 }
-                // if(data.userPositions.length == 0){
-
-                // }else{
-                //     this.form.position_id = data.userPositions[0].position_id;
-                // }
                 
                 
                 this.dialogFormVisible = true;
@@ -583,7 +582,7 @@
                 // alert(11)
                 // console.log(this.changeform)
             },
-        //   查询职责信息
+            //   查询职责信息
             getPosition(){
                 const self = this;
                 var params = new URLSearchParams();
@@ -654,7 +653,7 @@
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
                 console.log(self.form.dept_ids)
-                // var arr = [];
+                var arr = [];
                 // for(var i = 0;i<self.form.dept_ids.length;i++){
                 //     arr.push(self.form.dept_ids[i].dept_id)
                 // }
@@ -664,6 +663,8 @@
                 //   var dept_ids = '';
                 // }
                 var dept_ids = self.form.dept_ids.join(",")
+
+                // this.form.dept_ids
                 params.append('user_id',self.form.user_id);
                 params.append('user_true_name',self.form.user_true_name);
                 params.append('user_tel',self.form.user_tel);
@@ -733,7 +734,11 @@
                 }else{
                     return 'background:#e5e7e8;color:#000;'
                 }
-            },      
+            },   
+            headStyle({ row, rowIndex}) 
+                { 
+                    return 'background-color: #DEEDF4;color:#000'
+                },
             handleChange(value) {
                 var newArr = [];
                 newArr.push(value[value.length-1]) 

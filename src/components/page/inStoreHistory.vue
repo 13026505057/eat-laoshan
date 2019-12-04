@@ -242,8 +242,12 @@
       methods: {
           downClick(){
             var self = this;
+            console.log(self.date)
+            console.log(self.date[0]);
+            console.log(self.date[1])
+            console.log(self.$axios.defaults.baseURL+'/exoprtBankLogByMonth?bank_type=del&&user_type='+self.user_type+'&user_true_name='+self.user_true_name+'&begin_time='+self.date[0]+'&end_time='+self.date[1]+'&eat_type'+self.eat_type)
             if(self.date==''||self.date==null){
-              window.open(self.$axios.defaults.baseURL+'/exoprtBankLog?bank_type=del&&user_type='+self.user_type+'&user_true_name='+self.user_true_name+'&eat_type'+self.eat_type);
+                window.open(self.$axios.defaults.baseURL+'/exoprtBankLog?bank_type=del&&user_type='+self.user_type+'&user_true_name='+self.user_true_name+'&eat_type'+self.eat_type);
             }else{
               window.open(self.$axios.defaults.baseURL+'/exoprtBankLogByMonth?bank_type=del&&user_type='+self.user_type+'&user_true_name='+self.user_true_name+'&begin_time='+self.date[0]+'&end_time='+self.date[1]+'&eat_type'+self.eat_type);
             }

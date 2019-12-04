@@ -9,48 +9,172 @@
                 <div class="eattime">
                     当天未打卡情况统计
                 </div>
-                <div class="tableList1" id="tableList1">
-                    <el-table
-                        :header-cell-style="{ 'background-color': '#03004D','color':'#fff','height':'90px'}"
-                        :data="tableData"
-                        style="width: 92%;margin:0 auto;"
-                        :row-style="rowStyle">
-                        <el-table-column
-                            type="index"
-                            align="center"
-                            width="50">
-                        </el-table-column>
-                        <el-table-column
-                            label="照片"
-                            align="center"
-                            prop="">
-                            <template  slot-scope="props">
-                                <img  @click="lookPic(props.row)" class="headImg1" :src="props.row.face_url" alt="">
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            label="记录时间"
-                            align="center"
-                            prop="eat_time">
-                        </el-table-column>
-                        <el-table-column
-                            label="就餐类型"
-                            align="center"
-                            >
-                            <template slot-scope="props">
-                            <span>{{props.row.eat_type=='breakfast'?'早餐':''}}</span>
-                            <span>{{props.row.eat_type=='lunch'?'午餐':''}}</span>
-                            <span>{{props.row.eat_type=='dinner'?'晚餐':''}}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            label="人员"
-                            align="center"
-                            prop="user_true_name"
-                            >
-                        </el-table-column>
-                    </el-table>
+                <div class="conent-box-1">
+                    <el-carousel :interval="interval" height="1400px" >
+                        <el-carousel-item>
+                            <!-- <h3>{{ item }}</h3> -->
+                            <div class="tab_title">
+                                <ul>
+                                    <li>
+                                        干警
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="tableList1" id="tableList1">
+                                <el-table
+                                    :header-cell-style="{ 'background-color': '#03004D','color':'#fff','height':'90px'}"
+                                    :data="tableData1"
+                                    style="width: 92%;margin:0 auto;"
+                                    :row-style="rowStyle">
+                                    <el-table-column
+                                        type="index"
+                                        align="center"
+                                        width="50">
+                                    </el-table-column>
+                                    <el-table-column
+                                        label="照片"
+                                        align="center"
+                                        prop="">
+                                        <template  slot-scope="props">
+                                            <img  @click="lookPic(props.row)" class="headImg1" :src="props.row.face_url" alt="">
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                        label="记录时间"
+                                        align="center"
+                                        prop="eat_time">
+                                    </el-table-column>
+                                    <el-table-column
+                                        label="就餐类型"
+                                        align="center"
+                                        >
+                                        <template slot-scope="props">
+                                        <span>{{props.row.eat_type=='breakfast'?'早餐':''}}</span>
+                                        <span>{{props.row.eat_type=='lunch'?'午餐':''}}</span>
+                                        <span>{{props.row.eat_type=='dinner'?'晚餐':''}}</span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                        label="人员"
+                                        align="center"
+                                        prop="user_true_name"
+                                        >
+                                    </el-table-column>
+                                </el-table>
+                            </div>
+                        </el-carousel-item>
+                        <el-carousel-item >
+                            <!-- <h3>{{ item }}</h3> -->
+                            <div class="tab_title">
+                                <ul>
+                                    <li >
+                                        陌生人
+                                        <!-- {{item.itemText}} -->
+                                    </li>
+                                    
+                                </ul>
+                            </div>
+                            <div class="tableList1" id="tableList1">
+                                <el-table
+                                    :header-cell-style="{ 'background-color': '#03004D','color':'#fff','height':'90px'}"
+                                    :data="tableData2"
+                                    style="width: 92%;margin:0 auto;"
+                                    :row-style="rowStyle">
+                                    <el-table-column
+                                        type="index"
+                                        align="center"
+                                        width="50">
+                                    </el-table-column>
+                                    <el-table-column
+                                        label="照片"
+                                        align="center"
+                                        prop="">
+                                        <template  slot-scope="props">
+                                            <img  @click="lookPic(props.row)" class="headImg1" :src="props.row.face_url" alt="">
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                        label="记录时间"
+                                        align="center"
+                                        prop="eat_time">
+                                    </el-table-column>
+                                    <el-table-column
+                                        label="就餐类型"
+                                        align="center"
+                                        >
+                                        <template slot-scope="props">
+                                        <span>{{props.row.eat_type=='breakfast'?'早餐':''}}</span>
+                                        <span>{{props.row.eat_type=='lunch'?'午餐':''}}</span>
+                                        <span>{{props.row.eat_type=='dinner'?'晚餐':''}}</span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                        label="人员"
+                                        align="center"
+                                        prop="user_true_name"
+                                        >
+                                    </el-table-column>
+                                </el-table>
+                            </div>
+                        </el-carousel-item>
+                        <el-carousel-item >
+                            <!-- <h3>{{ item }}</h3> -->
+                            <div class="tab_title">
+                                <ul>
+                                    <li >
+                                        其他
+                                        <!-- {{item.itemText}} -->
+                                    </li>
+                                    
+                                </ul>
+                            </div>
+                            <div class="tableList1" id="tableList1">
+                                <el-table
+                                    :header-cell-style="{ 'background-color': '#03004D','color':'#fff','height':'90px'}"
+                                    :data="tableData3"
+                                    style="width: 92%;margin:0 auto;"
+                                    :row-style="rowStyle">
+                                    <el-table-column
+                                        type="index"
+                                        align="center"
+                                        width="50">
+                                    </el-table-column>
+                                    <el-table-column
+                                        label="照片"
+                                        align="center"
+                                        prop="">
+                                        <template  slot-scope="props">
+                                            <img  @click="lookPic(props.row)" class="headImg1" :src="props.row.face_url" alt="">
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                        label="记录时间"
+                                        align="center"
+                                        prop="eat_time">
+                                    </el-table-column>
+                                    <el-table-column
+                                        label="就餐类型"
+                                        align="center"
+                                        >
+                                        <template slot-scope="props">
+                                        <span>{{props.row.eat_type=='breakfast'?'早餐':''}}</span>
+                                        <span>{{props.row.eat_type=='lunch'?'午餐':''}}</span>
+                                        <span>{{props.row.eat_type=='dinner'?'晚餐':''}}</span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                        label="人员"
+                                        align="center"
+                                        prop="user_true_name"
+                                        >
+                                    </el-table-column>
+                                </el-table>
+                            </div>
+                        </el-carousel-item>
+                    </el-carousel>
+                    
                 </div>
+                
                 <div class="eattime1">
                     日期：{{today}} /
                     早餐未打卡总人数：{{breakfast_card_0}} /
@@ -76,21 +200,28 @@
     export default {
         data: function(){
             return {
-                tableData: [{
-                    face_url:"../../../static/img/test.png"
-                }],
-                pageNum:1,
+                // {
+                //     face_url:"../../../static/img/test.png"
+                // }
+                tableData1: [],
+                tableData2: [],
+                tableData3: [],
+                pageNum1:1,
+                pageNum2:1,
+                pageNum3:1,
                 pageSize:12,
                 total:0,
                 loadSign:false,
                 today:"2019-11-11",
                 breakfast_card_0:"15",
                 lunch_card_0:"20",
+                active:'',
+                interval:10000,
             }
         },
         methods: {
             
-            getDataList(){
+            getDataList1(){
                 const self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
@@ -104,24 +235,18 @@
                 var day3 = new Date();
                 day3.setTime(day3.getTime()+24*60*60*1000);
                 var finishTime = day3.getFullYear()+"-" + (day3.getMonth()+1) + "-" + day3.getDate() + ' ' + "00" + ':' + "00" + ':' + "00";
-                // console.log(day3)
-                // console.log(24*60*60*1000)
-                // console.log(startTime)
-                // console.log(finishTime)
-                // if(self.date==null||self.date.length==0){
-                //   var begin_time = '';
-                //   var end_time = '';
-                // }else{
+
                 var begin_time = startTime;
                 var end_time = finishTime;
-                // params.append('begin_time',begin_time);
-                // params.append('end_time',end_time);
-                params.append('pageNum',self.pageNum);
+                params.append('begin_time',begin_time);
+                params.append('end_time',end_time);
+                params.append('pageNum',self.pageNum1);
                 params.append('pageSize',self.pageSize);
+                params.append("user_type","yuangong");
                 // card=0代表未打卡
                 // bd_card=0代表未补打
-                // params.append('card','0');
-                // params.append('bd_card','0');
+                params.append('card','0');
+                params.append('bd_card','0');
 
                 self.$axios({
                     method: 'post',
@@ -131,11 +256,103 @@
                 }).then(function(data){
                     
                     if(data.data.code==0){
-                        self.tableData = data.data.data.list;
-                        self.pageNum = self.pageNum+1;
+                        self.tableData1 = data.data.data.list;
+                        self.pageNum1 = self.pageNum1+1;
                         self.total = data.data.data.total;
-                        if(self.tableData.length < 12){
-                            self.pageNum = 1
+                        if(self.tableData1.length < 12){
+                            self.pageNum1 = 1
+                        }
+                    }else{
+                        self.$response(data,self);
+                    }
+                });
+            },
+            getDataList2(){
+                const self = this;
+                var params = new URLSearchParams();
+                var token = localStorage.getItem('auth');
+                var date2 = new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1);
+                // var endTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + date2.getHours() + ':' + date2.getMinutes() + ':' + date2.getSeconds()
+                // console.log(date2)
+                var startTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + "00" + ':' + "00" + ':' + "00"
+                // var finishTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + (date2.getDate()+24*60*60*1000) + ' ' + "00" + ':' + "00" + ':' + "00"
+                
+                // console.log(date2.getDate()+24*60*60*1000)
+                var day3 = new Date();
+                day3.setTime(day3.getTime()+24*60*60*1000);
+                var finishTime = day3.getFullYear()+"-" + (day3.getMonth()+1) + "-" + day3.getDate() + ' ' + "00" + ':' + "00" + ':' + "00";
+
+                var begin_time = startTime;
+                var end_time = finishTime;
+                params.append('begin_time',begin_time);
+                params.append('end_time',end_time);
+                params.append('pageNum',self.pageNum2);
+                params.append('pageSize',self.pageSize);
+                params.append("user_type","moshengren");
+                // card=0代表未打卡
+                // bd_card=0代表未补打
+                params.append('card','0');
+                params.append('bd_card','0');
+
+                self.$axios({
+                    method: 'post',
+                    url: '/log/eat-log/getByPage',
+                    data: params,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                }).then(function(data){
+                    
+                    if(data.data.code==0){
+                        self.tableData2 = data.data.data.list;
+                        self.pageNum2 = self.pageNum2+1;
+                        self.total = data.data.data.total;
+                        if(self.tableData2.length < 12){
+                            self.pageNum2 = 1
+                        }
+                    }else{
+                        self.$response(data,self);
+                    }
+                });
+            },
+            getDataList3(){
+                const self = this;
+                var params = new URLSearchParams();
+                var token = localStorage.getItem('auth');
+                var date2 = new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1);
+                // var endTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + date2.getHours() + ':' + date2.getMinutes() + ':' + date2.getSeconds()
+                // console.log(date2)
+                var startTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + "00" + ':' + "00" + ':' + "00"
+                // var finishTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + (date2.getDate()+24*60*60*1000) + ' ' + "00" + ':' + "00" + ':' + "00"
+                
+                // console.log(date2.getDate()+24*60*60*1000)
+                var day3 = new Date();
+                day3.setTime(day3.getTime()+24*60*60*1000);
+                var finishTime = day3.getFullYear()+"-" + (day3.getMonth()+1) + "-" + day3.getDate() + ' ' + "00" + ':' + "00" + ':' + "00";
+
+                var begin_time = startTime;
+                var end_time = finishTime;
+                params.append('begin_time',begin_time);
+                params.append('end_time',end_time);
+                params.append('pageNum',self.pageNum3);
+                params.append('pageSize',self.pageSize);
+                params.append("user_type","qita");
+                // card=0代表未打卡
+                // bd_card=0代表未补打
+                params.append('card','0');
+                params.append('bd_card','0');
+
+                self.$axios({
+                    method: 'post',
+                    url: '/log/eat-log/getByPage',
+                    data: params,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                }).then(function(data){
+                    
+                    if(data.data.code==0){
+                        self.tableData3 = data.data.data.list;
+                        self.pageNum3 = self.pageNum3+1;
+                        self.total = data.data.data.total;
+                        if(self.tableData3.length < 12){
+                            self.pageNum3 = 1
                         }
                     }else{
                         self.$response(data,self);
@@ -179,11 +396,15 @@
         },
         mounted(){
             var self = this;
-            self.getDataList();
+            self.getDataList1();
+            self.getDataList2();
+            self.getDataList3();
             self.getBreakfast()
             setInterval(function(){
-                self.getDataList();
-            },60000);
+                self.getDataList1();
+                self.getDataList2();
+                self.getDataList3();
+            },8000);
             
         },
         created(){
@@ -197,13 +418,14 @@
             // })
         }
     }
+    
 </script>
+
 <style>
     #tableList1 .el-table .cell{
         line-height: 80px;
     }
 </style>
-
 <style scoped>
     .clear{
         clear: both;
@@ -233,7 +455,7 @@
         margin-top: 2px;
         /* text-align: center; */
         width: 100%;
-        height: 100px;
+        height: 150px;
         background-image: url(../../../static/img/head1.jpg);
         background-size: 100% 100%;
     }
@@ -285,9 +507,11 @@
     .userBox1{
         height: 100%;
     }
-
+    .conent-box-1{
+        height: 87%;
+    }
     .tableList1{
-        margin-top: 40px;
+        margin-top: 20px;
         height: 87%;
         overflow-y: auto;
     }
@@ -295,5 +519,31 @@
         width: 96px;
         height: 110px;
     }
-    
+    .tab_title{
+        width:30%;
+        margin: 0 auto;
+        background: #0000CD;
+        margin-top: 40px;
+        /* border: 2px solid #A9A9A9; */
+        height: 80px;
+        /* border-radius */
+         border-radius: 10px;
+    }
+    .tab_title ul{
+        display: flex;
+        justify-content: space-around;
+    }
+    .tab_title li{
+        width: 30%;
+        text-align: center;
+        list-style:none;
+        height: 80px;
+        line-height: 80px;
+        font-size: 26px;
+        color: #ffffff;
+       
+    }
+    .tab_title .active{
+        border-bottom: 2px solid #0000CD;
+    }
 </style>

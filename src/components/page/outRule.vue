@@ -66,6 +66,12 @@
         <el-dialog title="违规图片" :visible.sync="case_detail_dialog">
             <img :src="lookPicSrc" class="lookPicClass">  
         </el-dialog>
+        <div class="tishi">
+            <img src="../../../static/img/tishi.png" alt="">
+            <span>
+                未打卡人照片与人名不符时，以照片为准
+            </span>
+        </div>
         <div id="container" style="width: 100%;height: 110%;  float: right;">
             
           
@@ -1000,5 +1006,22 @@
     }
     .colorRed{
       color: red;
+    }
+    .tishi{
+        /* margin:10px 0; */
+        height: 50px;
+        /* line-height: 30px; */
+    }
+    .tishi span{
+        display: inline-block;
+        margin-left: 10px;
+        height: 40px;
+        line-height: 40px;
+        margin-top: 10px;
+    }
+    .tishi img{
+        width: 30px;
+        height: 30px;
+        vertical-align: middle;
     }
 </style>
