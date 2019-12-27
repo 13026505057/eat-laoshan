@@ -346,11 +346,7 @@
                 loading: false,
                 states: [],
                 date:[],
-                caseList: [{
-                    eat_time:"2018-02-03"
-                },
-
-                    
+                caseList: [
                 ],
                 exhibits:[],
                 total:0,
@@ -424,7 +420,8 @@
                 ],
                 officersList:[],
                 officersname:'',
-                }
+                pageSearch:'',
+            }
                 
         },
         mounted() {
@@ -444,9 +441,7 @@
                 const self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
-                
                 params.append('eat_log_id',row.eat_log_id);
-                
                 self.$confirm('此操作将永久删除该条记录, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -710,10 +705,12 @@
             //查询事件
             searchClick(){
                 this.pageNum = 1;
+                this.pageSearch = "";
                 this.getDataList();
             },
             // 查询今天
             TedaysearchClick(){
+                this.pageSearch = "today";
                 this.getToday();
             },
             getToday(){
@@ -852,7 +849,11 @@
             },
             //分页器点击事件
             pageChange(){
-                this.getDataList();
+                if(this.pageSearch == "today"){
+                    this.getToday();
+                }else{
+                    this.getDataList();
+                }
             },
             //分页器点击事件
             pageChange2(){

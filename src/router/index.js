@@ -58,6 +58,11 @@ export default new Router({
                     component: resolve => require(['../components/page/invest.vue'], resolve) // Vue-Quill-Editor组件
                 },
                 {
+                    name: '就餐记录查询',
+                    path: '/guanliInStoreHistory',
+                    component: resolve => require(['../components/page/guanliInStoreHistory.vue'], resolve) // Vue-Quill-Editor组件
+                },
+                {
                     name: '违规纪律查询',
                     path: '/outRule',
                     component: resolve => require(['../components/page/outRule.vue'], resolve) // Vue-Quill-Editor组件
@@ -310,11 +315,15 @@ export default new Router({
         },
         {
             path: '/publicity',
-            component: resolve => require(['../components/page/publicity.vue'], resolve)//竖屏
+            component: resolve => require(['../components/page/publicity.vue'], resolve)//竖屏 现在使用
         },
         {
             path: '/publicity1',
             component: resolve => require(['../components/page/publicity1.vue'], resolve)//竖屏
+        },
+        {
+            path: '/publicity2',
+            component: resolve => require(['../components/page/publicity2.vue'], resolve)//竖屏
         },
         {
             path: '/bigTvShow',

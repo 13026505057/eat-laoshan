@@ -222,6 +222,11 @@ import md5 from 'js-md5';
                         index: 'outRuleMan',
                         title: '违规记录查询'
                     },
+                    {
+                        icon: 'el-icon-setting',
+                        index: 'guanliInStoreHistory',
+                        title: '就餐记录查询'
+                    },
                     
                 );
             }

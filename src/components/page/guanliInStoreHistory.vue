@@ -34,7 +34,7 @@
                         :value="item.value">
                     </el-option>
                 </el-select>
-                <el-select v-model="user_type" placeholder="请选择违规类型" style="width: 180px;margin-left: 30px;">
+                <!-- <el-select v-model="user_type" placeholder="请选择违规类型" style="width: 180px;margin-left: 30px;">
                     <el-option
                         v-for="item in usertOptions"
                         :key="item.value"
@@ -49,8 +49,7 @@
                         :label="item.label"
                         :value="item.value">
                     </el-option>
-                </el-select>
-
+                </el-select> -->
 
                 <el-date-picker
                     style="margin-left: 20px;width:420px;"
@@ -64,10 +63,8 @@
                 </el-date-picker>
                 
                 <el-button type="warning" style="margin-left: 30px;" @click="searchClick">查询</el-button>
-                <el-button type="warning" style="margin-left: 0px;" @click="TedaysearchClick">查询今天</el-button>
+                <el-button type="warning" style="margin-left: 30px;" @click="TedaysearchClick">查询今天</el-button>
             </div>
-
-          
         </div>
         <!-- <div class="tree">
           <el-tree :data="data"    @node-click="handleNodeClick"></el-tree>
@@ -82,94 +79,91 @@
             </span>
         </div>
         <div id="container" style="width: 100%;height: 110%;  float: right;">
-            
-          
             <div class="tableList">
                 <el-table
-                :data="caseList"
-                :header-cell-style="{ 'background-color': '#deedf4','color':'#000'}"
-                :row-style="rowStyle"
-                class="tableClass"
-                >
-                <el-table-column
-                    type="index"
-                    align="center"
-                    width="50">
-                </el-table-column>
-                 <el-table-column
-                    label="照片"
-                    align="center"
-                    prop="">
-                    <template  slot-scope="props">
-                        <img  @click="lookPic(props.row)" class="headImg1" :src="props.row.face_url" alt="">
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    label="违规时间"
-                    align="center"
-                    prop="eat_time">
+                    :data="caseList"
+                    :header-cell-style="{ 'background-color': '#deedf4','color':'#000'}"
+                    :row-style="rowStyle"
+                    class="tableClass"
+                    >
+                    <el-table-column
+                        type="index"
+                        align="center"
+                        width="50">
+                    </el-table-column>
+                    <el-table-column
+                        label="照片"
+                        align="center"
+                        prop="">
+                        <template slot-scope="props">
+                            <img  @click="lookPic(props.row)" class="headImg1" :src="props.row.face_url" alt="">
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        label="就餐时间"
+                        align="center"
+                        prop="eat_time">
+                    </el-table-column>
+                    <el-table-column
+                        label="就餐类型"
+                        align="center"
+                        >
+                        <template slot-scope="props">
+                        <span>{{props.row.eat_type=='breakfast'?'早餐':''}}</span>
+                        <span>{{props.row.eat_type=='lunch'?'午餐':''}}</span>
+                        <span>{{props.row.eat_type=='dinner'?'晚餐':''}}</span>
+                        </template>
+                    </el-table-column>
+                    <!--  <el-table-column
+                        label="刷卡手机"
+                        align="center"
+                        prop="user_tel"
+                        >
+                    </el-table-column> -->
+                    <el-table-column
+                        label="姓名"
+                        align="center"
+                        prop="user_true_name"
+                        >
+                    </el-table-column>
+                    <el-table-column
+                        label="状态"
+                        align="center"
+                        >
+                        <template slot-scope="props">
+                        <span>{{props.row.bd_card=='0'?'未处理':''}}</span>
+                        <span>{{props.row.bd_card=='1'?'已补打':''}}</span>
+                        <span>{{props.row.bd_card=='2'?'接待访客':''}}</span>
+                        </template>
+                    </el-table-column>
+                    <!-- <el-table-column
+                        label="匹配得分"
+                        align="center"
+                        prop="face_score"
+                        >
+                    </el-table-column>
+                    <el-table-column
+                        label="实际刷卡人"
+                        align="center"
+                        prop="borrow_user_name"
+                        >
+                    </el-table-column> -->
                     
-                </el-table-column>
-                <el-table-column
-                    label="就餐类型"
-                    align="center"
-                    >
-                    <template slot-scope="props">
-                    <span>{{props.row.eat_type=='breakfast'?'早餐':''}}</span>
-                    <span>{{props.row.eat_type=='lunch'?'午餐':''}}</span>
-                    <span>{{props.row.eat_type=='dinner'?'晚餐':''}}</span>
-                    </template>
-                </el-table-column>
-                <!--  <el-table-column
-                    label="刷卡手机"
-                    align="center"
-                    prop="user_tel"
-                    >
-                </el-table-column> -->
-                <el-table-column
-                    label="违规人"
-                    align="center"
-                    prop="user_true_name"
-                    >
-                </el-table-column>
-                <el-table-column
-                    label="状态"
-                    align="center"
-                    >
-                    <template slot-scope="props">
-                    <span>{{props.row.bd_card=='0'?'未处理':''}}</span>
-                    <span>{{props.row.bd_card=='1'?'已补打':''}}</span>
-                    <span>{{props.row.bd_card=='2'?'接待访客':''}}</span>
-                    </template>
-                </el-table-column>
-                <!-- <el-table-column
-                    label="匹配得分"
-                    align="center"
-                    prop="face_score"
-                    >
-                </el-table-column>
-                <el-table-column
-                    label="实际刷卡人"
-                    align="center"
-                    prop="borrow_user_name"
-                    >
-                </el-table-column> -->
-                
-                <el-table-column
-                    label="操作"
-                    width="300px"
-                    align="center"
-                    >
-                    <template slot-scope="props">
-                        <!-- <el-button  type="warning" size="mini" style="margin-left: 0px;" @click="lookPic(props.row)">查看违规照片</el-button> -->
-                        
-                        <el-button  type="warning" size="mini" style="margin-left: 10px;" @click="bindingPolice(props.row)">纠正识别错误</el-button>
-                        <el-button type="warning" size="mini" style="margin-left: 10px;" @click="repairCard(props.row)">补打卡</el-button>
-                        <!-- <el-button  type="warning" size="mini" style="margin-left: 10px;" @click="deleStranger(props.row)">删除</el-button> -->
-                    </template>
-                </el-table-column>
-                </el-table> 
-                    
+                    <el-table-column
+                        label="操作"
+                        width="300px"
+                        align="center"
+                        >
+                        <template slot-scope="props">
+                            <!-- <el-button  type="warning" size="mini" style="margin-left: 0px;" @click="lookPic(props.row)">查看违规照片</el-button> -->
+                            
+                            <el-button  type="warning" size="mini" style="margin-left: 10px;" @click="bindingPolice(props.row)">纠正为已知人员</el-button>
+                            <el-button type="warning" size="mini" style="margin-left: 10px;" @click="bindingStranger(props.row)">纠正为陌生人</el-button>
+                            <!-- <el-button type="warning" size="mini" style="margin-left: 10px;" @click="repairCard(props.row)">纠正为陌生人</el-button> -->
+                            <!-- <el-button  type="warning" size="mini" style="margin-left: 10px;" @click="deleStranger(props.row)">删除</el-button> -->
+                        </template>
+                    </el-table-column>
+                </el-table>       
             </div>
             <el-pagination
                 small
@@ -181,6 +175,7 @@
                 layout="prev, pager, next, jumper"
                 :total="total">
             </el-pagination>
+            
             <el-dialog
                 title="补打卡"
                 :visible.sync="cardDialogVisible"
@@ -205,7 +200,7 @@
                     <el-button @click="cardDialogVisible = false">取 消</el-button>
                     <el-button type="primary" @click="repairCardClick">确 定</el-button>
                 </span>
-                </el-dialog>
+            </el-dialog>
 
             <el-dialog
                 title="纠正识别错误"
@@ -321,10 +316,7 @@
                     <el-button type="primary" @click="bindingDialogVisible = false">关 闭</el-button>
                 </span>
             </el-dialog>
-            
         </div>
-        
-
     </div>
 </template>
 
@@ -569,7 +561,6 @@
                 self.getpoliceList();
             },
             // 查询其他人列表
-
             getpoliceList(){
                 const self = this;
                 var params = new URLSearchParams();
@@ -595,6 +586,42 @@
                       self.$response(data,self);
                     }
                  });
+            },
+            // 绑定为陌生人
+            bindingStranger(res){
+                const self = this;
+                var params = new URLSearchParams();
+                var token = localStorage.getItem('auth');
+                params.append('eat_log_id',res.eat_log_id); 
+                // params.append('user_id',res.user_id); 
+                self.$confirm('是否继续执行此操作?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                    }).then(() => {
+                        self.$axios({
+                            method: 'post',
+                            url: '/log/eat-log/changeToMoShengRen',
+                            data: params,
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                        }).then(function(data){
+                            if(data.data.code==0){
+                                self.$message({
+                                    message: '操作成功',
+                                    type: 'success'
+                                });
+                                self.bindingDialogVisible = false;
+                                self.getDataList();
+                            }else{
+                                self.$response(data,self);
+                            }
+                        });
+                    }).catch(() => {
+                        self.$message({
+                            type: 'info',
+                            message: '已取消绑定'
+                        });          
+                });
             },
             // 警员列表分页器
             pageChange1(){
@@ -711,34 +738,34 @@
                 //   var begin_time = '';
                 //   var end_time = '';
                 // }else{
-                  var begin_time = startTime;
-                  var end_time = finishTime;
-                    params.append('begin_time',begin_time);
-                    params.append('end_time',end_time);
-                    params.append('card',0);
-                    params.append('pageNum',self.pageNum);
-                    params.append('pageSize',self.pageSize);
-                    // params.append('user_id',self.user_true_name);
-                    params.append('user_true_name',self.user_true_name);
-                    params.append('eat_type',self.eat_type);
-                    params.append('user_tel',self.user_tel);
-                    params.append('user_type',self.user_type);
-                    params.append('bd_card',self.user_status);
+                var begin_time = startTime;
+                var end_time = finishTime;
+                params.append('begin_time',begin_time);
+                params.append('end_time',end_time);
+                params.append('card',0);
+                params.append('pageNum',self.pageNum);
+                params.append('pageSize',self.pageSize);
+                // params.append('user_id',self.user_true_name);
+                params.append('user_true_name',self.user_true_name);
+                params.append('eat_type',self.eat_type);
+                params.append('user_tel',self.user_tel);
+                // params.append('user_type',self.user_type);
+                // params.append('bd_card',self.user_status);
 
-                    self.$axios({
-                        method: 'post',
-                        url: '/log/eat-log/getByPage',
-                        data: params,
-                        headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                    }).then(function(data){
-                        
-                        if(data.data.code==0){
-                            self.caseList = data.data.data.list;
-                            self.total = data.data.data.total;
-                        }else{
-                        self.$response(data,self);
-                        }
-                    });
+                self.$axios({
+                    method: 'post',
+                    url: '/log/eat-log/getByPage',
+                    data: params,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                }).then(function(data){
+                    
+                    if(data.data.code==0){
+                        self.caseList = data.data.data.list;
+                        self.total = data.data.data.total;
+                    }else{
+                    self.$response(data,self);
+                    }
+                });
             },
             officerssearchClick(){
                 this.pageNum1 = 1;
@@ -835,8 +862,6 @@
                 }else{
                     this.getDataList();
                 }
-                
-                
             },
             //分页器点击事件
             pageChange2(){
@@ -946,43 +971,43 @@
             },
             //获取默认列表数据
             getDataList(){
+
                 const self = this;
-            
+               
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
                 if(self.date==null||self.date.length==0){
-                    var begin_time = '';
-                    var end_time = '';
+                  var begin_time = '';
+                  var end_time = '';
                 }else{
-                    var begin_time = self.date[0];
-                    var end_time = self.date[1];
+                  var begin_time = self.date[0];
+                  var end_time = self.date[1];
                 }
-                    params.append('begin_time',begin_time);
-                    params.append('end_time',end_time);
-                    params.append('card',0);
-                    params.append('pageNum',self.pageNum);
-                    params.append('pageSize',self.pageSize);
-                    // params.append('user_id',self.user_true_name);
-                    params.append('user_true_name',self.user_true_name);
-                    params.append('eat_type',self.eat_type);
-                    params.append('user_tel',self.user_tel);
-                    params.append('user_type',self.user_type);
-                    params.append('bd_card',self.user_status);
+                params.append('begin_time',begin_time);
+                params.append('end_time',end_time);
+                params.append('card',1);
+                params.append('pageNum',self.pageNum);
+                params.append('pageSize',self.pageSize);
+                // params.append('user_id',self.user_true_name);
+                params.append('user_true_name',self.user_true_name);
+                params.append('eat_type',self.eat_type);
+                params.append('user_tel',self.user_tel);
+                // params.append('user_type',self.user_type);
 
-                    self.$axios({
-                        method: 'post',
-                        url: '/log/eat-log/getByPage',
-                        data: params,
-                        headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                    }).then(function(data){
-                        
-                        if(data.data.code==0){
-                            self.caseList = data.data.data.list;
-                            self.total = data.data.data.total;
-                        }else{
-                            self.$response(data,self);
-                        }
-                    });
+                self.$axios({
+                    method: 'post',
+                    url: '/log/eat-log/getByPage',
+                    data: params,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                 }).then(function(data){
+                    
+                    if(data.data.code==0){
+                        self.caseList = data.data.data.list;
+                        self.total = data.data.data.total;
+                    }else{
+                      self.$response(data,self);
+                    }
+                 });
             },
             
             //修改单元行颜色

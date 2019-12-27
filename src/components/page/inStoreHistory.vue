@@ -163,54 +163,52 @@
 </template>
 
 <script>
-  import  TMap from '../../TMap';
-  import md5 from 'js-md5';
-  export default {
-      data: function(){
-          return {
-              case_detail_dialog:false,
-              case_number:'',
-              options4: [],
-              case_name: [],
-              user_true_name:'',
-              list: [],
-              loading: false,
-              states: [],
-              date:[],
-              caseList: [
-                {
-                    quantity:100
-                }
-              ],
-              exhibits:[],
-              total:0,
-              pageNum:1,
-              pageSize:10,
-              total2:0,
-              pageNum2:1,
-              pageSize2:10,
-              lookPicSrc:'',
-              eat_type:'',
-              user_tel:'',
-              eatOptions:[
-                {
-                  value: '',
-                  label: '全部'
-                },
-                {
-                  value: 'breakfast',
-                  label: '早餐'
-                },
-                {
-                  value: 'lunch',
-                  label: '午餐'
-                },
-                {
-                  value: 'dinner',
-                  label: '晚餐'
-                },
-              ],
-              eatOptions:[
+    import  TMap from '../../TMap';
+    import md5 from 'js-md5';
+    export default {
+        data: function(){
+            return {
+                case_detail_dialog:false,
+                case_number:'',
+                options4: [],
+                case_name: [],
+                user_true_name:'',
+                list: [],
+                loading: false,
+                states: [],
+                date:[],
+                caseList: [
+                    
+                ],
+                exhibits:[],
+                total:0,
+                pageNum:1,
+                pageSize:10,
+                total2:0,
+                pageNum2:1,
+                pageSize2:10,
+                lookPicSrc:'',
+                eat_type:'',
+                user_tel:'',
+                eatOptions:[
+                    {
+                    value: '',
+                    label: '全部'
+                    },
+                    {
+                    value: 'breakfast',
+                    label: '早餐'
+                    },
+                    {
+                    value: 'lunch',
+                    label: '午餐'
+                    },
+                    {
+                    value: 'dinner',
+                    label: '晚餐'
+                    },
+                ],
+                eatOptions:[
                     {
                         type_value:'yuangong',
                         type_name:'单位干警'
@@ -230,48 +228,48 @@
                         type_value:'',
                         type_name:'全部'
                     },
-              ],
-              user_type:''
+                ],
+                user_type:'',
+                pageSearch:'',
             }
               
-      },
-      mounted() {
-          this.getDataList();
-          
-      },
-      methods: {
-          downClick(){
-            var self = this;
-            console.log(self.date)
-            console.log(self.date[0]);
-            console.log(self.date[1])
-            console.log(self.$axios.defaults.baseURL+'/exoprtBankLogByMonth?bank_type=del&&user_type='+self.user_type+'&user_true_name='+self.user_true_name+'&begin_time='+self.date[0]+'&end_time='+self.date[1]+'&eat_type'+self.eat_type)
-            if(self.date==''||self.date==null){
-                window.open(self.$axios.defaults.baseURL+'/exoprtBankLog?bank_type=del&&user_type='+self.user_type+'&user_true_name='+self.user_true_name+'&eat_type'+self.eat_type);
-            }else{
-              window.open(self.$axios.defaults.baseURL+'/exoprtBankLogByMonth?bank_type=del&&user_type='+self.user_type+'&user_true_name='+self.user_true_name+'&begin_time='+self.date[0]+'&end_time='+self.date[1]+'&eat_type'+self.eat_type);
-            }
-            
-          },
-          lookPic(e){
-            this.lookPicSrc = '';
-            this.lookPicSrc = e.face_url;
-            this.case_detail_dialog = true;
-          },
-          getConfigResult(e){
-            console.log(e)
-            // if(e.data==101){
-            //   router.push('/readme')
-            // }else if(e.data==102){
-            //   router.push('/jiedurenliebiao')
-            // }else if(e.data==103){
-            //   router.push('/jiedurendangan')
-            // }else{
-            //   router.push('/jingyuanliebiao')
-            // }
-          },
-          //案卷详情点击事件
-          caseDetailClick(res){
+        },
+        mounted() {
+            this.getDataList();
+        },
+        methods: {
+            downClick(){
+                var self = this;
+                console.log(self.date)
+                console.log(self.date[0]);
+                console.log(self.date[1])
+                console.log(self.$axios.defaults.baseURL+'/exoprtBankLogByMonth?bank_type=del&&user_type='+self.user_type+'&user_true_name='+self.user_true_name+'&begin_time='+self.date[0]+'&end_time='+self.date[1]+'&eat_type'+self.eat_type)
+                if(self.date==''||self.date==null){
+                    window.open(self.$axios.defaults.baseURL+'/exoprtBankLog?bank_type=del&&user_type='+self.user_type+'&user_true_name='+self.user_true_name+'&eat_type'+self.eat_type);
+                }else{
+                    window.open(self.$axios.defaults.baseURL+'/exoprtBankLogByMonth?bank_type=del&&user_type='+self.user_type+'&user_true_name='+self.user_true_name+'&begin_time='+self.date[0]+'&end_time='+self.date[1]+'&eat_type'+self.eat_type);
+                }
+                
+            },
+            lookPic(e){
+                this.lookPicSrc = '';
+                this.lookPicSrc = e.face_url;
+                this.case_detail_dialog = true;
+            },
+            getConfigResult(e){
+                console.log(e)
+                // if(e.data==101){
+                //   router.push('/readme')
+                // }else if(e.data==102){
+                //   router.push('/jiedurenliebiao')
+                // }else if(e.data==103){
+                //   router.push('/jiedurendangan')
+                // }else{
+                //   router.push('/jingyuanliebiao')
+                // }
+            },
+            //案卷详情点击事件
+            caseDetailClick(res){
                 var self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
@@ -280,36 +278,39 @@
                 params.append('stock_log_id',res.stock_log_id);
                 
                 const loading = self.$loading({
-                  lock: true,
-                  text: '打印中',
-                  spinner: 'el-icon-loading',
-                  background: 'rgba(0, 0, 0, 0.6)'
+                lock: true,
+                text: '打印中',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.6)'
                 });
                 self.$axios({
                     method: 'post',
                     url: '/stock/stock-log/printWord',
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                 }).then(function(data){
+                }).then(function(data){
                     
                     if(data.data.code==0){
-                      loading.close();
-                      self.$message({
+                    loading.close();
+                    self.$message({
                         type: 'success',
                         message: '已发送打印请求'
-                      });
+                    });
                     }else{
-                      self.$response(data,self);
+                    self.$response(data,self);
                     }
-                 });
-          },
-          //查询事件
-          searchClick(){
-              this.pageNum = 1;
+                });
+            },
+            //查询事件
+            searchClick(){
+                this.pageNum = 1;
+                this.pageSearch = "";
                 this.getDataList();
-          },
+            },
 
             TedaysearchClick(){
+                this.pageNum = 1;
+                this.pageSearch = "today";
                 this.getToday();
             },
             getToday(){
@@ -357,8 +358,8 @@
                     }
                  });
           },
-          //补打条码
-          printAgain(res){
+            //补打条码
+            printAgain(res){
                 var self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
@@ -389,89 +390,94 @@
                       self.$response(data,self);
                     }
                  });
-          },
-          //条码打印事件
-          printClick(res){
-            var self = this;
-            var numCount = res.exhibits.length+1;
-            this.$confirm('即将打印该案件的第'+numCount+'份案卷条码, 是否继续?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
+            },
+            //条码打印事件
+            printClick(res){
+                var self = this;
+                var numCount = res.exhibits.length+1;
+                this.$confirm('即将打印该案件的第'+numCount+'份案卷条码, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+                }).then(() => {
 
-                const loading = self.$loading({
-                  lock: true,
-                  text: '打印中',
-                  spinner: 'el-icon-loading',
-                  background: 'rgba(0, 0, 0, 0.6)'
-                });
-                var params = new URLSearchParams();
-                var token = localStorage.getItem('auth');
+                    const loading = self.$loading({
+                        lock: true,
+                        text: '打印中',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.6)'
+                    });
+                    var params = new URLSearchParams();
+                    var token = localStorage.getItem('auth');
 
-                params.append('case_id',res.case_id);
-                params.append('exhibit_name','');
-                
-
-                self.$axios({
-                    method: 'post',
-                    url: '/exhibit/exhibit/add',
-                    data: params,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                 }).then(function(data){
+                    params.append('case_id',res.case_id);
+                    params.append('exhibit_name','');
                     
-                    if(data.data.code==0){
-                      loading.close();
-                      self.$message({
-                        type: 'success',
-                        message: '已发送打印请求'
-                      });
-                      self.getDataList();
-                    }else{
 
-                      self.$response(data,self);
-                      loading.close();
-                    }
-                 });
-              
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消打印'
-              });          
-            });
-          },
-          //分页器点击事件
-          pageChange(){
-            this.getDataList();
-          },
-          //分页器点击事件
-          pageChange2(){
+                    self.$axios({
+                        method: 'post',
+                        url: '/exhibit/exhibit/add',
+                        data: params,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+                    }).then(function(data){
+                        
+                        if(data.data.code==0){
+                            loading.close();
+                            self.$message({
+                                type: 'success',
+                                message: '已发送打印请求'
+                            });
+                            self.getDataList();
+                        }else{
 
-          },
-          
-          //关键字模糊查询提示
-          remoteMethod(query) {
-            if (query !== '') {
-              this.loading = true;
-              this.user_true_name = query;
-              this.getNameList(query);
-              setTimeout(() => {
-                this.loading = false;
-                this.options4 = this.list.filter(item => {
-                  return item.label.toLowerCase()
-                    .indexOf(query.toLowerCase()) > -1;
+                            self.$response(data,self);
+                            loading.close();
+                        }
+                    });
+                
+                }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消打印'
+                });          
                 });
-              }, 500);
-            } else {
-              this.options4 = [];
-            }
-          },
+            },
+            //分页器点击事件
+            pageChange(){
+                if(this.pageSearch == "today"){
+                    this.getToday();
+                }else{
+                    this.getDataList();
+                }
+                
+            },
+            //分页器点击事件
+            pageChange2(){
+
+            },
+          
+            //关键字模糊查询提示
+            remoteMethod(query) {
+                if (query !== '') {
+                this.loading = true;
+                this.user_true_name = query;
+                this.getNameList(query);
+                setTimeout(() => {
+                    this.loading = false;
+                    this.options4 = this.list.filter(item => {
+                    return item.label.toLowerCase()
+                        .indexOf(query.toLowerCase()) > -1;
+                    });
+                }, 500);
+                } else {
+                this.options4 = [];
+                }
+            },
             focusName(){
                 this.getNameList('');
             },
-          //关键字模糊查询提示
-          getNameList(query){
+            //关键字模糊查询提示
+            getNameList(query){
                 const self = this;
                 self.user_true_name = query;
                 var params = new URLSearchParams();
@@ -484,7 +490,7 @@
                     url: '/user/getByPage',
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                 }).then(function(data){
+                }).then(function(data){
                     
                     if(data.data.code==0){
                         self.states = data.data.data.list;
@@ -496,10 +502,10 @@
                     }else{
                       self.$response(data,self);
                     }
-                 });
-          },
-          //获取默认列表数据
-          getDataList(){
+                });
+            },
+            //获取默认列表数据
+            getDataList(){
                 const self = this;
                
                 var params = new URLSearchParams();
@@ -533,26 +539,26 @@
                         self.caseList = data.data.data.list;
                         self.total = data.data.data.total;
                     }else{
-                      self.$response(data,self);
+                        self.$response(data,self);
                     }
                  });
-          },
+            },
           
-         //修改单元行颜色
-          rowStyle({ row, rowIndex}){
-            if(rowIndex%2 ==0){
-              return 'background:#eee;color:#000;'
-            }else{
-             return 'background:#e5e7e8;color:#000;'
-            }
-          },      
+            //修改单元行颜色
+            rowStyle({ row, rowIndex}){
+                if(rowIndex%2 ==0){
+                    return 'background:#eee;color:#000;'
+                }else{
+                    return 'background:#e5e7e8;color:#000;'
+                }
+            },      
          
           
           
          
-      }
+        }
      
-  }
+    }
     window.addEventListener('message', function(event) {
         // 接收位置信息，用户选择确认位置点后选点组件会触发该事件，回传用户的位置信息
         var loc = event.data;

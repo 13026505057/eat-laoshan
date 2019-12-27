@@ -1,68 +1,16 @@
 <template>
-    <div  class="login-wrap1">
+    <div  class="login-wrap">
         <div class="head-img">
             <!-- <img src="../../../static/img/head1.png" alt="">
             <img src="../../../static/img/head2.png" alt=""> -->
-            <div class="head-img1">
-                <img src="../../../static/img/showlogo.png" alt="">
-            </div>
-            <div class="head-title">
-                青岛市崂山区人民检察院
-            </div>
-        </div>
-        <div class="quantity">
-            <div class="quantity-1">
-                <div class="quantity-title">
-                    <div class="eattime">餐厅管理系统当天未打卡情况统计</div>
-                    <div class="eatDate">日期：{{today}}</div>
-                </div>
-                
-                <div class="repast">
-                    <div class="breakfast">
-                        <div class="breakfast-title">早餐未打卡总人数</div>
-                        <div class="breakfast-num">{{breakfast_card_0}}</div>
-                    </div>
-                    <div class="lunch">
-                        <div class="breakfast-title">午餐未打卡总人数</div>
-                        <div class="breakfast-num">{{lunch_card_0}}</div>
-                    </div>
-                </div>
-                <div class="sum">
-                    <div class="personType">
-                        <div class="noneCard">
-                            干警未打卡人数
-                        </div>
-                        <div class="noneNum">
-                            20
-                        </div>
-                        <img class="dakaIcon" src="../../../static/img/daka.png" alt="">
-                    </div>
-                    <div class="personType">
-                        <div class="noneCard">
-                            陌生人未打卡人数
-                        </div>
-                        <div class="noneNum">
-                            20
-                        </div>
-                        <img class="dakaIcon" src="../../../static/img/daka.png" alt="">
-                    </div>
-                    <div class="personType">
-                        <div class="noneCard">
-                            其他未打卡人数
-                        </div>
-                        <div class="noneNum">
-                            20
-                        </div>
-                        <img class="dakaIcon" src="../../../static/img/daka.png" alt="">
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="back-white">
             <div class="userBox1">
-                
+                <div class="eattime">
+                    当天未打卡情况统计
+                </div>
                 <div class="conent-box-1">
-                    <el-carousel :interval="interval" height="1000px" >
+                    <el-carousel :interval="interval" height="1400px" >
                         <el-carousel-item>
                             <!-- <h3>{{ item }}</h3> -->
                             <div class="tab_title">
@@ -74,14 +22,14 @@
                             </div>
                             <div class="tableList1" id="tableList1">
                                 <el-table
-                                    :header-cell-style="{ 'background-color': '#F0F0F0','color':'#000','height':'90px'}"
+                                    :header-cell-style="{ 'background-color': '#03004D','color':'#fff','height':'90px'}"
                                     :data="tableData1"
                                     style="width: 92%;margin:0 auto;"
                                     :row-style="rowStyle">
                                     <el-table-column
                                         type="index"
                                         align="center"
-                                        width="60">
+                                        width="50">
                                     </el-table-column>
                                     <el-table-column
                                         label="照片"
@@ -128,7 +76,7 @@
                             </div>
                             <div class="tableList1" id="tableList1">
                                 <el-table
-                                    :header-cell-style="{ 'background-color': '#F0F0F0','color':'#000','height':'90px'}"
+                                    :header-cell-style="{ 'background-color': '#03004D','color':'#fff','height':'90px'}"
                                     :data="tableData2"
                                     style="width: 92%;margin:0 auto;"
                                     :row-style="rowStyle">
@@ -177,11 +125,12 @@
                                         其他
                                         <!-- {{item.itemText}} -->
                                     </li>
+                                    
                                 </ul>
                             </div>
                             <div class="tableList1" id="tableList1">
                                 <el-table
-                                    :header-cell-style="{ 'background-color': '#F0F0F0','color':'#000','height':'100px'}"
+                                    :header-cell-style="{ 'background-color': '#03004D','color':'#fff','height':'90px'}"
                                     :data="tableData3"
                                     style="width: 92%;margin:0 auto;"
                                     :row-style="rowStyle">
@@ -226,12 +175,12 @@
                     
                 </div>
                 
-                <!-- <div class="eattime1">
+                <div class="eattime1">
                     日期：{{today}} /
                     早餐未打卡总人数：{{breakfast_card_0}} /
                     午餐未打卡总人数：{{lunch_card_0}}
 
-                </div> -->
+                </div>
             </div>
         </div>
         <!-- <el-dialog
@@ -260,7 +209,7 @@
                 pageNum1:1,
                 pageNum2:1,
                 pageNum3:1,
-                pageSize:9,
+                pageSize:12,
                 total:0,
                 loadSign:false,
                 today:"2019-11-11",
@@ -309,8 +258,8 @@
                     if(data.data.code==0){
                         self.tableData1 = data.data.data.list;
                         self.pageNum1 = self.pageNum1+1;
-                        self.total = data.data.data.total;  
-                        if(self.tableData1.length < 9){
+                        self.total = data.data.data.total;
+                        if(self.tableData1.length < 12){
                             self.pageNum1 = 1
                         }
                     }else{
@@ -356,7 +305,7 @@
                         self.tableData2 = data.data.data.list;
                         self.pageNum2 = self.pageNum2+1;
                         self.total = data.data.data.total;
-                        if(self.tableData2.length < 9){
+                        if(self.tableData2.length < 12){
                             self.pageNum2 = 1
                         }
                     }else{
@@ -402,7 +351,7 @@
                         self.tableData3 = data.data.data.list;
                         self.pageNum3 = self.pageNum3+1;
                         self.total = data.data.data.total;
-                        if(self.tableData3.length < 9){
+                        if(self.tableData3.length < 12){
                             self.pageNum3 = 1
                         }
                     }else{
@@ -472,12 +421,21 @@
     
 </script>
 
-
+<style>
+    #tableList1 .el-table .cell{
+        line-height: 80px;
+    }
+</style>
 <style scoped>
     .clear{
         clear: both;
     }
-    
+    .eattime{
+        color: #002770;
+        font-size: 35px;
+        text-align: center;
+        padding-top: 60px;
+    }
     .eattime1{
         color: #002770;
         font-size: 24px;
@@ -485,145 +443,21 @@
         margin-right: 20px;
         margin-top: 20px;
     }
-    .login-wrap1{
+    .login-wrap{
         position: relative;
         width:100%;
         height:100%;
-        /* background-image: url(../../../static/img/banner2.png); */
-        /* background-size: 100% 100%; */
-        background-color: #F0F3F8;
+        background-image: url(../../../static/img/banner2.png);
+        background-size: 100% 100%;
         overflow: hidden;
     }
     .head-img{
-        /* margin-top: 2px; */
+        margin-top: 2px;
+        /* text-align: center; */
         width: 100%;
-        height: 160px;
-        background-color: #357EFF;
-        display: flex;
-        justify-content: center;
-        /* background-image: url(../../../static/img/head1.jpg); */
-        /* background-size: 100% 100%; */
-    }
-    .head-img1{
-        height: 160px;
-        line-height: 160px;
-    }
-    .head-img1 img{
-        width: 104px;
-        height: 108px;
-        vertical-align: middle;
-    }
-
-    .head-title{
-        font-size: 60px;
-        height: 160px;
-        line-height: 160px;
-        color: #fff;
-        margin-left: 40px;
-    }
-    .quantity{
-        width: 96%;
-        /* height: 18%; */
-        margin: 50px auto 20px;
-        background-color: #ffffff;
-        border-radius: 20px;
-    }
-    .quantity-1{
-        width: 94%;
-        /* height: 100%; */
-        margin: 0 auto;
-    }
-    .quantity-title{
-        display: flex;
-        justify-content: space-between;
-    }
-    .eatDate{
-        color: #000;
-        font-size: 40px;
-        padding-top: 30px;
-
-    }
-    .eattime{
-        color: #000;
-        font-size: 44px;
-        text-align: center;
-        padding-top: 30px;
-    }
-    .repast{
-        /* height: 410px; */
-        display: flex;
-        justify-content: space-between;
-    }
-    .breakfast{
-        background-image: url(../../../static/img/zcbg1.png);
-    }
-    .lunch{
-
-        background-image: url(../../../static/img/wcbg1.png);
-
-    }
-    .breakfast,.lunch{
-
-        /* width: 432px; */
-        /* height: 143px; */
-        width: 648px;
-        height: 214px;     
-        /* height: 209px; */
-        margin-top: 40px;
-        /* background-image: linear-gradient(to right, #B4E0FF ,#84CAFB, #32A4F4); */
-        
+        height: 150px;
+        background-image: url(../../../static/img/head1.jpg);
         background-size: 100% 100%;
-    }
-    
-    .breakfast-title,.breakfast-num{
-        margin-left: 40px;
-        color: #fff;
-        
-    }
-    .breakfast-title{
-        font-size: 48px;
-        /* margin-top: 20px; */
-        margin-top: 30px;
-    }
-    .breakfast-num{
-        font-size: 80px;
-        margin-left: 70px;
-        margin-top: 10px;
-    }
-    .sum{
-        display: flex;
-        justify-content: space-between;
-        margin-top: 30px;
-        padding-bottom: 30px;
-    }
-    .personType{
-        width: 510px;
-        height: 204px;
-        /* background-color: #00BAFF; */
-        background-image: url(../../../static/img/xiaobg.png);
-        background-size: 100% 100%;
-        /* border-radius: 10px; */
-        position: relative;
-    }
-    .noneCard,.noneNum{
-        color: #ffffff;
-        margin-left: 30px;
-    }
-    .noneCard{
-        font-size: 45px;
-        margin-top: 20px;
-    }
-    .noneNum{
-        font-size: 60px;
-        margin-top: 20px;
-        margin-left: 60px;
-    }
-    .dakaIcon{
-        width: 158px;
-        height: 158px;
-        position: absolute;
-        top:33px;
-        right: 10px;
     }
     .back-white{
         /* position: relative;
@@ -633,7 +467,7 @@
         background-size: 100% 100%;
         overflow: hidden; */
         width: 96%;
-        height: 70%;
+        height: 90%;
         margin: 0px auto 20px;
         background-color: #ffffff;
         border-radius: 12px;
@@ -677,7 +511,7 @@
         height: 87%;
     }
     .tableList1{
-        /* margin-top: 20px; */
+        margin-top: 20px;
         height: 87%;
         overflow-y: auto;
     }
@@ -686,39 +520,30 @@
         height: 110px;
     }
     .tab_title{
-        width:92%;
+        width:30%;
         margin: 0 auto;
-        background: #BDD5FF;
+        background: #0000CD;
         margin-top: 40px;
         /* border: 2px solid #A9A9A9; */
-        height: 110px;
-         /* border-radius: 10px; */
+        height: 80px;
+        /* border-radius */
+         border-radius: 10px;
     }
     .tab_title ul{
         display: flex;
         justify-content: space-around;
     }
     .tab_title li{
-        /* width: 30%; */
+        width: 30%;
         text-align: center;
-        list-style:none;    
-        height: 110px;
-        line-height: 110px;
-        font-size: 44px;
-        color: #000;
+        list-style:none;
+        height: 80px;
+        line-height: 80px;
+        font-size: 26px;
+        color: #ffffff;
        
     }
     .tab_title .active{
         border-bottom: 2px solid #0000CD;
-    }
-    
-</style>
-<style>
-    #tableList1 .el-table .cell{
-        line-height: 90px;
-        font-size:36px;
-    }
-    #tableList1 .el-table__empty-text{
-        font-size: 30px;
     }
 </style>

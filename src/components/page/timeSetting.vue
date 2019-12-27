@@ -288,11 +288,13 @@
               options: [],
               options1:[],
               value:'',
-              tableData5: [{
-                  config_name:"陌生人检测",
-                  config_id:111,
-                  config_value:0,
-              }],
+              tableData5: [
+            //       {
+            //       config_name:"陌生人检测",
+            //       config_id:111,
+            //       config_value:0,
+            //   }
+              ],
               strangerDialogVisible:false,
               expands: [],
               org_idList:[],

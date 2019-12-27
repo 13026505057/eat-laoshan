@@ -349,7 +349,9 @@
                 ],
                 officersList:[],
                 officersname:'',
-                }
+                pageSearch:'',
+                
+            }
                 
         },
         mounted() {
@@ -441,7 +443,6 @@
             },
             // 绑定到警员
             bindingClick(res){
-                
                 const self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
@@ -525,10 +526,13 @@
             //查询事件
             searchClick(){
                 this.pageNum = 1;
+                this.pageSearch = "";
                 this.getDataList();
             },
             // 查询今天
             TedaysearchClick(){
+                this.pageNum = 1;
+                this.pageSearch = "today";
                 this.getToday();
             },
             getToday(){
@@ -665,7 +669,11 @@
             },
             //分页器点击事件
             pageChange(){
-                this.getDataList();
+                if(this.pageSearch == "today"){
+                    this.getToday();
+                }else{
+                    this.getDataList();
+                }
             },
             //分页器点击事件
             pageChange2(){
