@@ -496,6 +496,7 @@
                 var token = localStorage.getItem('auth');
                 
                 params.append('eat_log_id',self.eat_log_id); 
+                params.append('card_num',self.cardForm.card_num); 
 
                 self.$axios({
                     method: 'post',
