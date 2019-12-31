@@ -11,6 +11,13 @@
             </div>
         </div>
         <div>
+            <!-- 字段
+            早餐未打卡总人数：breakfast_card_0
+            午餐未打卡总人数：lunch_card_0
+            干警未打卡人数：ganjingTotal
+            驻场人员未打卡人数：qitanTotal
+            陌生人未打卡人数：moshengrenTotal
+             -->
             <div class="eatBox">
                 <div class="quantity">
                     <div class="quantity-1">
@@ -20,123 +27,108 @@
                         </div>
                         
                         <div class="repast">
-                            <div class="breakfast">
-                                <div class="check-item-eat">
+                            <div class="lunch" v-for="(breakfastItem,index) in breakfastItems" :key="index" >
+                                <div class="check-item-eat " :class="index==3?'':'check-item-eat1'">
                                     <div class="check-item-img">
                                         <img src="../../../static/img/daka1.png" alt="">
                                     </div>
                                     <div class="check-item-text">
                                         <div>
-                                            <div class="text-num">{{breakfast_card_0}}</div>
-                                            <div class="text-title">早餐未打卡总人数</div>
+                                            <div class="text-num">{{breakfastItem.num}}</div>
+                                            <div class="text-title">{{breakfastItem.title}}</div>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- <div class="breakfast_box">
-                                    <div class="breakfast-num">{{breakfast_card_0}}</div>
-                                    <div class="breakfast-title">早餐未打卡总人数</div>
-                                </div> -->
-                            </div>
-                            <div class="line">
-                                <div></div>
-                            </div>
-                            <div class="lunch">
-                                <div class="check-item-eat">
-                                    <div class="check-item-img">
-                                        <img src="../../../static/img/daka1.png" alt="">
-                                    </div>
-                                    <div class="check-item-text">
-                                        <div>
-                                            <div class="text-num">{{lunch_card_0}}</div>
-                                            <div class="text-title">午餐未打卡总人数</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- <div class="breakfast_box">
-                                    <div class=" lunch-num">{{lunch_card_0}}</div>
-                                    <div class="breakfast-title">午餐未打卡总人数</div>
-                                </div> -->
                             </div>
                         </div>
-                        <div class="sum">
-                            <div class="personType">
-                                <div class="check-item-eat">
+                        <div class="repast">
+                            <div class="lunch"  v-for="(lunchItem,index) in lunchItems" :key="index">
+                                <div class="check-item-eat" :class="index==3?'':'check-item-eat1'">
                                     <div class="check-item-img">
                                         <img src="../../../static/img/daka2.png" alt="">
                                     </div>
                                     <div class="check-item-text">
                                         <div>
-                                            <div class="text-num">{{ganjingTotal}}</div>
-                                            <div class="text-title">干警未打卡人数</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- <div class="noneNum">
-                                    {{}}
-                                </div>
-                                <div class="noneCard">
-                                    干警未打卡人数
-                                </div>
-                                 -->
-                                <!-- <img class="dakaIcon" src="../../../static/img/daka.png" alt=""> -->
-                            </div>
-                            <div class="line">
-                                <div></div>
-                            </div>
-                            <div class="personType">
-                                <div class="check-item-eat">
-                                    <div class="check-item-img">
-                                        <img src="../../../static/img/daka2.png" alt="">
-                                    </div>
-                                    <div class="check-item-text">
-                                        <div>
-                                            <div class="text-num">{{qitanTotal}}</div>
-                                            <div class="text-title">驻场人员未打卡人数</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- <div class="noneCard">
-                                    驻场人员未打卡人数
-                                </div>
-                                <div class="noneNum">
-                                    {{qitanTotal}}
-                                </div>
-                                <img class="dakaIcon" src="../../../static/img/daka.png" alt=""> -->
-                            </div>
-                            
-                            <!-- <div class="personType">
-                                <div class="noneCard">
-                                    陌生人未打卡人数
-                                </div>
-                                <div class="noneNum">
-                                    {{moshengrenTotal}}
-                                </div>
-                                <img class="dakaIcon" src="../../../static/img/daka.png" alt="">
-                            </div> -->
-                        </div>
-                        <div class="sum">
-                            <div class="personType">
-                                <div class="check-item-eat">
-                                    <div class="check-item-img">
-                                        <img src="../../../static/img/daka2.png" alt="">
-                                    </div>
-                                    <div class="check-item-text">
-                                        <div>
-                                            <div class="text-num">{{moshengrenTotal}}</div>
-                                            <div class="text-title">陌生人未打卡人数</div>
+                                            <div class="text-num">{{lunchItem.num}}</div>
+                                            <div class="text-title">{{lunchItem.title}}</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                           
                         </div>
                     </div>
                 </div>
                 <div class="back-white">
                     <div class="userBox1">
                         <div class="conent-box-1">
-                            <el-carousel :interval="interval" height="800px" >
+                            <div class="tab-head">
+                                <div 
+                                    @click="tabClick(index)"
+                                    v-for="(itemTab,index) in itamTabs" 
+                                    :key="index" 
+                                    class="tabTitle" 
+                                    :class="tabActive==index?'active':''">
+                                    {{itemTab}}
+                                </div>
+                                <div class="tishi">*温馨提示：请及时与餐厅管理员联系，外来人员请及时填报《接待审批表》</div>
+                            </div>
+                            <div>
+                                <div class="tableList2" id="tableList1">
+                                    <el-table
+                                        :header-cell-style="headStyle"
+                                        :data="tableData1"
+                                        style="width: 92%;margin:0 auto;"
+                                        :row-style="rowStyle">
+                                        <el-table-column
+                                            type="index"
+                                            align="center"
+                                            width="60">
+                                        </el-table-column>
+                                        <el-table-column
+                                            v-if="photoHid"
+                                            label="照片"
+                                            align="center"
+                                            prop="">
+                                            <template  slot-scope="props">
+                                                <img  @click="lookPic(props.row)" class="headImg1" :src="props.row.face_url" alt="">
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            label="记录时间"
+                                            align="center"
+                                            prop="eat_time">
+                                        </el-table-column>
+                                        <el-table-column
+                                            label="就餐类型"
+                                            align="center"
+                                            >
+                                            <template slot-scope="props">
+                                            <span>{{props.row.eat_type=='breakfast'?'早餐':''}}</span>
+                                            <span>{{props.row.eat_type=='lunch'?'午餐':''}}</span>
+                                            <span>{{props.row.eat_type=='dinner'?'晚餐':''}}</span>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            label="人员"
+                                            align="center"
+                                            prop="user_true_name"
+                                            >
+                                        </el-table-column>
+                                    </el-table>
+                                </div>
+                                <el-pagination
+                                    background
+                                    style="text-align: center;margin-top: 20px;padding-bottom:20px;"
+                                    @current-change="handleCurrentChange1"
+                                    :current-page.sync="pageNum1"
+                                    :page-size="pageSize1"
+                                    layout="prev, pager, next, jumper"
+                                    :total="total1">
+                                </el-pagination>
+                            </div>
+                            <!-- <el-carousel :interval="interval" height="800px" >
                                 <el-carousel-item>
-                                    <!-- <h3>{{ item }}</h3> -->
                                     <div class="tab_title">
                                         干警
                                     </div>
@@ -185,7 +177,6 @@
                                 </el-carousel-item>
                                 
                                 <el-carousel-item >
-                                    <!-- <h3>{{ item }}</h3> -->
                                     <div class="tab_title">
                                         驻场人员
                                     </div>
@@ -233,7 +224,6 @@
                                     </div>
                                 </el-carousel-item>
                                 <el-carousel-item >
-                                    <!-- <h3>{{ item }}</h3> -->
                                     <div class="tab_title">
                                         陌生人
                                     </div>
@@ -280,7 +270,7 @@
                                         </el-table>
                                     </div>
                                 </el-carousel-item>
-                            </el-carousel>
+                            </el-carousel> -->
                         </div> 
                     </div>
                 </div>
@@ -299,30 +289,21 @@
                             </div>
                             <div class="check">
                                 <ul>
-                                    <li class="check-li">
+                                    <li @click="kaoqinClick(index+1)" class="" v-for="(kaoqinItem,index) in kaoqinItems" :key="index" :class="index==7||index==3?'':'check-li'">
                                         <div class="check-item">
                                             <div class="check-item-img">
-                                                <img src="../../../static/img/kaoqin1.png" alt="">
+                                                <img :src="kaoqinItem.img" alt="">
                                             </div>
                                             <div class="check-item-text">
                                                 <div>
-                                                    <div class="text-num">{{kaoqin}}</div>
-                                                    <div class="text-title">考勤人数</div>
+                                                    <div class="text-num">{{kaoqinItem.num}}</div>
+                                                    <div class="text-title">{{kaoqinItem.title}}</div>
                                                 </div>
                                             </div>
-                                            <!-- <img src="../../../static/img/kaoqinbg.png" alt="">
-                                            <div class="check-text">
-                                                <div class="text-title">考勤人数</div>
-                                                <div class="text-num">{{kaoqin}}</div>
-                                            </div> -->
                                         </div>
                                     </li>
-                                    <li>
-                                        <div class="line">
-                                            <div></div>
-                                        </div>
-                                    </li>
-                                    <li class="check-li">
+                                    
+                                    <!-- <li class="check-li">
                                         <div class="check-item">
                                             <div class="check-item-img">
                                                 <img src="../../../static/img/kaoqin2.png" alt="">
@@ -333,18 +314,9 @@
                                                     <div class="text-title">实到人数</div>
                                                 </div>
                                             </div>
-                                            <!-- <img src="../../../static/img/shidaobg.png" alt="">
-                                            <div class="check-text">
-                                                <div class="text-title">实到人数</div>
-                                                <div class="text-num">{{shidao}}</div>
-                                            </div> -->
                                         </div>
                                     </li>
-                                    <li>
-                                        <div class="line">
-                                            <div></div>
-                                        </div>
-                                    </li>
+                                    
                                     <li class="check-li">
                                         <div class="check-item">
                                             <div class="check-item-img">
@@ -357,20 +329,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div class="check-item">
-                                            <img src="../../../static/img/chidaobg.png" alt="">
-                                            <div class="check-text">
-                                                <div class="text-title">迟到人数</div>
-                                                <div class="text-num">{{chidao}}</div>
-                                            </div>
-                                        </div> -->
                                     </li>
-                                    <li>
-                                        <div class="line">
-                                            <div></div>
-                                        </div>
-                                    </li>
-                                    <li class="check-li">
+                                    
+                                    <li >
                                         <div class="check-item">
                                             <div class="check-item-img">
                                                 <img src="../../../static/img/kaoqin4.png" alt="">
@@ -382,13 +343,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div class="check-item">
-                                            <img src="../../../static/img/zaotuibg.png" alt="">
-                                            <div class="check-text">
-                                                <div class="text-title">早退人数</div>
-                                                <div class="text-num">{{zaotui}}</div>
-                                            </div>
-                                        </div> -->
                                     </li>
                                     <li class="check-li">
                                         <div class="check-item">
@@ -402,19 +356,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div class="check-item">
-                                            <img src="../../../static/img/qingjiabg.png" alt="">
-                                            <div class="check-text">
-                                                <div class="text-title">请假人数</div>
-                                                <div class="text-num">{{qingjia}}</div>
-                                            </div>
-                                        </div> -->
                                     </li>
-                                    <li>
-                                        <div class="line">
-                                            <div></div>
-                                        </div>
-                                    </li>
+                                    
                                     <li class="check-li">
                                         <div class="check-item">
                                             <div class="check-item-img">
@@ -427,19 +370,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div class="check-item">
-                                            <img src="../../../static/img/xiujiabg.png" alt="">
-                                            <div class="check-text">
-                                                <div class="text-title">休假人数</div>
-                                                <div class="text-num">{{xiujia}}</div>
-                                            </div>
-                                        </div> -->
                                     </li>
-                                    <li>
-                                        <div class="line">
-                                            <div></div>
-                                        </div>
-                                    </li>
+                                    
                                     <li class="check-li">
                                         <div class="check-item">
                                             <div class="check-item-img">
@@ -452,20 +384,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div class="check-item">
-                                            <img src="../../../static/img/waichubg.png" alt="">
-                                            <div class="check-text">
-                                                <div class="text-title">因公外出人数</div>
-                                                <div class="text-num">{{waichu}}</div>
-                                            </div>
-                                        </div> -->
                                     </li>
+                                    
                                     <li>
-                                        <div class="line">
-                                            <div></div>
-                                        </div>
-                                    </li>
-                                    <li class="check-li">
                                         <div class="check-item">
                                             <div class="check-item-img">
                                                 <img src="../../../static/img/kaoqin8.png" alt="">
@@ -477,14 +398,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div class="check-item">
-                                            <img src="../../../static/img/queqin.png" alt="">
-                                            <div class="check-text">
-                                                <div class="text-title">缺勤人数</div>
-                                                <div class="text-num">{{queqin}}</div>
-                                            </div>
-                                        </div> -->
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </div>
                             
@@ -494,13 +408,12 @@
                 <div class="back-white">
                     <div class="userBox1">
                         <div class="conent-box-1">
-                            <el-carousel :interval="interval1" height="800px" >
-                                <el-carousel-item>
-                                    <!-- <h3>{{ item }}</h3> -->
-                                    <div class="tab_title">
+                            <!-- <el-carousel :interval="interval1" height="800px" >
+                                <el-carousel-item> -->
+                                    <!-- <div class="tab_title">
                                         外出统计
-                                    </div>
-                                    <div class="tableList2" id="tableList1">
+                                    </div> -->
+                                    <!-- <div class="tableList2" id="tableList1">
                                         <el-table
                                             :header-cell-style="headStyle"
                                             :data="tableDataKaoqin1"
@@ -585,14 +498,13 @@
                                                 >
                                             </el-table-column>
                                         </el-table>
-                                    </div>
-                                </el-carousel-item>
+                                    </div> -->
+                                <!-- </el-carousel-item>
                                 
-                                <el-carousel-item >
-                                    <!-- <h3>{{ item }}</h3> -->
-                                    <div class="tab_title">
+                                <el-carousel-item > -->
+                                    <!-- <div class="tab_title">
                                         打卡统计
-                                    </div>
+                                    </div> -->
                                     <div class="tableList1" id="tableList1">
                                         <el-table
                                             :header-cell-style="headStyle"
@@ -612,10 +524,50 @@
                                                 
                                             </el-table-column>
                                             <el-table-column
+                                                label="卡号"
+                                                align="center"
+                                                prop="user_num"
+                                                v-if="kaoqinValue==1?true:false"
+                                                >
+                                            </el-table-column>
+                                            <el-table-column
+                                                label="是否打卡"
+                                                align="center"
+                                                prop=""
+                                                v-if="kaoqinValue==1?true:false"
+                                                >
+                                                <template slot-scope="props">
+                                                    <span>{{props.row.kaoqin_status=="1"?"是":"否"}}</span>
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column
+                                                label="部门"
+                                                align="center"
+                                                prop="dept_name"
+                                                v-if="kaoqinValue==1?true:false"
+                                                >
+                                                <template slot-scope="props">
+                                                    <span v-for="(item,index) in props.row.userDeptList" :key="index">{{item.dept_name}};</span>
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column
+                                                label="所在班次"
+                                                align="center"
+                                                prop="dept_name"
+                                                v-if="kaoqinValue==1?true:false"
+                                                >
+                                                <template slot-scope="props">
+                                                    <span v-for="(item,index) in props.row.userShiftList" :key="index">{{item.shift_name}};</span>
+                                                </template>
+                                            </el-table-column>
+                                            
+                                            <el-table-column
                                                 label="考勤状态"
                                                 align="center"
                                                 prop=""
+                                                v-if="kaoqinValue==1?false:true"
                                                 >
+                                                
                                                 <template slot-scope="props">
                                                     <span>{{props.row.attendance_status=="0"?"正常":""}}</span>
                                                     <span>{{props.row.attendance_status=="1"?"迟到":""}}</span>
@@ -632,6 +584,7 @@
                                                 label="是否考勤"
                                                 align="center"
                                                 prop=""
+                                                v-if="kaoqinValue==1?false:true"
                                                 >
                                                 <template slot-scope="props">
                                                     <span>{{props.row.kaoqin_status=="0"?"不考勤":""}}</span>
@@ -644,6 +597,7 @@
                                                 label="外出状态"
                                                 align="center"
                                                 prop=""
+                                                v-if="kaoqinValue==1?false:true"
                                                 >
                                                 <template slot-scope="props">
                                                     <span>{{props.row.leave_status=="qingjia"?"请假":""}}</span>
@@ -655,43 +609,57 @@
                                             <el-table-column
                                                 label="部门"
                                                 align="center"
-                                                prop="dept_name">
+                                                prop="dept_name"
+                                               v-if="kaoqinValue==1?false:true">
                                             </el-table-column>
                                             <el-table-column
                                                 label="打卡日期"
                                                 align="center"
                                                 prop="attendance_day"
+                                               v-if="kaoqinValue==1?false:true"
                                                 >
                                             </el-table-column>
                                             <el-table-column
                                                 label="上班打卡"
                                                 align="center"
                                                 prop="attendance_begin_card"
+                                               v-if="kaoqinValue==1?false:true"
                                                 >
                                             </el-table-column>
                                             <el-table-column
                                                 label="下班打卡"
                                                 align="center"
                                                 prop="attendance_end_card"
+                                               v-if="kaoqinValue==1?false:true"
                                                 >
                                             </el-table-column>
                                             <el-table-column
                                                 label="上班刷脸"
                                                 align="center"
                                                 prop="attendance_begin_face"
+                                               v-if="kaoqinValue==1?false:true"
                                                 >
                                             </el-table-column>
                                             <el-table-column
                                                 label="下班刷脸"
                                                 align="center"
                                                 prop="attendance_end_face"
+                                                v-if="kaoqinValue==1?false:true"
                                                 >
                                             </el-table-column>
                                         </el-table>
                                     </div>
-                                </el-carousel-item>
+                                    <el-pagination
+                                        background
+                                        style="text-align: center;margin-top: 20px;padding-bottom:20px;"
+                                        @current-change="handleCurrentChange2"
+                                        :current-page.sync="pageNum2"
+                                        :page-size="pageSize2"
+                                        layout="prev, pager, next, jumper"
+                                        :total="total2">
+                                    </el-pagination>
+                                <!-- </el-carousel-item>
                                 <el-carousel-item >
-                                    <!-- <h3>{{ item }}</h3> -->
                                     <div class="tab_title">
                                         打卡记录
                                     </div>
@@ -733,12 +701,6 @@
                                                 prop="log_date_time"
                                                 >
                                             </el-table-column>
-                                            <!-- <el-table-column
-                                                label="结束时间"
-                                                align="center"
-                                                prop="end_log_date_time"
-                                                >
-                                            </el-table-column> -->
                                             <el-table-column
                                                 label="卡号"
                                                 align="center"
@@ -748,7 +710,7 @@
                                         </el-table>
                                     </div>
                                 </el-carousel-item>
-                            </el-carousel>
+                            </el-carousel> -->
                         </div>
                     </div>
                 </div>
@@ -770,11 +732,11 @@
                 tableData1: [],
                 tableData2: [],
                 tableData3: [],
-                pageNum1:1,
-                pageNum2:1,
-                pageNum3:1,
-                pageSize:4,
-                total:0,
+                // pageNum1:1,
+                // pageNum2:1,
+                // pageNum3:1,
+                // pageSize:4,
+                // total:0,
                 loadSign:false,
                 today:"",
                 todayKaoqin:"",
@@ -787,15 +749,43 @@
                 ganjingTotal:'0',
                 moshengrenTotal:'0',
                 qitanTotal:'0',
+
+                pageNum1:1,
+                pageSize1:4,
+                total1:1,
+                photoHid:false,
+                breakfastItems:[{
+                    title:"早餐未打卡总人数",
+                    num:'0',
+                },{
+                    title:"早餐干警未打卡",
+                    num:'0',
+                },{
+                    title:"早餐驻场人员未打卡",
+                    num:'0',
+                },{
+                    title:"早餐陌生人未打卡",
+                    num:'0',
+                }],
+                lunchItems:[{
+                    title:"午餐未打卡总人数",
+                    num:'0',
+                },{
+                    title:"午餐干警未打卡",
+                    num:'0',
+                },{
+                    title:"午餐驻场人员未打卡",
+                    num:'0',
+                },{
+                    title:"午餐陌生人未打卡",
+                    num:'0',
+                }],
+                itamTabs:[
+                    "干警","驻场人员","陌生人"
+                ],
+                tabActive:"",
                 // 考勤
-                kaoqin:"",
-                shidao:"",
-                chidao:"",
-                zaotui:"",
-                qingjia:"",
-                xiujia:"",
-                waichu:"",
-                queqin:"",
+                
                 tableDataKaoqin1:[],
                 finishTime:'',
                 kaoqinTotal1:0,
@@ -803,9 +793,43 @@
                 kaoqinTotal2: 0,
                 tableDataKaoqin3:[],
                 kaoqinTotal3:'',
-                pageNum4:4,
-                pageNum5:4,
-                pageNum6:4,
+                pageNum2:1,
+                pageSize2:4,
+                total2:1,
+                kaoqinItems:[{
+                    title:'考勤人数',
+                    img:'../../../static/img/kaoqin1.png',
+                    num:'',
+                },{
+                    title:'实到人数',
+                    img:'../../../static/img/kaoqin2.png',
+                    num:'',
+                },{
+                    title:'迟到人数',
+                    img:'../../../static/img/kaoqin3.png',
+                    num:'',
+                },{
+                    title:'早退人数',
+                    img:'../../../static/img/kaoqin4.png',
+                    num:'',
+                },{
+                    title:'请假人数',
+                    img:'../../../static/img/kaoqin5.png',
+                    num:'',
+                },{
+                    title:'休假人数',
+                    img:'../../../static/img/kaoqin6.png',
+                    num:'',
+                },{
+                    title:'因公外出人数',
+                    img:'../../../static/img/kaoqin7.png',
+                    num:'',
+                },{
+                    title:'缺勤人数',
+                    img:'../../../static/img/kaoqin8.png',
+                    num:'',
+                }],
+                kaoqinValue:'',
 
                 // 160*
             }
@@ -814,14 +838,14 @@
             // 考勤
              getDataListKaoqin(){
                 const self = this;
-                self.kaoqin = '';
-                self.shidao = '';
-                self.chidao = '';
-                self.zaotui = '';
-                self.qingjia = '';
-                self.xiujia = '';
-                self.waichu = '';
-                self.queqin = '';
+                self.kaoqinItems[0].num = '';
+                self.kaoqinItems[1].num = '';
+                self.kaoqinItems[2].num = '';
+                self.kaoqinItems[3].num = '';
+                self.kaoqinItems[4].num = '';
+                self.kaoqinItems[5].num = '';
+                self.kaoqinItems[6].num = '';
+                self.kaoqinItems[7].num = '';
                 var params = new URLSearchParams();
                 // var token = localStorage.getItem('auth');
                 var day3 = new Date();
@@ -830,11 +854,6 @@
                 // console.log(finishTime)
                 self.todayKaoqin = finishTime;
                 self.finishTime = finishTime;
-                // if(self.date == ""){
-                //     var date1 = finishTime
-                // }else{
-                //     var date1 = self.date
-                // }
                 params.append('holiday_day',self.finishTime);
 
                 self.$axios({
@@ -845,14 +864,14 @@
                 }).then(function(data){
                     
                     if(data.data.code==0){
-                        self.kaoqin = data.data.data[0].kaoqin;
-                        self.shidao = data.data.data[0].shidao;
-                        self.chidao = data.data.data[0].chidao;
-                        self.zaotui = data.data.data[0].zaotui;
-                        self.qingjia = data.data.data[0].qingjia;
-                        self.xiujia = data.data.data[0].xiujia;
-                        self.waichu = data.data.data[0].waichu;
-                        self.queqin = data.data.data[0].queqin;
+                        self.kaoqinItems[0].num = data.data.data[0].kaoqin;
+                        self.kaoqinItems[1].num = data.data.data[0].shidao;
+                        self.kaoqinItems[2].num = data.data.data[0].chidao;
+                        self.kaoqinItems[3].num = data.data.data[0].zaotui;
+                        self.kaoqinItems[4].num = data.data.data[0].qingjia;
+                        self.kaoqinItems[5].num = data.data.data[0].xiujia;
+                        self.kaoqinItems[6].num = data.data.data[0].waichu;
+                        self.kaoqinItems[7].num = data.data.data[0].queqin;
                         
                     }else{
                         self.$response(data,self);
@@ -860,102 +879,191 @@
                 });
             },
             // 外出考勤列表
-            getDataListKaoqin1(){
-                const self = this;
-                var params = new URLSearchParams();
-                // var token = localStorage.getItem('auth');
-                var day3 = new Date();
-                day3.setTime(day3.getTime()-24*60*60*1000);
-                var finishTime = day3.getFullYear()+"-" + (day3.getMonth()+1) + "-" + day3.getDate() ;
-                console.log(finishTime)
+            // getDataListKaoqin1(){
+            //     const self = this;
+            //     var params = new URLSearchParams();
+            //     // var token = localStorage.getItem('auth');
+            //     var day3 = new Date();
+            //     day3.setTime(day3.getTime()-24*60*60*1000);
+            //     var finishTime = day3.getFullYear()+"-" + (day3.getMonth()+1) + "-" + day3.getDate() ;
+            //     console.log(finishTime)
 
-                params.append('leave_day',finishTime);
-                params.append('pageNum',self.pageNum4);
-                params.append('pageSize',self.pageSize);
-                self.$axios({
-                    method: 'post',
-                    url: 'http://192.168.100.226/attendance/leave/getByPage',
-                    data: params,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                }).then(function(data){
-                    if(data.data.code==0){
-                        self.tableDataKaoqin1 = data.data.data.list;
-                        // self.kaoqinTotal1 = data.data.data.total;
-                        self.pageNum4 = self.pageNum4+1;
+            //     params.append('leave_day',finishTime);
+            //     params.append('pageNum',self.pageNum4);
+            //     params.append('pageSize',self.pageSize);
+            //     self.$axios({
+            //         method: 'post',
+            //         url: 'http://192.168.100.226/attendance/leave/getByPage',
+            //         data: params,
+            //         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            //     }).then(function(data){
+            //         if(data.data.code==0){
+            //             self.tableDataKaoqin1 = data.data.data.list;
+            //             // self.kaoqinTotal1 = data.data.data.total;
+            //             self.pageNum4 = self.pageNum4+1;
 
-                        self.kaoqinTotal1 = data.data.data.total;  
-                        if(self.tableDataKaoqin1.length < 4){
-                            self.pageNum4 = 1
-                        }
-                    }else{
-                        self.$response(data,self);
-                    }
-                });
+            //             self.kaoqinTotal1 = data.data.data.total;  
+            //             if(self.tableDataKaoqin1.length < 4){
+            //                 self.pageNum4 = 1
+            //             }
+            //         }else{
+            //             self.$response(data,self);
+            //         }
+            //     });
+            // },
+            // 
+            kaoqinClick(value){
+                console.log(value)
+                this.kaoqinValue  = value;
+                var self = this;
+                self.pageNum2 = 1;
+                self.tableDataKaoqin2 = [];
+
+                self.getDataListKaoqin2(value);
             },
             // 个人考勤列表
-            getDataListKaoqin2(){
+            getDataListKaoqin2(value){
                 const self = this;
                 var params = new URLSearchParams();
                 // var token = localStorage.getItem('auth');
                 var day3 = new Date();
                 day3.setTime(day3.getTime()-24*60*60*1000);
                 var finishTime = day3.getFullYear()+"-" + (day3.getMonth()+1) + "-" + day3.getDate() ;
-                console.log(finishTime)
-                params.append('pageNum',self.pageNum5);
-                params.append('pageSize',self.pageSize);
-                params.append('attendance_day',finishTime);
+                // console.log(finishTime)
+                var httpUrl = 'http://192.168.100.226/attendance/attendance/getByPage';
+                // 第一个 参数 user_status，kaoqin_status 接口attendance/user/getByPage
+                // 第二个 参数 attendance_status，attendance_day 接口attendance/attendance/getByPage
+                // 第三个 参数 attendance_day 接口attendance/attendance/getByPage
+                // 第四个 参数 attendance_day 接口attendance/attendance/getByPage
+                // 第五个 参数 attendance_day 接口attendance/attendance/getByPage
+                // 第六个 参数 attendance_day 接口attendance/attendance/getByPage
+                // 第七个 参数 attendance_day 接口attendance/attendance/getByPage
+                // 第八个 参数 attendance_day 接口attendance/attendance/getByPage
+                switch (value) {
+                    case 1:
+                        console.log("我被执行了")
+                        params.append('user_status',"1");
+                        params.append('kaoqin_status',"1");
+                        httpUrl = "http://192.168.100.226/attendance/user/getByPage"
+                        break;
+                    case 2:
+                        console.log("实到")
+                        params.append('attendance_status',"normal");
+                        params.append('attendance_day',finishTime);
+                        break;
+                    case 3:
+                        console.log("迟到")
+                        params.append('attendance_status',"chidao");
+                        params.append('attendance_day',finishTime);
+                        break;
+                    case 4:
+                        console.log("早退")
+                        params.append('attendance_status',"zaotui");
+                        params.append('attendance_day',finishTime);
+                        break;
+                    case 5:
+                        console.log("请假")
+                        params.append('leave_status',"qingjia");
+                        params.append('attendance_day',finishTime);
+                        break;
+                    case 6:
+                        console.log("休假")
+                        params.append('leave_status',"5");
+                        params.append('attendance_day',finishTime);
+                        break;
+                    case 7:
+                        console.log("因公外出")
+                        params.append('leave_status',"gongchu");
+                        params.append('attendance_day',finishTime);
+                        break;
+                    case 8:
+                        console.log("缺勤")
+                        params.append('attendance_status',"7");
+                        params.append('attendance_day',finishTime);
+                        break;
+                    default:
+                        break;
+                }
+                params.append('pageNum',self.pageNum2);
+                params.append('pageSize',self.pageSize2);
+                
+                
                 self.$axios({
                     method: 'post',
-                    url: 'http://192.168.100.226/attendance/attendance/getByPage',
+                    url: httpUrl,
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 }).then(function(data){
                     if(data.data.code==0){
                         self.tableDataKaoqin2 = data.data.data.list;
                         // self.kaoqinTotal2 = data.data.data.total;
-                        self.pageNum5 = self.pageNum5+1;
-                        self.kaoqinTotal2 = data.data.data.total;  
-                        if(self.tableDataKaoqin2.length < 4){
-                            self.pageNum5 = 1
-                        }
+                        // self.pageNum5 = self.pageNum5+1;
+                        self.total2 = data.data.data.total;  
+                        // if(self.tableDataKaoqin2.length < 4){
+                        //     self.pageNum5 = 1
+                        // }
                     }else{
                         self.$response(data,self);
                     }
                 });
             },
-            // 
-            getDataListKaoqin3(){
-                const self = this;
-                var params = new URLSearchParams();
-                // var token = localStorage.getItem('auth');
-                var day3 = new Date();
-                day3.setTime(day3.getTime()-24*60*60*1000);
-                var finishTime = day3.getFullYear()+"-" + (day3.getMonth()+1) + "-" + day3.getDate() ;
-                console.log(finishTime)
+            
+            // 翻页
+            handleCurrentChange2(){
+                var value = this.kaoqinValue
+                this.getDataListKaoqin2(value);
+            },
+            // // 
+            // getDataListKaoqin3(){
+            //     const self = this;
+            //     var params = new URLSearchParams();
+            //     // var token = localStorage.getItem('auth');
+            //     var day3 = new Date();
+            //     day3.setTime(day3.getTime()-24*60*60*1000);
+            //     var finishTime = day3.getFullYear()+"-" + (day3.getMonth()+1) + "-" + day3.getDate() ;
+            //     console.log(finishTime)
 
-                params.append('log_date',finishTime);
-                params.append('pageNum',self.pageNum6);
-                params.append('pageSize',self.pageSize);
-                self.$axios({
-                    method: 'post',
-                    url: 'http://192.168.100.226/attendance/log/getByPage',
-                    data: params,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                }).then(function(data){
-                    if(data.data.code==0){
-                        self.tableDataKaoqin3 = data.data.data.logList;
-                        // self.kaoqinTotal3 = data.data.data.total;
-                        self.pageNum6 = self.pageNum6+1;
-                        self.kaoqinTotal3 = data.data.data.total;  
-                        if(self.tableDataKaoqin3.length < 4){
-                            self.pageNum6 = 1
-                        }
-                    }else{
-                        self.$response(data,self);
-                    }
-                });
-            },
+            //     params.append('log_date',finishTime);
+            //     params.append('pageNum',self.pageNum6);
+            //     params.append('pageSize',self.pageSize);
+            //     self.$axios({
+            //         method: 'post',
+            //         url: 'http://192.168.100.226/attendance/log/getByPage',
+            //         data: params,
+            //         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            //     }).then(function(data){
+            //         if(data.data.code==0){
+            //             self.tableDataKaoqin3 = data.data.data.logList;
+            //             // self.kaoqinTotal3 = data.data.data.total;
+            //             self.pageNum6 = self.pageNum6+1;
+            //             self.kaoqinTotal3 = data.data.data.total;  
+            //             if(self.tableDataKaoqin3.length < 4){
+            //                 self.pageNum6 = 1
+            //             }
+            //         }else{
+            //             self.$response(data,self);
+            //         }
+            //     });
+            // },
             // 餐厅
+            // tab切换
+            tabClick(index){
+                var self = this;
+                self.tabActive = index;
+                self.pageNum1 = 1;
+                self.tableData1 = [];
+                if(index == 0){
+                    self.photoHid = false;
+                    self.user_type = "yuangong";
+                }else if(index == 1){
+                    self.photoHid = false;
+                    self.user_type = "qita";
+                }else{
+                    self.photoHid = true;
+                    self.user_type = "moshengren";
+                }
+                self.getDataList1();
+            },
             getDataList1(){
                 const self = this;
                 var params = new URLSearchParams();
@@ -976,8 +1084,9 @@
                 params.append('begin_time',begin_time);
                 params.append('end_time',end_time);
                 params.append('pageNum',self.pageNum1);
-                params.append('pageSize',self.pageSize);
-                params.append("user_type","yuangong");
+                params.append('pageSize',self.pageSize1);
+                params.append("user_type",self.user_type);
+                // params.append("user_type","yuangong");
                 // card=0代表未打卡
                 // bd_card=0代表未补打
                 params.append('card','0');
@@ -992,118 +1101,121 @@
                     
                     if(data.data.code==0){
                         self.tableData1 = data.data.data.list;
-                        self.pageNum1 = self.pageNum1+1;
-                        self.total = data.data.data.total;  
-                        self.ganjingTotal = data.data.data.total;  
-                        if(self.tableData1.length < 9){
-                            self.pageNum1 = 1
-                        }
+                        // self.pageNum1 = self.pageNum1+1;
+                        self.total1 = data.data.data.total;  
+                        // self.ganjingTotal = data.data.data.total;  
+                        // if(self.tableData1.length < 9){
+                        //     self.pageNum1 = 1
+                        // }
                     }else{
                         self.$response(data,self);
                     }
                 });
             },
-            getDataList2(){
-                const self = this;
-                var params = new URLSearchParams();
-                var token = localStorage.getItem('auth');
-                var date2 = new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1);
-                // var endTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + date2.getHours() + ':' + date2.getMinutes() + ':' + date2.getSeconds()
-                // console.log(date2)
-                var startTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + "00" + ':' + "00" + ':' + "00"
-                // var finishTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + (date2.getDate()+24*60*60*1000) + ' ' + "00" + ':' + "00" + ':' + "00"
+            // 翻页
+            handleCurrentChange1(){
+                this.getDataList1();
+            },
+            // getDataList2(){
+            //     const self = this;
+            //     var params = new URLSearchParams();
+            //     var token = localStorage.getItem('auth');
+            //     var date2 = new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1);
+            //     // var endTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + date2.getHours() + ':' + date2.getMinutes() + ':' + date2.getSeconds()
+            //     // console.log(date2)
+            //     var startTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + "00" + ':' + "00" + ':' + "00"
+            //     // var finishTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + (date2.getDate()+24*60*60*1000) + ' ' + "00" + ':' + "00" + ':' + "00"
                 
-                // console.log(date2.getDate()+24*60*60*1000)
-                var day3 = new Date();
-                day3.setTime(day3.getTime()+24*60*60*1000);
-                var finishTime = day3.getFullYear()+"-" + (day3.getMonth()+1) + "-" + day3.getDate() + ' ' + "00" + ':' + "00" + ':' + "00";
+            //     // console.log(date2.getDate()+24*60*60*1000)
+            //     var day3 = new Date();
+            //     day3.setTime(day3.getTime()+24*60*60*1000);
+            //     var finishTime = day3.getFullYear()+"-" + (day3.getMonth()+1) + "-" + day3.getDate() + ' ' + "00" + ':' + "00" + ':' + "00";
 
-                var begin_time = startTime;
-                var end_time = finishTime;
-                params.append('begin_time',begin_time);
-                params.append('end_time',end_time);
-                params.append('pageNum',self.pageNum2);
-                params.append('pageSize',self.pageSize);
-                params.append("user_type","moshengren");
-                // card=0代表未打卡
-                // bd_card=0代表未补打
-                params.append('card','0');
-                params.append('bd_card','0');
+            //     var begin_time = startTime;
+            //     var end_time = finishTime;
+            //     params.append('begin_time',begin_time);
+            //     params.append('end_time',end_time);
+            //     params.append('pageNum',self.pageNum2);
+            //     params.append('pageSize',self.pageSize);
+            //     params.append("user_type","moshengren");
+            //     // card=0代表未打卡
+            //     // bd_card=0代表未补打
+            //     params.append('card','0');
+            //     params.append('bd_card','0');
 
-                self.$axios({
-                    method: 'post',
-                    url: '/log/eat-log/getByPage',
-                    data: params,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                }).then(function(data){
+            //     self.$axios({
+            //         method: 'post',
+            //         url: '/log/eat-log/getByPage',
+            //         data: params,
+            //         headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+            //     }).then(function(data){
                     
-                    if(data.data.code==0){
-                        self.tableData2 = data.data.data.list;
-                        self.pageNum2 = self.pageNum2+1;
-                        self.total = data.data.data.total;
-                        self.moshengrenTotal = data.data.data.total;
+            //         if(data.data.code==0){
+            //             self.tableData2 = data.data.data.list;
+            //             self.pageNum2 = self.pageNum2+1;
+            //             self.total = data.data.data.total;
+            //             self.moshengrenTotal = data.data.data.total;
                         
-                        if(self.tableData2.length < 9){
-                            self.pageNum2 = 1
-                        }
-                    }else{
-                        self.$response(data,self);
-                    }
-                });
-            },
-            getDataList3(){
-                const self = this;
-                var params = new URLSearchParams();
-                var token = localStorage.getItem('auth');
-                var date2 = new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1);
-                // var endTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + date2.getHours() + ':' + date2.getMinutes() + ':' + date2.getSeconds()
-                // console.log(date2)
-                var startTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + "00" + ':' + "00" + ':' + "00"
-                // var finishTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + (date2.getDate()+24*60*60*1000) + ' ' + "00" + ':' + "00" + ':' + "00"
+            //             if(self.tableData2.length < 9){
+            //                 self.pageNum2 = 1
+            //             }
+            //         }else{
+            //             self.$response(data,self);
+            //         }
+            //     });
+            // },
+            // getDataList3(){
+            //     const self = this;
+            //     var params = new URLSearchParams();
+            //     var token = localStorage.getItem('auth');
+            //     var date2 = new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1);
+            //     // var endTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + date2.getHours() + ':' + date2.getMinutes() + ':' + date2.getSeconds()
+            //     // console.log(date2)
+            //     var startTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate() + ' ' + "00" + ':' + "00" + ':' + "00"
+            //     // var finishTime = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + (date2.getDate()+24*60*60*1000) + ' ' + "00" + ':' + "00" + ':' + "00"
                 
-                // console.log(date2.getDate()+24*60*60*1000)
-                var day3 = new Date();
-                day3.setTime(day3.getTime()+24*60*60*1000);
-                var finishTime = day3.getFullYear()+"-" + (day3.getMonth()+1) + "-" + day3.getDate() + ' ' + "00" + ':' + "00" + ':' + "00";
+            //     // console.log(date2.getDate()+24*60*60*1000)
+            //     var day3 = new Date();
+            //     day3.setTime(day3.getTime()+24*60*60*1000);
+            //     var finishTime = day3.getFullYear()+"-" + (day3.getMonth()+1) + "-" + day3.getDate() + ' ' + "00" + ':' + "00" + ':' + "00";
 
-                var begin_time = startTime;
-                var end_time = finishTime;
-                params.append('begin_time',begin_time);
-                params.append('end_time',end_time);
-                params.append('pageNum',self.pageNum3);
-                params.append('pageSize',self.pageSize);
-                params.append("user_type","qita");
-                // card=0代表未打卡
-                // bd_card=0代表未补打
-                params.append('card','0');
-                params.append('bd_card','0');
+            //     var begin_time = startTime;
+            //     var end_time = finishTime;
+            //     params.append('begin_time',begin_time);
+            //     params.append('end_time',end_time);
+            //     params.append('pageNum',self.pageNum3);
+            //     params.append('pageSize',self.pageSize);
+            //     params.append("user_type","qita");
+            //     // card=0代表未打卡
+            //     // bd_card=0代表未补打
+            //     params.append('card','0');
+            //     params.append('bd_card','0');
 
-                self.$axios({
-                    method: 'post',
-                    url: '/log/eat-log/getByPage',
-                    data: params,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
-                }).then(function(data){
+            //     self.$axios({
+            //         method: 'post',
+            //         url: '/log/eat-log/getByPage',
+            //         data: params,
+            //         headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
+            //     }).then(function(data){
                     
-                    if(data.data.code==0){
-                        self.tableData3 = data.data.data.list;
-                        self.pageNum3 = self.pageNum3+1;
-                        self.total = data.data.data.total;
-                        self.qitanTotal = data.data.data.total;
-                        if(self.tableData3.length < 9){
-                            self.pageNum3 = 1
-                        }
-                    }else{
-                        self.$response(data,self);
-                    }
-                });
-            },
+            //         if(data.data.code==0){
+            //             self.tableData3 = data.data.data.list;
+            //             self.pageNum3 = self.pageNum3+1;
+            //             self.total = data.data.data.total;
+            //             self.qitanTotal = data.data.data.total;
+            //             if(self.tableData3.length < 9){
+            //                 self.pageNum3 = 1
+            //             }
+            //         }else{
+            //             self.$response(data,self);
+            //         }
+            //     });
+            // },
             // 早餐未打卡总人数
             getBreakfast(){
                 const self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
-                
                 self.$axios({
                     method: 'post',
                     url: '/log/eat-log/getTodayUserQuantity',
@@ -1113,8 +1225,23 @@
                     
                     if(data.data.code==0){
                         self.today = data.data.data.today;
-                        self.breakfast_card_0 = data.data.data.breakfast_card_0;
-                        self.lunch_card_0 = data.data.data.lunch_card_0;
+                        // self.breakfast_card_0 = data.data.data.breakfast_card_0;
+                        // breakfast_card_0_yuangong
+                        // breakfast_card_0_moshengren
+                        // breakfast_card_0_qita
+
+                        // lunch_card_0_yuangong
+                        // lunch_card_0_moshengren
+                        // lunch_card_0_qita
+                        self.breakfastItems[0].num = data.data.data.breakfast_card_0;
+                        self.breakfastItems[1].num = data.data.data.breakfast_card_0_yuangong;
+                        self.breakfastItems[2].num = data.data.data.breakfast_card_0_qita;
+                        self.breakfastItems[3].num = data.data.data.breakfast_card_0_moshengren;
+                        self.lunchItems[0].num = data.data.data.lunch_card_0;
+                        self.lunchItems[1].num = data.data.data.lunch_card_0_yuangong;
+                        self.lunchItems[2].num = data.data.data.lunch_card_0_qita;
+                        self.lunchItems[3].num = data.data.data.lunch_card_0_moshengren;
+                        // self.lunch_card_0 = data.data.data.lunch_card_0;
                     }else{
                         self.$response(data,self);
                     }
@@ -1130,7 +1257,7 @@
                 }
             },   
             headStyle({row, column, rowIndex, columnIndex}){ 
-                return 'background-color: #F0F0F0;color:#000;height:100px;font-size:26px;'
+                return 'background-color: #F0F0F0;color:#000;height:90px;font-size:26px;'
             },
            
    
@@ -1141,24 +1268,24 @@
             var self = this;
             // 餐厅
             self.getDataList1();
-            self.getDataList2();
-            self.getDataList3();
+            // self.getDataList2();
+            // self.getDataList3();
             self.getBreakfast();
             // 考勤
             self.getDataListKaoqin();//头部
-            self.getDataListKaoqin1();
+            // self.getDataListKaoqin1();
             self.getDataListKaoqin2();
-            self.getDataListKaoqin3();
-            setInterval(function(){
-                self.getDataList1();
-                self.getDataList2();
-                self.getDataList3();
+            // self.getDataListKaoqin3();
+            // setInterval(function(){
+            //     self.getDataList1();
+            //     self.getDataList2();
+            //     self.getDataList3();
 
-                self.getDataListKaoqin();//头部
-                self.getDataListKaoqin1();
-                self.getDataListKaoqin2();
-                self.getDataListKaoqin3();
-            },4000);
+            //     self.getDataListKaoqin();//头部
+            //     self.getDataListKaoqin1();
+            //     self.getDataListKaoqin2();
+            //     self.getDataListKaoqin3();
+            // },4000);
             
         },
         created(){
@@ -1256,7 +1383,7 @@
     }
     .repast{
         /* height: 410px; */
-        height: 200px;
+        /* height: 200px; */
         display: flex;
         justify-content: space-between;
     }
@@ -1278,7 +1405,9 @@
         /* margin-top: 40px; */
         /* background-image: linear-gradient(to right, #B4E0FF ,#84CAFB, #32A4F4); */
         
-        background-size: 100% 100%;
+        /* background-size: 100% 100%; */
+        display: flex;
+        align-items: center;
     }
     .breakfast_box{
         width: 60%;
@@ -1395,18 +1524,45 @@
     }
     .conent-box-1{
         height: 87%;
+        border: 1px solid #fff;
     }
-    .tableList1{
-        /* margin-top: 20px; */
-        height: 87%;
+    .tableList1,.tableList2{
+        /* height: 87%; */
+        height: 600px;
         overflow-y: auto;
+        margin-top: 20px;
     }
-    .tableList2{
-
-    }
+    /* .tableList2{
+        height: 600px;
+        margin-top: 20px;
+    } */
     .headImg1{
         width: 96px;
         height: 110px;
+    }
+    .tab-head{
+        width:92%;
+        margin: 40px auto 0;
+        border-bottom: 1px solid #BDD5FF;
+        display: flex;
+        justify-content: space-around;
+        cursor: pointer;
+    }
+    .tab-head .tabTitle{
+        height: 80px;
+        line-height: 80px;
+        font-size: 30px;
+        width:14%;
+        text-align: center;
+    }
+    .tishi{
+        height: 80px;
+        line-height: 80px;
+        /* width: 400px; */
+    }
+    .tab-head .active{
+        /* background: #BDD5FF; */
+        border-bottom: 3px solid #357EFF;
     }
     .tab_title{
         width:92%;
@@ -1449,31 +1605,44 @@
     }
     .check li{
         list-style: none; 
+        width: 24%;
+        margin-top: 20px;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
     }
     .check .check-li{
         
-        width: 24%;
-        margin-top: 20px;
+        
+    }
+    .check-li .check-item{
+        border-right: 1px solid #959595;
     }
     .check-item{
-        width: 300px;
-        /* height: 113px; */
-        height: 200px;
+        width:100%;
         margin: 0 auto;
+        padding: 0 40px;
         /* position: relative; */
         /* border: 1px solid #ff00ff; */
         display: flex;
         justify-content: space-around;
+        
     }
     .check-item-eat{
-        width: 400px;
+        /* width: 400px; */
         /* height: 113px; */
-        height: 200px;
+        /* height: 200px; */
+        width: 100%;
         margin: 0 auto;
         /* position: relative; */
         /* border: 1px solid #ff00ff; */
         display: flex;
         justify-content: space-around;
+        
+    }
+    .check-item-eat1{
+        border-right: 1px solid #959595;
     }
     .check-item-img{
         display: flex;
@@ -1488,12 +1657,12 @@
         display: flex;
         align-items: center;
     }
-    .line div{
+    /* .line div{
         width: 2px;
         margin: 0px 1px; 
         height: 80px;
         background-color: #959595;
-    }
+    } */
     .check-item-text{
         /* margin-top: 30px; */
         display: flex;

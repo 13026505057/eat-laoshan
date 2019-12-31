@@ -59,7 +59,7 @@
                             
 
                             <el-form-item >
-                                <el-button v-if="topUpHid1" type="primary" @click="onSubmit('form')">充值</el-button>
+                                <el-button :disabled="disabledBtn" :loading="loadingBtn" v-if="topUpHid1" type="primary" @click="onSubmit('form')">充值</el-button>
                                 <el-button v-if="topUpHid2" type="primary" @click="returnCard('form')">退卡</el-button>
                                 <el-button @click="cancelClick">关闭</el-button>
                             </el-form-item>
@@ -103,7 +103,8 @@
                 topupIpt:true,
                 user_id:'',
                 face_url:'',
-                
+                disabledBtn:false,
+                loadingBtn:false,
             }
                 
         },
@@ -246,8 +247,10 @@
             },
             // 点击充值
             onSubmit(formName){
+                this.disabledBtn = true;
+                this.loadingBtn = true;
                 console.log(formName)
-                 this.$refs[formName].validate((valid) => {
+                this.$refs[formName].validate((valid) => {
                     if (valid) {
                         const self = this;
                         var params = new URLSearchParams();
@@ -272,6 +275,7 @@
                                 headers: {'Content-Type': 'application/x-www-form-urlencoded','kf-token':token},
                             }).then(function(data){
                                 if(data.data.code==0){
+                                    
                                     self.$message({
                                         type: 'success',
                                         message: '充值金额是: ' + self.form.quantity+"元"
@@ -279,6 +283,8 @@
                                     setTimeout(function(){
                                         self.content1Hid = true;
                                         self.content2Hid = false;
+                                        self.disabledBtn = false;
+                                        self.loadingBtn = false;
                                     },2000)
                                     
                                     
