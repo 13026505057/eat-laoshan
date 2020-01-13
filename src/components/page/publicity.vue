@@ -28,9 +28,9 @@
                         
                         <div class="repast">
                             <div class="lunch" v-for="(breakfastItem,index) in breakfastItems" :key="index" >
-                                <div class="check-item-eat " :class="index==3?'':'check-item-eat1'">
+                                <div @click="cantingClick(index+1)" class="check-item-eat " :class="index==7||index==3?'':'check-item-eat1'">
                                     <div class="check-item-img">
-                                        <img src="../../../static/img/daka1.png" alt="">
+                                        <img :src="breakfastItem.itemImg" alt="">
                                     </div>
                                     <div class="check-item-text">
                                         <div>
@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="repast">
+                        <!-- <div class="repast">
                             <div class="lunch"  v-for="(lunchItem,index) in lunchItems" :key="index">
                                 <div class="check-item-eat" :class="index==3?'':'check-item-eat1'">
                                     <div class="check-item-img">
@@ -56,25 +56,26 @@
                                 </div>
                             </div>
                            
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="back-white">
                     <div class="userBox1">
                         <div class="conent-box-1">
                             <div class="tab-head">
-                                <div 
+                                <div class="tabTitle active">{{tabTitle}}</div>
+                                <!-- <div 
                                     @click="tabClick(index)"
                                     v-for="(itemTab,index) in itamTabs" 
                                     :key="index" 
                                     class="tabTitle" 
                                     :class="tabActive==index?'active':''">
                                     {{itemTab}}
-                                </div>
+                                </div> -->
                                 <div class="tishi">*温馨提示：请及时与餐厅管理员联系，外来人员请及时填报《接待审批表》</div>
                             </div>
                             <div>
-                                <div class="tableList2" id="tableList1">
+                                <div class="tableList1" id="tableList1">
                                     <el-table
                                         :header-cell-style="headStyle"
                                         :data="tableData1"
@@ -284,7 +285,7 @@
                     <div class="quantity">
                         <div class="quantity-1">
                             <div class="quantity-title">
-                                <div class="eattime">考勤管理系统打卡情况统计</div>
+                                <div class="eattime">考勤管理系统打卡情况统计（昨日）</div>
                                 <div class="eatDate">日期：{{todayKaoqin}}</div>
                             </div>
                             <div class="check">
@@ -517,7 +518,7 @@
                                                 width="50">
                                             </el-table-column>
                                             <el-table-column
-                                                width="90"
+                                                width=""
                                                 label="姓名"
                                                 align="center"
                                                 prop="user_true_name">
@@ -716,7 +717,6 @@
                 </div>
             </div>
         </div>
-        
     </div>
 </template>
 
@@ -751,20 +751,40 @@
                 qitanTotal:'0',
 
                 pageNum1:1,
-                pageSize1:4,
+                pageSize1:7,
                 total1:1,
                 photoHid:false,
                 breakfastItems:[{
+                    itemImg:"../../../static/img/daka1.png",
                     title:"早餐未打卡总人数",
                     num:'0',
                 },{
+                    itemImg:"../../../static/img/daka1.png",
                     title:"早餐干警未打卡",
                     num:'0',
                 },{
+                    itemImg:"../../../static/img/daka1.png",
                     title:"早餐驻场人员未打卡",
                     num:'0',
                 },{
+                    itemImg:"../../../static/img/daka1.png",
                     title:"早餐陌生人未打卡",
+                    num:'0',
+                },{
+                    itemImg:"../../../static/img/daka2.png",
+                    title:"午餐未打卡总人数",
+                    num:'0',
+                },{
+                    itemImg:"../../../static/img/daka2.png",
+                    title:"午餐干警未打卡",
+                    num:'0',
+                },{
+                    itemImg:"../../../static/img/daka2.png",
+                    title:"午餐驻场人员未打卡",
+                    num:'0',
+                },{
+                    itemImg:"../../../static/img/daka2.png",
+                    title:"午餐陌生人未打卡",
                     num:'0',
                 }],
                 lunchItems:[{
@@ -784,6 +804,10 @@
                     "干警","驻场人员","陌生人"
                 ],
                 tabActive:"",
+                user_type: "",
+                eat_type:"",
+                cantingValue:"",
+                tabTitle:"未打卡总人数",
                 // 考勤
                 
                 tableDataKaoqin1:[],
@@ -794,7 +818,7 @@
                 tableDataKaoqin3:[],
                 kaoqinTotal3:'',
                 pageNum2:1,
-                pageSize2:4,
+                pageSize2:7,
                 total2:1,
                 kaoqinItems:[{
                     title:'考勤人数',
@@ -830,6 +854,8 @@
                     num:'',
                 }],
                 kaoqinValue:'',
+                kaoqinRequestUrl:'http://192.168.100.226/attendance',
+                
 
                 // 160*
             }
@@ -858,7 +884,7 @@
 
                 self.$axios({
                     method: 'post',
-                    url:'http://192.168.100.226/attendance/holiday/get',
+                    url:self.kaoqinRequestUrl+'/holiday/get',
                     data: params,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded',},
                 }).then(function(data){
@@ -913,7 +939,7 @@
             // },
             // 
             kaoqinClick(value){
-                console.log(value)
+                // console.log(value)
                 this.kaoqinValue  = value;
                 var self = this;
                 self.pageNum2 = 1;
@@ -923,6 +949,7 @@
             },
             // 个人考勤列表
             getDataListKaoqin2(value){
+                
                 const self = this;
                 var params = new URLSearchParams();
                 // var token = localStorage.getItem('auth');
@@ -930,21 +957,15 @@
                 day3.setTime(day3.getTime()-24*60*60*1000);
                 var finishTime = day3.getFullYear()+"-" + (day3.getMonth()+1) + "-" + day3.getDate() ;
                 // console.log(finishTime)
-                var httpUrl = 'http://192.168.100.226/attendance/attendance/getByPage';
-                // 第一个 参数 user_status，kaoqin_status 接口attendance/user/getByPage
-                // 第二个 参数 attendance_status，attendance_day 接口attendance/attendance/getByPage
-                // 第三个 参数 attendance_day 接口attendance/attendance/getByPage
-                // 第四个 参数 attendance_day 接口attendance/attendance/getByPage
-                // 第五个 参数 attendance_day 接口attendance/attendance/getByPage
-                // 第六个 参数 attendance_day 接口attendance/attendance/getByPage
-                // 第七个 参数 attendance_day 接口attendance/attendance/getByPage
-                // 第八个 参数 attendance_day 接口attendance/attendance/getByPage
+                var httpUrl = self.kaoqinRequestUrl+'/attendance/getByPage';
+                // console.log(value)
+                self.kaoqinValue  = value;
                 switch (value) {
                     case 1:
                         console.log("我被执行了")
                         params.append('user_status',"1");
                         params.append('kaoqin_status',"1");
-                        httpUrl = "http://192.168.100.226/attendance/user/getByPage"
+                        httpUrl = self.kaoqinRequestUrl+"/user/getByPage"
                         break;
                     case 2:
                         console.log("实到")
@@ -1052,6 +1073,7 @@
                 self.tabActive = index;
                 self.pageNum1 = 1;
                 self.tableData1 = [];
+                self.eat_type = "";
                 if(index == 0){
                     self.photoHid = false;
                     self.user_type = "yuangong";
@@ -1064,7 +1086,13 @@
                 }
                 self.getDataList1();
             },
-            getDataList1(){
+            cantingClick(value){
+                this.cantingValue = value;
+                this.pageNum1 = 1;
+                this.tableData1 = [];
+                this.getDataList1(value)
+            },
+            getDataList1(value){
                 const self = this;
                 var params = new URLSearchParams();
                 var token = localStorage.getItem('auth');
@@ -1078,20 +1106,82 @@
                 var day3 = new Date();
                 day3.setTime(day3.getTime()+24*60*60*1000);
                 var finishTime = day3.getFullYear()+"-" + (day3.getMonth()+1) + "-" + day3.getDate() + ' ' + "00" + ':' + "00" + ':' + "00";
-
+                // eat_type lunch
+                // self.tabTitle = self.breakfastItems[value-1].title;
+                console.log(value)
+                if(value==""){
+                    self.tabTitle = "未打卡总人数";
+                }else{
+                    self.tabTitle = self.breakfastItems[value-1].title;
+                }
+                // console.log(self.breakfastItems[value-1])
+                switch (value) {
+                    case 1:
+                        console.log("我被执行了")
+                        self.photoHid = false;
+                        self.user_type = "";
+                        self.eat_type = "breakfast";
+                        
+                        // tabTitle
+                        break;
+                    case 2:
+                        console.log("早餐干警")
+                        self.photoHid = false;
+                        self.user_type = "yuangong";
+                        self.eat_type = "breakfast";
+                        break;
+                    case 3:
+                        console.log("早餐驻场")
+                        self.photoHid = false;
+                        self.user_type = "qita";
+                        self.eat_type = "breakfast";
+                        break;
+                    case 4:
+                        console.log("早餐陌生人")
+                        self.photoHid = true;
+                        self.user_type = "moshengren";
+                        self.eat_type = "breakfast";
+                        break;
+                    case 5:
+                        console.log("午餐")
+                        self.photoHid = false;
+                        self.user_type = "";
+                        self.eat_type = "lunch";
+                        break;
+                    case 6:
+                        console.log("午餐干警")
+                        self.photoHid = false;
+                        self.user_type = "yuangong";
+                        self.eat_type = "lunch";
+                        break;
+                    case 7:
+                        console.log("午餐驻场")
+                        self.photoHid = false;
+                        self.user_type = "qita";
+                        self.eat_type = "lunch";
+                        break;
+                    case 8:
+                        console.log("午餐陌生人")
+                        self.photoHid = true;
+                        self.user_type = "moshengren";
+                        self.eat_type = "lunch";
+                        break;
+                    default:
+                        break;
+                }
                 var begin_time = startTime;
                 var end_time = finishTime;
+                console.log(self.user_type)
                 params.append('begin_time',begin_time);
                 params.append('end_time',end_time);
                 params.append('pageNum',self.pageNum1);
                 params.append('pageSize',self.pageSize1);
-                params.append("user_type",self.user_type);
-                // params.append("user_type","yuangong");
+                params.append('user_type',self.user_type);
+                params.append('eat_type',self.eat_type);
                 // card=0代表未打卡
                 // bd_card=0代表未补打
                 params.append('card','0');
                 params.append('bd_card','0');
-
                 self.$axios({
                     method: 'post',
                     url: '/log/eat-log/getByPage',
@@ -1114,7 +1204,8 @@
             },
             // 翻页
             handleCurrentChange1(){
-                this.getDataList1();
+                var value = this.cantingValue;
+                this.getDataList1(value);
             },
             // getDataList2(){
             //     const self = this;
@@ -1237,10 +1328,14 @@
                         self.breakfastItems[1].num = data.data.data.breakfast_card_0_yuangong;
                         self.breakfastItems[2].num = data.data.data.breakfast_card_0_qita;
                         self.breakfastItems[3].num = data.data.data.breakfast_card_0_moshengren;
-                        self.lunchItems[0].num = data.data.data.lunch_card_0;
-                        self.lunchItems[1].num = data.data.data.lunch_card_0_yuangong;
-                        self.lunchItems[2].num = data.data.data.lunch_card_0_qita;
-                        self.lunchItems[3].num = data.data.data.lunch_card_0_moshengren;
+                        self.breakfastItems[4].num = data.data.data.lunch_card_0;
+                        self.breakfastItems[5].num = data.data.data.lunch_card_0_yuangong;
+                        self.breakfastItems[6].num = data.data.data.lunch_card_0_qita;
+                        self.breakfastItems[7].num = data.data.data.lunch_card_0_moshengren;
+                        // self.lunchItems[0].num = data.data.data.lunch_card_0;
+                        // self.lunchItems[1].num = data.data.data.lunch_card_0_yuangong;
+                        // self.lunchItems[2].num = data.data.data.lunch_card_0_qita;
+                        // self.lunchItems[3].num = data.data.data.lunch_card_0_moshengren;
                         // self.lunch_card_0 = data.data.data.lunch_card_0;
                     }else{
                         self.$response(data,self);
@@ -1259,33 +1354,76 @@
             headStyle({row, column, rowIndex, columnIndex}){ 
                 return 'background-color: #F0F0F0;color:#000;height:90px;font-size:26px;'
             },
+            fullScreen() {
+                var el = document.documentElement,
+                    rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen,
+                    wscript;
+                // console.log(typeof rfs)
+                if(typeof rfs != "undefined" && rfs) {
+                    rfs.call(el);
+                    return;
+                }
+            
+                if(typeof window.ActiveXObject != "undefined") {
+                    wscript = new ActiveXObject("WScript.Shell");
+                    if(wscript) {
+                        wscript.SendKeys("{F11}");
+                    }
+                }
+            },
+            exitFullScreen() {
+                var el = document,
+                    cfs = el.cancelFullScreen || el.webkitCancelFullScreen || el.mozCancelFullScreen || el.exitFullScreen,
+                    wscript;
+            
+                if (typeof cfs != "undefined" && cfs) {
+                cfs.call(el);
+                return;
+                }
+            
+                if (typeof window.ActiveXObject != "undefined") {
+                    wscript = new ActiveXObject("WScript.Shell");
+                    if (wscript != null) {
+                        wscript.SendKeys("{F11}");
+                    }
+                }
+            },
+
+            
+
            
    
            
 
         },
         mounted(){
+            
             var self = this;
             // 餐厅
-            self.getDataList1();
+            self.getDataList1('');
             // self.getDataList2();
             // self.getDataList3();
             self.getBreakfast();
             // 考勤
             self.getDataListKaoqin();//头部
             // self.getDataListKaoqin1();
-            self.getDataListKaoqin2();
+            self.getDataListKaoqin2(1);
             // self.getDataListKaoqin3();
-            // setInterval(function(){
-            //     self.getDataList1();
-            //     self.getDataList2();
-            //     self.getDataList3();
-
-            //     self.getDataListKaoqin();//头部
+            // 24*60*60*1000
+            var time = 3*60*60*1000;
+            console.log(time)
+            setInterval(function(){
+                //  console.log('-----------------------')
+                self.getDataList1('');
+                self.getBreakfast();
+               
+                self.getDataListKaoqin();//头部
             //     self.getDataListKaoqin1();
-            //     self.getDataListKaoqin2();
+                self.getDataListKaoqin2(1);
             //     self.getDataListKaoqin3();
-            // },4000);
+            },time);
+            
+
             
         },
         created(){
@@ -1293,10 +1431,19 @@
                 event.returnValue = false;
             }
             var self = this;
+            
+            self.fullScreen();
+            self.exitFullScreen();
 
+            // self.DoOne()
+            // var dosome = self.dosome();
+            // self.DoOne("key", dosome);
+            
             // bus.$on('isCard',function(val, code){
             //     self.showCard(val,code);
             // })
+            
+
         }
     }
     
@@ -1385,7 +1532,8 @@
         /* height: 410px; */
         /* height: 200px; */
         display: flex;
-        justify-content: space-between;
+        flex-wrap: wrap;
+        /* justify-content: space-between; */
     }
     .breakfast{
         /* background-image: url(../../../static/img/zc.bg.png); */
@@ -1399,7 +1547,7 @@
 
         /* width: 432px; */
         /* height: 143px; */
-        width: 648px;
+        width: 24%;
         height: 214px;     
         /* height: 209px; */
         /* margin-top: 40px; */
@@ -1526,11 +1674,25 @@
         height: 87%;
         border: 1px solid #fff;
     }
-    .tableList1,.tableList2{
+    .tableList1{
         /* height: 87%; */
-        height: 600px;
+        height: 740px;
         overflow-y: auto;
         margin-top: 20px;
+    }
+    .tableList1::-webkit-scrollbar {/*滚动条整体样式*/
+            width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+            height: 4px;
+    }
+    .tableList1::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+            border-radius: 5px;
+            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.2);
+    }
+    .tableList1::-webkit-scrollbar-track {/*滚动条里面轨道*/
+            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            border-radius: 0;
+            background: rgba(0,0,0,0.1);
     }
     /* .tableList2{
         height: 600px;
