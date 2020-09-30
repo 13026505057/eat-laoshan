@@ -525,14 +525,26 @@
                                                 
                                             </el-table-column>
                                             <el-table-column
+                                                width=""
                                                 label="卡号"
                                                 align="center"
                                                 prop="user_num"
                                                 v-if="kaoqinValue==1?true:false"
                                                 >
+                                                <template slot-scope="props">
+                                                    <span>{{props.row.user_num}}</span>
+                                                </template>
+                                                
                                             </el-table-column>
+                                            <!-- <el-table-column
+                                                label="卡号"
+                                                align="center"
+                                                prop="user_num"
+                                                v-if="kaoqinValue==1?true:false"
+                                                >
+                                            </el-table-column> -->
                                             <el-table-column
-                                                label="是否打卡"
+                                                label="是否考勤"
                                                 align="center"
                                                 prop=""
                                                 v-if="kaoqinValue==1?true:false"
@@ -820,39 +832,48 @@
                 pageNum2:1,
                 pageSize2:7,
                 total2:1,
-                kaoqinItems:[{
+                kaoqinItems:[
+                {
                     title:'考勤人数',
                     img:'../../../static/img/kaoqin1.png',
                     num:'',
-                },{
-                    title:'实到人数',
-                    img:'../../../static/img/kaoqin2.png',
-                    num:'',
-                },{
-                    title:'迟到人数',
-                    img:'../../../static/img/kaoqin3.png',
-                    num:'',
-                },{
-                    title:'早退人数',
-                    img:'../../../static/img/kaoqin4.png',
-                    num:'',
-                },{
+                },
+                // {
+                //     title:'实到人数',
+                //     img:'../../../static/img/kaoqin2.png',
+                //     num:'',
+                // },
+                // {
+                //     title:'迟到人数',
+                //     img:'../../../static/img/kaoqin3.png',
+                //     num:'',
+                // },
+                // {
+                //     title:'早退人数',
+                //     img:'../../../static/img/kaoqin4.png',
+                //     num:'',
+                // },
+                {
                     title:'请假人数',
                     img:'../../../static/img/kaoqin5.png',
                     num:'',
-                },{
+                },
+                {
                     title:'休假人数',
                     img:'../../../static/img/kaoqin6.png',
                     num:'',
-                },{
+                },
+                {
                     title:'因公外出人数',
                     img:'../../../static/img/kaoqin7.png',
                     num:'',
-                },{
-                    title:'缺勤人数',
-                    img:'../../../static/img/kaoqin8.png',
-                    num:'',
-                }],
+                },
+                // {
+                //     title:'缺勤人数',
+                //     img:'../../../static/img/kaoqin8.png',
+                //     num:'',
+                // }
+                ],
                 kaoqinValue:'',
                 kaoqinRequestUrl:'http://192.168.100.226/attendance',
                 
@@ -868,10 +889,10 @@
                 self.kaoqinItems[1].num = '';
                 self.kaoqinItems[2].num = '';
                 self.kaoqinItems[3].num = '';
-                self.kaoqinItems[4].num = '';
-                self.kaoqinItems[5].num = '';
-                self.kaoqinItems[6].num = '';
-                self.kaoqinItems[7].num = '';
+                // self.kaoqinItems[4].num = '';
+                // self.kaoqinItems[5].num = '';
+                // self.kaoqinItems[6].num = '';
+                // self.kaoqinItems[7].num = '';
                 var params = new URLSearchParams();
                 // var token = localStorage.getItem('auth');
                 var day3 = new Date();
@@ -891,13 +912,13 @@
                     
                     if(data.data.code==0){
                         self.kaoqinItems[0].num = data.data.data[0].kaoqin;
-                        self.kaoqinItems[1].num = data.data.data[0].shidao;
-                        self.kaoqinItems[2].num = data.data.data[0].chidao;
-                        self.kaoqinItems[3].num = data.data.data[0].zaotui;
-                        self.kaoqinItems[4].num = data.data.data[0].qingjia;
-                        self.kaoqinItems[5].num = data.data.data[0].xiujia;
-                        self.kaoqinItems[6].num = data.data.data[0].waichu;
-                        self.kaoqinItems[7].num = data.data.data[0].queqin;
+                        self.kaoqinItems[1].num = data.data.data[0].qingjia;//shidao
+                        self.kaoqinItems[2].num = data.data.data[0].xiujia;//chidao
+                        self.kaoqinItems[3].num = data.data.data[0].waichu;//zaotui
+                        // self.kaoqinItems[4].num = data.data.data[0].qingjia;
+                        // self.kaoqinItems[5].num = data.data.data[0].xiujia;
+                        // self.kaoqinItems[6].num = data.data.data[0].waichu;
+                        // self.kaoqinItems[7].num = data.data.data[0].queqin;
                         
                     }else{
                         self.$response(data,self);
@@ -968,18 +989,27 @@
                         httpUrl = self.kaoqinRequestUrl+"/user/getByPage"
                         break;
                     case 2:
-                        console.log("实到")
-                        params.append('attendance_status',"normal");
+                        // console.log("实到")
+                        // params.append('attendance_status',"normal");
+                        // params.append('attendance_day',finishTime);
+                        console.log("请假")
+                        params.append('leave_status',"qingjia");
                         params.append('attendance_day',finishTime);
                         break;
                     case 3:
-                        console.log("迟到")
-                        params.append('attendance_status',"chidao");
+                        // console.log("迟到")
+                        // params.append('attendance_status',"chidao");
+                        // params.append('attendance_day',finishTime);
+                        console.log("休假")
+                        params.append('leave_status',"5");
                         params.append('attendance_day',finishTime);
                         break;
                     case 4:
-                        console.log("早退")
-                        params.append('attendance_status',"zaotui");
+                        // console.log("早退")
+                        // params.append('attendance_status',"zaotui");
+                        // params.append('attendance_day',finishTime);
+                        console.log("因公外出")
+                        params.append('leave_status',"gongchu");
                         params.append('attendance_day',finishTime);
                         break;
                     case 5:
@@ -1410,7 +1440,7 @@
             self.getDataListKaoqin2(1);
             // self.getDataListKaoqin3();
             // 24*60*60*1000
-            var time = 3*60*60*1000;
+            var time = 15*60*1000;
             console.log(time)
             setInterval(function(){
                 //  console.log('-----------------------')
